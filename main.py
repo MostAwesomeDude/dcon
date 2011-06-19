@@ -11,7 +11,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from werkzeug import secure_filename
 
-from flask import Flask, abort, redirect, render_template, url_for
+from flask import Flask, abort, flash, redirect, render_template, url_for
 from flaskext.sqlalchemy import SQLAlchemy
 from flaskext.uploads import configure_uploads, IMAGES, UploadSet
 from flaskext.wtf import Form, FileField, file_allowed, file_required
@@ -68,10 +68,15 @@ def upload():
     if form.validate_on_submit():
         filename = secure_filename(form.file.file.filename)
         path = os.path.abspath(os.path.join("uploads", filename))
-        if not os.path.exists(path):
+        if os.path.exists(path):
+            flash("Oh noes!")
+            return redirect(url_for("index"))
+        else:
             form.file.file.save(path)
-
-        return redirect(url_for("index"))
+            comic = Comic(filename)
+            db.session.add(comic)
+            db.session.commit()
+            return redirect(url_for("comics", cid=comic.id))
 
     return render_template("upload.html", form=form)
 
@@ -94,4 +99,4 @@ def comics(cid):
     except NoResultFound:
         abort(404)
 
-    return "Here's the comic: %s" % comic
+    return render_template("comics.html", comic=comic)
