@@ -3,5 +3,5 @@
     enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     {{ forms.render_field(form.file) }}
-    <input type="submit" value="Upload!">
+    {{ forms.render_field(form.submit) }}
 </form>
