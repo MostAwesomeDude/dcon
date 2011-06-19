@@ -1,0 +1,7 @@
+{% import "forms.html" as forms %}
+<form method="POST" action="{{ url_for("upload") }}"
+    enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    {{ forms.render_field(form.file) }}
+    <input type="submit" value="Upload!">
+</form>
