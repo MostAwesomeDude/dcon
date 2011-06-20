@@ -6,3 +6,9 @@ Here's comic number {{ comic.id }}, uploaded {{ comic.time }}:
 {% if after %}
     <a href="{{ url_for("comics", cid=after.id) }}">Next</a>
 {% endif %}
+{% if comic.before %}
+    <a href="{{ url_for("comics", cid=comic.before.id) }}">Chrono Previous</a>
+{% endif %}
+{% if comic.after %}
+    <a href="{{ url_for("comics", cid=comic.after.id) }}">Chrono Next</a>
+{% endif %}
