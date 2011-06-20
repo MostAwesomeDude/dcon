@@ -1,2 +1,8 @@
 Here's comic number {{ comic.id }}, uploaded {{ comic.time }}:
 <img src="{{ url_for("static", filename=comic.filename) }}" />
+{% if before %}
+    <a href="{{ url_for("comics", cid=before.id) }}">Previous</a>
+{% endif %}
+{% if after %}
+    <a href="{{ url_for("comics", cid=after.id) }}">Next</a>
+{% endif %}

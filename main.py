@@ -142,4 +142,16 @@ def comics(cid):
     except NoResultFound:
         abort(404)
 
-    return render_template("comics.html", comic=comic)
+    q = Comic.query.filter(Comic.time < comic.time)
+    before = q.order_by(Comic.time.desc()).first()
+
+    q = Comic.query.filter(Comic.time > comic.time)
+    after = q.order_by(Comic.time).first()
+
+    kwargs = {
+        "comic": comic,
+        "before": before,
+        "after": after,
+    }
+
+    return render_template("comics.html", **kwargs)
