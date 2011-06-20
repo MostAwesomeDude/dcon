@@ -14,8 +14,8 @@ from werkzeug import secure_filename
 from flask import Flask, abort, flash, redirect, render_template, url_for
 from flaskext.sqlalchemy import SQLAlchemy
 from flaskext.uploads import configure_uploads, IMAGES, UploadSet
-from flaskext.wtf import (Form, FileField, SelectField, SubmitField,
-    file_allowed, file_required)
+from flaskext.wtf import (FileAllowed, FileRequired, Form, FileField,
+    SelectField, SubmitField)
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///temp.db"
@@ -100,7 +100,8 @@ def characters():
 
 class UploadForm(Form):
     file = FileField("Select a file to upload",
-        validators=(file_required(), file_allowed(images, "Images only!")))
+        validators=(FileRequired("Must upload a comic!"),
+            FileAllowed(images, "Images only!")))
     submit = SubmitField("Upload!")
 
 @app.route("/upload", methods=("GET", "POST"))
