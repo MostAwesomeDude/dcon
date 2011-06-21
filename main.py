@@ -15,7 +15,8 @@ from flask import Flask, abort, flash, redirect, render_template, url_for
 from flaskext.sqlalchemy import SQLAlchemy
 from flaskext.uploads import configure_uploads, IMAGES, UploadSet
 from flaskext.wtf import (Form, FileAllowed, FileRequired, Required,
-    FileField, QuerySelectField, SubmitField, TextField)
+    FileField, QuerySelectField, QuerySelectMultipleField, SubmitField,
+    TextField)
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///temp.db"
@@ -66,9 +67,6 @@ class Comic(db.Model):
     time = db.Column(db.DateTime)
     # Local filename.
     filename = db.Column(db.String)
-    # Relations, for timeline data.
-    parents = db.Column(db.PickleType)
-    kids = db.Column(db.PickleType)
 
     # Chronological position, as ascertained during the last sort.
     after = db.relationship("Comic", uselist=False,
@@ -193,6 +191,9 @@ class UploadForm(Form):
     file = FileField("Select a file to upload",
         validators=(FileRequired("Must upload a comic!"),
             FileAllowed(images, "Images only!")))
+    characters = QuerySelectMultipleField("Available characters:",
+        query_factory=lambda: Character.query.order_by(Character.name),
+        get_label="name")
     submit = SubmitField("Upload!")
 
 @app.route("/upload", methods=("GET", "POST"))
@@ -203,11 +204,12 @@ def upload():
         filename = secure_filename(form.file.file.filename)
         path = os.path.abspath(os.path.join("uploads", filename))
         if os.path.exists(path):
-            flash("Oh noes!")
-            return redirect(url_for("index"))
+            flash("File already exists!")
+            return redirect(url_for("upload"))
         else:
             form.file.file.save(path)
             comic = Comic(filename)
+            comic.characters = form.characters.data
             db.session.add(comic)
             db.session.commit()
             return redirect(url_for("comics", cid=comic.id))

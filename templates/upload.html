@@ -1,7 +1,12 @@
 {% import "forms.html" as forms %}
+{% extends "base.html" %}
+
+{% block body %}
 <form method="POST" action="{{ url_for("upload") }}"
     enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     {{ forms.render_field(form.file) }}
+    {{ forms.render_field(form.characters) }}
     {{ forms.render_field(form.submit) }}
 </form>
+{% endblock %}
