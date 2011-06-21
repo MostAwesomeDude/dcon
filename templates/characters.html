@@ -1,14 +1,5 @@
 {% import "forms.html" as forms %}
 
-<table>
-{% for character in characters %}
-    <tr>
-        <td>{{ character[0] }}</td>
-        <td>{{ character[1] }}</td>
-    </tr>
-{% endfor %}
-</table>
-
 <form>
     {{ form.hidden_tag() }}
     {{ forms.render_field(form.characters) }}

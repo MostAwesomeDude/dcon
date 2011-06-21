@@ -15,7 +15,7 @@ from flask import Flask, abort, flash, redirect, render_template, url_for
 from flaskext.sqlalchemy import SQLAlchemy
 from flaskext.uploads import configure_uploads, IMAGES, UploadSet
 from flaskext.wtf import (FileAllowed, FileRequired, Form, FileField,
-    SelectField, SubmitField)
+    QuerySelectField, SubmitField)
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///temp.db"
@@ -58,7 +58,7 @@ class Comic(db.Model):
 
     # Serial number, for simple PK.
     id = db.Column(db.Integer, primary_key=True)
-    after_id = db.Column(db.Integer, db.ForeignKey("comics.id"))
+    after_id = db.Column(db.Integer, db.ForeignKey(id))
     # Upload time.
     time = db.Column(db.DateTime)
     # Local filename.
@@ -69,7 +69,7 @@ class Comic(db.Model):
 
     # Chronological position, as ascertained during the last sort.
     after = db.relationship("Comic", uselist=False,
-        backref=db.backref("before", remote_side=id))
+        backref=db.backref("before", remote_side=id, uselist=False))
 
     # List of characters in this comic.
     characters = db.relationship("Character", secondary=casts,
@@ -84,19 +84,41 @@ class Comic(db.Model):
     def __repr__(self):
         return "<Comic(%r)>" % self.filename
 
+    def orphan(self):
+        """
+        Remove this comic from its current position in the timeline.
+
+        This is usually a prelude to inserting the comic in another position.
+        """
+
+        if self.before:
+            self.before.after = self.after
+        self.after = None
+
+    def move_before(self, other):
+        """
+        Move this comic to come just before another comic in the timeline.
+        """
+
+        other.move_after(self)
+
+    def move_after(self, other):
+        """
+        Move this comic to come just after another comic in the timeline.
+        """
+
+        self.orphan()
+        self.after, other.after = other.after, self
+
 class CharacterForm(Form):
-    characters = SelectField(u"Characters")
+    characters = QuerySelectField(u"Characters",
+        query_factory=lambda: Character.query, get_label="name")
 
 @app.route("/characters", methods=("GET", "POST"))
 def characters():
     form = CharacterForm()
 
-    q = db.session.query(Character.slug, Character.name)
-    characters = q.order_by(Character.name).all()
-
-    form.characters.choices = characters
-
-    return render_template("characters.html", characters=characters, form=form)
+    return render_template("characters.html", form=form)
 
 class UploadForm(Form):
     file = FileField("Select a file to upload",
