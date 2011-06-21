@@ -14,8 +14,8 @@ from werkzeug import secure_filename
 from flask import Flask, abort, flash, redirect, render_template, url_for
 from flaskext.sqlalchemy import SQLAlchemy
 from flaskext.uploads import configure_uploads, IMAGES, UploadSet
-from flaskext.wtf import (FileAllowed, FileRequired, Form, FileField,
-    QuerySelectField, SubmitField)
+from flaskext.wtf import (Form, FileAllowed, FileRequired, Required,
+    FileField, QuerySelectField, SubmitField, TextField)
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///temp.db"
@@ -39,15 +39,18 @@ class Character(db.Model):
 
     __tablename__ = "characters"
 
-    slug = db.Column(db.String, primary_key=True)
     name = db.Column(db.String)
+    slug = db.Column(db.String, primary_key=True)
 
     def __init__(self, name):
-        self.name = name
-        self.slug = name.strip().lower().replace(" ", "-")
+        self.rename(name)
 
     def __repr__(self):
         return "<Character(%r)>" % self.name
+
+    def rename(self, name):
+        self.name = name
+        self.slug = name.strip().lower().replace(" ", "-")
 
 class Comic(db.Model):
     """
@@ -110,15 +113,81 @@ class Comic(db.Model):
         self.orphan()
         self.after, other.after = other.after, self
 
-class CharacterForm(Form):
+class CharacterCreateForm(Form):
+    name = TextField(u"New name", validators=(Required(),))
+    submit = SubmitField("Create!")
+
+class CharacterModifyForm(Form):
     characters = QuerySelectField(u"Characters",
-        query_factory=lambda: Character.query, get_label="name")
+        query_factory=lambda: Character.query.order_by(Character.name),
+        get_label="name")
+    name = TextField(u"New name", validators=(Required(),))
+    submit = SubmitField("Modify!")
 
-@app.route("/characters", methods=("GET", "POST"))
+class CharacterDeleteForm(Form):
+    characters = QuerySelectField(u"Characters",
+        query_factory=lambda: Character.query.order_by(Character.name),
+        get_label="name")
+    submit = SubmitField("Delete!")
+
+@app.route("/characters")
 def characters():
-    form = CharacterForm()
+    cform = CharacterCreateForm(prefix="create")
+    mform = CharacterModifyForm(prefix="modify")
+    dform = CharacterDeleteForm(prefix="delete")
 
-    return render_template("characters.html", form=form)
+    return render_template("characters.html", cform=cform, mform=mform, dform=dform)
+
+@app.route("/characters/create", methods=("POST",))
+def characters_create():
+    form = CharacterCreateForm(prefix="create")
+
+    if form.validate_on_submit():
+        character = Character(form.name.data)
+        db.session.add(character)
+        db.session.commit()
+        flash("Successfully created character %s!" % character.name)
+    else:
+        flash("Couldn't validate form...")
+
+    return redirect(url_for("characters"))
+
+@app.route("/characters/modify", methods=("POST",))
+def characters_modify():
+    form = CharacterModifyForm(prefix="modify")
+
+    if form.validate_on_submit():
+        character = form.characters.data
+        if character:
+            character.rename(form.name.data)
+            db.session.add(character)
+            db.session.commit()
+            flash("Successfully renamed character %s!" % character.name)
+        else:
+            flash("Couldn't find character for slug %s..." %
+                form.characters.data)
+    else:
+        flash("Couldn't validate form...")
+
+    return redirect(url_for("characters"))
+
+@app.route("/characters/delete", methods=("POST",))
+def characters_delete():
+    form = CharacterDeleteForm(prefix="delete")
+
+    if form.validate_on_submit():
+        character = form.characters.data
+        if character:
+            db.session.delete(character)
+            db.session.commit()
+            flash("Successfully removed character %s!" % character.name)
+        else:
+            flash("Couldn't find character for slug %s..." %
+                form.characters.data)
+    else:
+        flash("Couldn't validate form...")
+
+    return redirect(url_for("characters"))
 
 class UploadForm(Form):
     file = FileField("Select a file to upload",

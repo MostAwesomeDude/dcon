@@ -1,6 +1,23 @@
+{% extends "base.html" %}
 {% import "forms.html" as forms %}
 
-<form>
-    {{ form.hidden_tag() }}
-    {{ forms.render_field(form.characters) }}
+{% block body %}
+<form method="POST" action="{{ url_for("characters_create") }}">
+    {{ cform.hidden_tag() }}
+    {{ forms.render_field(cform.name) }}
+    {{ forms.render_field(cform.submit) }}
 </form>
+
+<form method="POST" action="{{ url_for("characters_modify") }}">
+    {{ mform.hidden_tag() }}
+    {{ forms.render_field(mform.characters) }}
+    {{ forms.render_field(mform.name) }}
+    {{ forms.render_field(mform.submit) }}
+</form>
+
+<form method="POST" action="{{ url_for("characters_delete") }}">
+    {{ dform.hidden_tag() }}
+    {{ forms.render_field(dform.characters) }}
+    {{ forms.render_field(dform.submit) }}
+</form>
+{% endblock %}
