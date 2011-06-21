@@ -85,31 +85,35 @@ class Comic(db.Model):
     def __repr__(self):
         return "<Comic(%r)>" % self.filename
 
+    @property
+    def orphaned(self):
+        """
+        Whether this comic is chronologically oriented.
+        """
+
+        return bool(self.before or self.after)
+
     def orphan(self):
         """
         Remove this comic from its current position in the timeline.
-
-        This is usually a prelude to inserting the comic in another position.
         """
 
-        if self.before:
-            self.before.after = self.after
+        if self.after:
+            db.session.add(self.after)
+            self.after.before = self.before
+
         self.after = None
+        db.session.add(self)
 
-    def move_before(self, other):
-        """
-        Move this comic to come just before another comic in the timeline.
-        """
-
-        other.move_after(self)
-
-    def move_after(self, other):
+    def insert(self, prior):
         """
         Move this comic to come just after another comic in the timeline.
         """
 
-        self.orphan()
-        self.after, other.after = other.after, self
+        self.after = prior.after
+        prior.after = self
+        db.session.add(prior)
+        db.session.add(self)
 
 class CharacterCreateForm(Form):
     name = TextField(u"New name", validators=(Required(),))
