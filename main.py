@@ -7,6 +7,7 @@ if __name__ == "__main__":
 from datetime import datetime
 import os.path
 
+from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
 
 from werkzeug import secure_filename
@@ -15,7 +16,7 @@ from flask import Flask, abort, flash, redirect, render_template, url_for
 from flaskext.sqlalchemy import SQLAlchemy
 from flaskext.uploads import configure_uploads, IMAGES, UploadSet
 from flaskext.wtf import (Form, FileAllowed, FileRequired,
-    Required, FileField, QuerySelectField, QuerySelectMultipleField,
+    Required, FileField, QuerySelectField, IntegerField,
     SubmitField, TextField)
 from wtforms.fields import Field
 from wtforms.widgets import TextInput
@@ -63,16 +64,13 @@ class Comic(db.Model):
     __tablename__ = "comics"
 
     # Serial number, for simple PK.
-    id = db.Column(db.Integer, primary_key=True)
-    after_id = db.Column(db.Integer, db.ForeignKey(id))
+    id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
     # Upload time.
-    time = db.Column(db.DateTime)
+    time = db.Column(db.DateTime, unique=True, nullable=False)
     # Local filename.
-    filename = db.Column(db.String)
-
-    # Chronological position, as ascertained during the last sort.
-    after = db.relationship("Comic", uselist=False,
-        backref=db.backref("before", remote_side=id, uselist=False))
+    filename = db.Column(db.String, unique=True, nullable=False)
+    # Position in the timeline.
+    position = db.Column(db.Integer, nullable=False)
 
     # List of characters in this comic.
     characters = db.relationship("Character", secondary=casts,
@@ -81,40 +79,62 @@ class Comic(db.Model):
     def __init__(self, filename):
         self.filename = filename
         self.time = datetime.utcnow()
-        self.parents = {}
-        self.kids = {}
 
     def __repr__(self):
         return "<Comic(%r)>" % self.filename
 
-    @property
-    def orphaned(self):
+    @classmethod
+    def reorder(cls):
         """
-        Whether this comic is chronologically oriented.
-        """
+        Compact chronological ordering.
 
-        return bool(self.before or self.after)
-
-    def orphan(self):
-        """
-        Remove this comic from its current position in the timeline.
+        The reason for doing this is almost completely aesthetic.
         """
 
-        if self.after:
-            db.session.add(self.after)
-            self.after.before = self.before
+        for i, comic in enumerate(cls.query.order_by(cls.position)):
+            if comic.position != i:
+                comic.position = i
+                db.session.add(comic)
 
-        self.after = None
+    def insert_at_head(self):
+        """
+        Make this comic the very first comic.
+        """
+
+        self.position = 0
         db.session.add(self)
+
+        q = Comic.query.filter(Comic.id != self.id)
+        q = q.order_by(Comic.position)
+
+        for i, comic in enumerate(q):
+            if comic.position != i + 1:
+                comic.position = i + 1
+                db.session.add(comic)
 
     def insert(self, prior):
         """
         Move this comic to come just after another comic in the timeline.
         """
 
-        self.after = prior.after
-        prior.after = self
-        db.session.add(prior)
+        if not prior:
+            # First insertion in the table, ever. Let's just set ourselves to
+            # zero and walk away.
+            self.position = 1
+            db.session.add(self)
+            return
+
+        position = prior.position + 1
+
+        q = Comic.query.filter(Comic.position >= position)
+        q = q.order_by(Comic.position)
+
+        for i, comic in enumerate(q):
+            if comic.position != i + position:
+                comic.position = i + position
+                db.session.add(comic)
+
+        self.position = position
         db.session.add(self)
 
 class CharacterCreateForm(Form):
@@ -214,6 +234,8 @@ class UploadForm(Form):
         validators=(FileRequired("Must upload a comic!"),
             FileAllowed(images, "Images only!")))
     characters = TagListField("Characters")
+    index = IntegerField("Where to insert this comic?",
+        validators=(Required(),))
     submit = SubmitField("Upload!")
 
 @app.route("/upload", methods=("GET", "POST"))
@@ -229,6 +251,15 @@ def upload():
             flash("Couldn't find character %s..." % ke.args)
             return render_template("upload.html", form=form)
 
+        bottom = db.session.query(func.min(Comic.position)).first()[0]
+        top = db.session.query(func.max(Comic.position)).first()[0]
+
+        if (bottom and top and form.index.data and
+            not bottom <= form.index.data <= top):
+            flash("Couldn't find insertion point between %d and %d"
+                % (bottom, top))
+            return render_template("upload.html", form=form)
+
         filename = secure_filename(form.file.file.filename)
         path = os.path.abspath(os.path.join("uploads", filename))
         if os.path.exists(path):
@@ -238,6 +269,13 @@ def upload():
         form.file.file.save(path)
         comic = Comic(filename)
         comic.characters = characters
+
+        if form.index.data == 0:
+            comic.insert_at_head()
+        else:
+            prior = Comic.query.filter(Comic.position < form.index.data).first()
+            comic.insert(prior)
+
         db.session.add(comic)
         db.session.commit()
         return redirect(url_for("comics", cid=comic.id))
