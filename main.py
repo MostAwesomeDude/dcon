@@ -307,10 +307,17 @@ def comics(cid):
     q = Comic.query.filter(Comic.time > comic.time)
     after = q.order_by(Comic.time).first()
 
+    q = Comic.query.filter(Comic.position < comic.position)
+    previous = q.order_by(Comic.position.desc()).first()
+
+    q = Comic.query.filter(Comic.position > comic.position)
+    chrono = previous, q.order_by(Comic.position).first()
+
     kwargs = {
         "comic": comic,
         "before": before,
         "after": after,
+        "chrono": chrono,
     }
 
     return render_template("comics.html", **kwargs)

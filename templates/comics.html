@@ -14,10 +14,10 @@
     {% if after %}
         <a href="{{ url_for("comics", cid=after.id) }}">Next</a>
     {% endif %}
-    {% if comic.before %}
-        <a href="{{ url_for("comics", cid=comic.before.id) }}">Chrono Previous</a>
+    {% if chrono[0] %}
+        <a href="{{ url_for("comics", cid=chrono[0].id) }}">Chrono Previous</a>
     {% endif %}
-    {% if comic.after %}
-        <a href="{{ url_for("comics", cid=comic.after.id) }}">Chrono Next</a>
+    {% if chrono[1] %}
+        <a href="{{ url_for("comics", cid=chrono[1].id) }}">Chrono Next</a>
     {% endif %}
 {%endblock %}
