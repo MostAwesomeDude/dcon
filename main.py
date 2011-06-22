@@ -313,11 +313,24 @@ def comics(cid):
     q = Comic.query.filter(Comic.position > comic.position)
     chrono = previous, q.order_by(Comic.position).first()
 
+    cdict = {}
+
+    for character in list(comic.characters):
+        q = Comic.query.filter(Comic.position < comic.position)
+        q = q.order_by(Comic.position.desc())
+        previous = q.filter(Comic.characters.any(slug=character.slug)).first()
+
+        q = Comic.query.filter(Comic.position > comic.position)
+        next = q.filter(Comic.characters.any(slug=character.slug)).first()
+
+        cdict[character.slug] = character, previous, next
+
     kwargs = {
         "comic": comic,
         "before": before,
         "after": after,
         "chrono": chrono,
+        "characters": cdict,
     }
 
     return render_template("comics.html", **kwargs)

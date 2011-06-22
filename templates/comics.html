@@ -20,4 +20,16 @@
     {% if chrono[1] %}
         <a href="{{ url_for("comics", cid=chrono[1].id) }}">Chrono Next</a>
     {% endif %}
+    {% for character, t in characters.items() %}
+        {% if t[1] %}
+            <a href="{{ url_for("comics", cid=t[1].id) }}">
+                {{ t[0].name }} Previous
+            </a>
+        {% endif %}
+        {% if t[2] %}
+            <a href="{{ url_for("comics", cid=t[2].id) }}">
+                {{ t[0].name }} Next
+            </a>
+        {% endif %}
+    {% endfor %}
 {%endblock %}
