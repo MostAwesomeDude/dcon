@@ -14,9 +14,11 @@ from werkzeug import secure_filename
 from flask import Flask, abort, flash, redirect, render_template, url_for
 from flaskext.sqlalchemy import SQLAlchemy
 from flaskext.uploads import configure_uploads, IMAGES, UploadSet
-from flaskext.wtf import (Form, FileAllowed, FileRequired, Required,
-    FileField, QuerySelectField, QuerySelectMultipleField, SubmitField,
-    TextField)
+from flaskext.wtf import (Form, FileAllowed, FileRequired,
+    Required, FileField, QuerySelectField, QuerySelectMultipleField,
+    SubmitField, TextField)
+from wtforms.fields import Field
+from wtforms.widgets import TextInput
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///temp.db"
@@ -191,13 +193,27 @@ def characters_delete():
 
     return redirect(url_for("characters"))
 
+class TagListField(Field):
+    widget = TextInput()
+
+    def _value(self):
+        if self.data:
+            return u", ".join(self.data)
+        else:
+            return u""
+
+    def process_formdata(self, data):
+        if data:
+            self.data = [word.strip() for word in data[0].split(",")]
+            self.data.sort()
+        else:
+            self.data = []
+
 class UploadForm(Form):
     file = FileField("Select a file to upload",
         validators=(FileRequired("Must upload a comic!"),
             FileAllowed(images, "Images only!")))
-    characters = QuerySelectMultipleField("Available characters:",
-        query_factory=lambda: Character.query.order_by(Character.name),
-        get_label="name")
+    characters = TagListField("Characters")
     submit = SubmitField("Upload!")
 
 @app.route("/upload", methods=("GET", "POST"))
@@ -205,18 +221,26 @@ def upload():
     form = UploadForm()
 
     if form.validate_on_submit():
+        d = dict((c.name, c) for c in
+            Character.query.order_by(Character.name).all())
+        try:
+            characters = [d[name] for name in form.characters.data]
+        except KeyError, ke:
+            flash("Couldn't find character %s..." % ke.args)
+            return render_template("upload.html", form=form)
+
         filename = secure_filename(form.file.file.filename)
         path = os.path.abspath(os.path.join("uploads", filename))
         if os.path.exists(path):
             flash("File already exists!")
-            return redirect(url_for("upload"))
-        else:
-            form.file.file.save(path)
-            comic = Comic(filename)
-            comic.characters = form.characters.data
-            db.session.add(comic)
-            db.session.commit()
-            return redirect(url_for("comics", cid=comic.id))
+            return render_template("upload.html", form=form)
+
+        form.file.file.save(path)
+        comic = Comic(filename)
+        comic.characters = characters
+        db.session.add(comic)
+        db.session.commit()
+        return redirect(url_for("comics", cid=comic.id))
 
     return render_template("upload.html", form=form)
 
