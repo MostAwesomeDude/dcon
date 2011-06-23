@@ -37,6 +37,7 @@ def auth_required(f):
     return decorated
 
 @app.route("/characters")
+@auth_required
 def characters():
     cform = CharacterCreateForm(prefix="create")
     mform = CharacterModifyForm(prefix="modify")
