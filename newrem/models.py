@@ -46,6 +46,8 @@ class Comic(db.Model):
     filename = db.Column(db.String, unique=True, nullable=False)
     # Position in the timeline.
     position = db.Column(db.Integer, nullable=False)
+    # Title of the comic.
+    title = db.Column(db.String, nullable=False)
 
     # List of characters in this comic.
     characters = db.relationship("Character", secondary=casts,
