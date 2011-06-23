@@ -1,4 +1,7 @@
 from datetime import datetime
+import re
+
+from unidecode import unidecode
 
 from flaskext.sqlalchemy import SQLAlchemy
 
@@ -10,6 +13,8 @@ casts = db.Table("casts", db.metadata,
     db.Column("character_id", db.String, db.ForeignKey("characters.slug")),
     db.Column("comic_id", db.Integer, db.ForeignKey("comics.id"))
 )
+
+punctuation = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
 
 class Character(db.Model):
     """
@@ -29,7 +34,12 @@ class Character(db.Model):
 
     def rename(self, name):
         self.name = name
-        self.slug = name.strip().lower().replace(" ", "-")
+
+        # ASCIIfy slug. Based on http://flask.pocoo.org/snippets/5/.
+        l = []
+        for word in punctuation.split(self.name):
+            l.extend(unidecode(word).split())
+        self.slug = "-".join(word.strip().lower() for word in l)
 
 class Comic(db.Model):
     """
