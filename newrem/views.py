@@ -1,3 +1,4 @@
+from functools import wraps
 import os.path
 
 from sqlalchemy import func
@@ -5,13 +6,35 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from werkzeug import secure_filename
 
-from flask import abort, flash, redirect, render_template, request, url_for
+from flask import (abort, flash, redirect, render_template, request, url_for,
+    Response)
 from flaskext.login import login_user, logout_user
 
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
     CharacterModifyForm, LoginForm, UploadForm)
 from newrem.main import app
 from newrem.models import db, Character, Comic, User
+
+def check_auth(username, password):
+    """
+    This function is called to check if a username/password combination is
+    valid.
+    """
+
+    return username, password == "hurp", "derp"
+
+def authenticate():
+    return Response("Haha, no.", 401,
+        {'WWW-Authenticate': '''Basic realm="Cid's Lair"'''})
+
+def auth_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwargs)
+    return decorated
 
 @app.route("/characters")
 def characters():
@@ -73,6 +96,7 @@ def characters_delete():
     return redirect(url_for("characters"))
 
 @app.route("/upload", methods=("GET", "POST"))
+@auth_required
 def upload():
     form = UploadForm()
 
@@ -190,6 +214,7 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
+    flash("Logged out!")
 
     if "next" in request.args:
         return redirect(request.args["next"])
