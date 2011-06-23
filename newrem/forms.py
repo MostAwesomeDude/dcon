@@ -1,7 +1,7 @@
 from flaskext.uploads import configure_uploads, IMAGES, UploadSet
 from flaskext.wtf import (Form, FileAllowed, FileRequired,
     Required, FileField, QuerySelectField, IntegerField,
-    SubmitField, TextField)
+    PasswordField, SubmitField, TextField)
 from wtforms.fields import Field
 from wtforms.widgets import TextInput
 
@@ -44,6 +44,11 @@ class CharacterDeleteForm(Form):
         query_factory=lambda: Character.query.order_by(Character.name),
         get_label="name")
     submit = SubmitField("Delete!")
+
+class LoginForm(Form):
+    username = TextField("Username", validators=(Required(),))
+    password = PasswordField("Password", validators=(Required(),))
+    submit = SubmitField("Login!")
 
 class UploadForm(Form):
     file = FileField("Select a file to upload",

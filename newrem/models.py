@@ -3,9 +3,11 @@ import re
 
 from unidecode import unidecode
 
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from flaskext.sqlalchemy import SQLAlchemy
 
-from newrem.main import app
+from newrem.main import app, lm
 
 db = SQLAlchemy(app)
 
@@ -123,3 +125,50 @@ class Comic(db.Model):
 
         self.position = position
         db.session.add(self)
+
+class User(db.Model):
+
+    __tablename__ = "users"
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String, unique=True)
+    password = db.Column(db.String)
+    logged_in = db.Column(db.Boolean)
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
+    def login(self):
+        self.logged_in = True
+        db.session.add(self)
+        db.session.commit()
+
+    def logout(self):
+        self.logged_in = False
+        db.session.add(self)
+        db.session.commit()
+
+    def is_authenticated(self):
+        return self.logged_in
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(self.id)
+
+@lm.user_loader
+def user_loader(uid):
+    try:
+        uid = int(uid)
+    except ValueError:
+        return None
+
+    return User.query.filter_by(id=uid).first()

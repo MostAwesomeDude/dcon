@@ -5,12 +5,13 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from werkzeug import secure_filename
 
-from flask import abort, flash, redirect, render_template, url_for
+from flask import abort, flash, redirect, render_template, request, url_for
+from flaskext.login import login_user, logout_user
 
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
-    CharacterModifyForm, UploadForm)
+    CharacterModifyForm, LoginForm, UploadForm)
 from newrem.main import app
-from newrem.models import db, Character, Comic
+from newrem.models import db, Character, Comic, User
 
 @app.route("/characters")
 def characters():
@@ -167,3 +168,30 @@ def comics(cid):
     }
 
     return render_template("comics.html", **kwargs)
+
+@app.route("/login", methods=("GET", "POST"))
+def login():
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+
+        if user and user.check_password(form.password.data):
+            user.login()
+            login_user(user)
+            flash("Logged in!")
+            if "next" in request.args:
+                return redirect(request.args["next"])
+            else:
+                return redirect(url_for("index"))
+
+    return render_template("login.html", form=LoginForm())
+
+@app.route("/logout")
+def logout():
+    logout_user()
+
+    if "next" in request.args:
+        return redirect(request.args["next"])
+    else:
+        return redirect(url_for("index"))
