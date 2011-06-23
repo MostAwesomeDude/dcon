@@ -1,8 +1,8 @@
-{% with flashes = get_flashed_messages() %}
+{% with flashes = get_flashed_messages(True) %}
     {% if flashes %}
         <ul>
-        {% for flash in flashes %}
-            <li>{{ flash }}</li>
+        {% for category, flash in flashes %}
+            <li class="{{ category }}">{{ flash }}</li>
         {% endfor %}
         </ul>
     {% endif %}
