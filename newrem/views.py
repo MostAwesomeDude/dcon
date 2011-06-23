@@ -202,7 +202,7 @@ def login():
 
         if user and user.check_password(form.password.data):
             user.login()
-            login_user(user)
+            login_user(user, remember=True)
             flash("Logged in!")
             if "next" in request.args:
                 return redirect(request.args["next"])

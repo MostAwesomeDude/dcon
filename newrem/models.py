@@ -6,6 +6,7 @@ from unidecode import unidecode
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flaskext.sqlalchemy import SQLAlchemy
+from flaskext.login import make_secure_token
 
 from newrem.main import app, lm
 
@@ -163,6 +164,9 @@ class User(db.Model):
 
     def get_id(self):
         return unicode(self.id)
+
+    def get_auth_token(self):
+        return make_secure_token(self.id, self.username, self.password)
 
 @lm.user_loader
 def user_loader(uid):
