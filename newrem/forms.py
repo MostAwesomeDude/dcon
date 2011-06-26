@@ -54,7 +54,8 @@ class UploadForm(Form):
     file = FileField("Select a file to upload",
         validators=(FileRequired("Must upload a comic!"),
             FileAllowed(images, "Images only!")))
-    characters = TagListField("Characters")
+    title = TextField("Title", validators=(Required(),))
     index = IntegerField("Where to insert this comic?",
         validators=(Required(),))
+    characters = TagListField("Characters")
     submit = SubmitField("Upload!")

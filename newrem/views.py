@@ -119,6 +119,7 @@ def upload():
         form.file.file.save(path)
         comic = Comic(filename)
         comic.characters = characters
+        comic.title = form.title.data
 
         if form.index.data == 0:
             comic.insert_at_head()

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
-    Here's comic number {{ comic.id }}, uploaded {{ comic.time }}. It features
-    these characters:
+    Here's comic number {{ comic.id }} "{{ comic.title }}" uploaded
+    {{ comic.time }}. It features these characters:
     <ul>
     {% for character in comic.characters %}
         <li>{{ character.name }}</li>
