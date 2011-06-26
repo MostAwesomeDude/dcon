@@ -11,7 +11,7 @@ from flask import abort, flash, redirect, render_template, request, url_for
 from flaskext.login import login_user, logout_user
 
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
-    CharacterModifyForm, LoginForm, UploadForm)
+    CharacterModifyForm, LoginForm, RegisterForm, UploadForm)
 from newrem.main import app
 from newrem.models import db, Character, Comic, User
 
@@ -191,6 +191,26 @@ def comics(cid):
 
     return render_template("comics.html", **kwargs)
 
+@app.route("/register", methods=("GET", "POST"))
+def register():
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+
+        if not user:
+            user = User(form.username.data, form.password.data)
+            db.session.add(user)
+            user.login()
+            login_user(user, remember=True)
+            flash("Logged in!")
+            if "next" in request.args:
+                return redirect(request.args["next"])
+            else:
+                return redirect(url_for("index"))
+
+    return render_template("register.html", form=form)
+
 @app.route("/login", methods=("GET", "POST"))
 def login():
     form = LoginForm()
@@ -207,7 +227,7 @@ def login():
             else:
                 return redirect(url_for("index"))
 
-    return render_template("login.html", form=LoginForm())
+    return render_template("login.html", form=form)
 
 @app.route("/logout")
 def logout():

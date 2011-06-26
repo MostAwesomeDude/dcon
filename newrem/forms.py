@@ -1,9 +1,11 @@
+from wtforms.fields import Field
+from wtforms.widgets import TextInput
+from wtforms.validators import EqualTo
+
 from flaskext.uploads import configure_uploads, IMAGES, UploadSet
 from flaskext.wtf import (Form, FileAllowed, FileRequired,
     Required, FileField, QuerySelectField, IntegerField,
     PasswordField, SubmitField, TextField)
-from wtforms.fields import Field
-from wtforms.widgets import TextInput
 
 from newrem.main import app
 from newrem.models import Character
@@ -49,6 +51,11 @@ class LoginForm(Form):
     username = TextField("Username", validators=(Required(),))
     password = PasswordField("Password", validators=(Required(),))
     submit = SubmitField("Login!")
+
+class RegisterForm(LoginForm):
+    confirm = PasswordField("Confirm password",
+        validators=(Required(), EqualTo("password")))
+    submit = SubmitField("Register!")
 
 class UploadForm(Form):
     file = FileField("Select a file to upload",
