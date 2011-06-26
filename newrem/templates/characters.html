@@ -2,14 +2,16 @@
 {% import "forms.html" as forms %}
 
 {% block body %}
-<form method="POST" action="{{ url_for("characters_create") }}">
+<form method="POST" enctype="multipart/form-data"
+    action="{{ url_for("characters_create") }}">
     {{ cform.hidden_tag() }}
     {{ forms.render_field(cform.name) }}
     {{ forms.render_field(cform.portrait) }}
     {{ forms.render_field(cform.submit) }}
 </form>
 
-<form method="POST" action="{{ url_for("characters_modify") }}">
+<form method="POST" enctype="multipart/form-data"
+    action="{{ url_for("characters_modify") }}">
     {{ mform.hidden_tag() }}
     {{ forms.render_field(mform.characters) }}
     {{ forms.render_field(mform.name) }}

@@ -13,7 +13,7 @@ from newrem.models import Character
 images = UploadSet("images", IMAGES)
 pngs = UploadSet("pngs", ("png",))
 
-configure_uploads(app, (images,))
+configure_uploads(app, (images, pngs))
 
 class TagListField(Field):
     widget = TextInput()
@@ -41,7 +41,7 @@ class CharacterModifyForm(Form):
     characters = QuerySelectField(u"Characters",
         query_factory=lambda: Character.query.order_by(Character.name),
         get_label="name")
-    name = TextField(u"New name", validators=(Required(),))
+    name = TextField(u"New name")
     portrait = FileField("Select a portrait",
         validators=(FileAllowed(pngs, "PNGs only!"),))
     submit = SubmitField("Modify!")

@@ -48,8 +48,7 @@ class Character(db.Model):
     @property
     def portrait(self):
         png = "%s.png" % self.slug
-        return os.path.join(app.config["UPLOADS_DEFAULT_DEST"],
-            "characters", png)
+        return os.path.join("characters", png)
 
     @portrait.setter
     def portrait(self, filename):

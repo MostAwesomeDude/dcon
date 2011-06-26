@@ -3,6 +3,7 @@
 <ul>
 {% for character in characters %}
     <li>{{ character.name }}</li>
+    <li><img src="{{ url_for("static", filename=character.portrait) }}" /></li>
 {% endfor %}
 </ul>
 {% endblock %}

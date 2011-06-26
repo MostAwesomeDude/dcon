@@ -45,9 +45,8 @@ def characters_create():
         db.session.add(character)
         db.session.commit()
 
-        if form.portrait.file:
-            path = character.portrait
-            form.portrait.file.save(path)
+        path = os.path.abspath(os.path.join("uploads", character.portrait))
+        form.portrait.file.save(path)
 
         flash("Successfully created character %s!" % character.name)
     else:
@@ -70,7 +69,8 @@ def characters_modify():
                 flash("Successfully renamed character %s!" % character.name)
 
             if form.portrait.file:
-                path = character.portrait
+                path = os.path.abspath(os.path.join("uploads",
+                    character.portrait))
                 form.portrait.file.save(path)
                 flash("Successfully changed portrait for character %s!" %
                     character.name)
