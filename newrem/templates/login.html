@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 
 {% block body %}
-<form method="POST" action="{{ url_for("login") }}">
+<form method="POST" action="{{ url_for("login", **request.args) }}">
     {{ form.hidden_tag() }}
     {{ forms.render_field(form.username) }}
     {{ forms.render_field(form.password) }}
