@@ -44,6 +44,11 @@ def characters_create():
         character = Character(form.name.data)
         db.session.add(character)
         db.session.commit()
+
+        if form.portrait.file:
+            path = character.portrait
+            form.portrait.file.save(path)
+
         flash("Successfully created character %s!" % character.name)
     else:
         flash("Couldn't validate form...")
@@ -57,10 +62,18 @@ def characters_modify():
     if form.validate_on_submit():
         character = form.characters.data
         if character:
-            character.rename(form.name.data)
-            db.session.add(character)
-            db.session.commit()
-            flash("Successfully renamed character %s!" % character.name)
+            # Which modifications do we want to make?
+            if form.name.data:
+                character.rename(form.name.data)
+                db.session.add(character)
+                db.session.commit()
+                flash("Successfully renamed character %s!" % character.name)
+
+            if form.portrait.file:
+                path = character.portrait
+                form.portrait.file.save(path)
+                flash("Successfully changed portrait for character %s!" %
+                    character.name)
         else:
             flash("Couldn't find character for slug %s..." %
                 form.characters.data)

@@ -5,6 +5,7 @@
 <form method="POST" action="{{ url_for("characters_create") }}">
     {{ cform.hidden_tag() }}
     {{ forms.render_field(cform.name) }}
+    {{ forms.render_field(cform.portrait) }}
     {{ forms.render_field(cform.submit) }}
 </form>
 
@@ -12,6 +13,7 @@
     {{ mform.hidden_tag() }}
     {{ forms.render_field(mform.characters) }}
     {{ forms.render_field(mform.name) }}
+    {{ forms.render_field(mform.portrait) }}
     {{ forms.render_field(mform.submit) }}
 </form>
 

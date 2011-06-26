@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 import re
 
 from unidecode import unidecode
@@ -43,6 +44,16 @@ class Character(db.Model):
         for word in punctuation.split(self.name):
             l.extend(unidecode(word).split())
         self.slug = "-".join(word.strip().lower() for word in l)
+
+    @property
+    def portrait(self):
+        png = "%s.png" % self.slug
+        return os.path.join(app.config["UPLOADS_DEFAULT_DEST"],
+            "characters", png)
+
+    @portrait.setter
+    def portrait(self, filename):
+        os.rename(filename, self.portrait)
 
 class Comic(db.Model):
     """
