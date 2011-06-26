@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+
+<head>
+    {% block head %}
+    {% endblock %}
+</head>
+
 {% with flashes = get_flashed_messages(True) %}
     {% if flashes %}
         <ul>
@@ -7,8 +14,10 @@
         </ul>
     {% endif %}
 {% endwith %}
+
 {% block body %}
 {% endblock %}
+
 {% if current_user.is_anonymous() %}
     Not currently logged in (
     <a href="{{ url_for("login", next=request.path)}}">Login?</a>

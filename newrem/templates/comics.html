@@ -1,4 +1,13 @@
 {% extends "base.html" %}
+
+{% block head %}
+    {% if after %}
+        <!-- For Serialist and other indexers, as well as for readers and
+          -- prefetchers, mark the next page in the sequence. -->
+        <link rel="next" href="{{ url_for("comics", cid=after.id) }}">Next</a>
+    {% endif %}
+{% endblock %}
+
 {% block body %}
     Here's comic number {{ comic.id }} "{{ comic.title }}" uploaded
     {{ comic.time }}. It features these characters:
