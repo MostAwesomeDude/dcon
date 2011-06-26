@@ -22,7 +22,7 @@ def auth_required(f):
     def decorated(*args, **kwargs):
         auth = request.authorization
         if not auth or not authenticator.validate(auth):
-            return authenticator.make_digest_challenge("Cid's Lair",
+            return authenticator.make_basic_challenge("Cid's Lair",
                 "Haha, no.")
         return f(*args, **kwargs)
     return decorated
