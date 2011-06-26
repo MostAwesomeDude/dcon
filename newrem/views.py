@@ -5,6 +5,7 @@ from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
 
 from werkzeug import secure_filename
+from werkzeug.security import Authenticator
 
 from flask import (abort, flash, redirect, render_template, request, url_for,
     Response)
@@ -15,24 +16,15 @@ from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
 from newrem.main import app
 from newrem.models import db, Character, Comic, User
 
-def check_auth(username, password):
-    """
-    This function is called to check if a username/password combination is
-    valid.
-    """
-
-    return username, password == "hurp", "derp"
-
-def authenticate():
-    return Response("Haha, no.", 401,
-        {'WWW-Authenticate': '''Basic realm="Cid's Lair"'''})
+authenticator = Authenticator({"hurp": "derp"})
 
 def auth_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         auth = request.authorization
-        if not auth or not check_auth(auth.username, auth.password):
-            return authenticate()
+        if not auth or not authenticator.validate(auth):
+            return authenticator.make_digest_challenge("Cid's Lair",
+                "Haha, no.")
         return f(*args, **kwargs)
     return decorated
 
