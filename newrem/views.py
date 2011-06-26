@@ -7,8 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from werkzeug import secure_filename
 from werkzeug.security import Authenticator
 
-from flask import (abort, flash, redirect, render_template, request, url_for,
-    Response)
+from flask import abort, flash, redirect, render_template, request, url_for
 from flaskext.login import login_user, logout_user
 
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
@@ -140,6 +139,11 @@ def not_found(error):
 @app.route("/")
 def index():
     return "One second, please."
+
+@app.route("/cast")
+def cast():
+    characters = Character.query.order_by(Character.name)
+    return render_template("cast.html", characters=characters)
 
 @app.route("/comics/")
 def comics_root():
