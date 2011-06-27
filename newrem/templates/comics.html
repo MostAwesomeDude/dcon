@@ -8,6 +8,12 @@
     {% endif %}
 {% endblock %}
 
+{% block header %}
+    <div class="banner"></div>
+    <div class="links"></div>
+    <div class="login"></div>
+{% endblock %}
+
 {% block content %}
     Here's comic number {{ comic.id }} "{{ comic.title }}" uploaded
     {{ comic.time }}. It features these characters:
@@ -41,4 +47,10 @@
             </a>
         {% endif %}
     {% endfor %}
-{%endblock %}
+    <div class="shareables"></div>
+    <div class="news"></div>
+    <div class="money"></div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
