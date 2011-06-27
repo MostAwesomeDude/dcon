@@ -231,14 +231,19 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
 
-        if user and user.check_password(form.password.data):
-            user.login()
-            login_user(user, remember=True)
-            flash("Logged in!")
-            if "next" in request.args:
-                return redirect(request.args["next"])
+        if user:
+            if user.check_password(form.password.data):
+                user.login()
+                login_user(user, remember=True)
+                flash("Logged in!")
+                if "next" in request.args:
+                    return redirect(request.args["next"])
+                else:
+                    return redirect(url_for("index"))
             else:
-                return redirect(url_for("index"))
+                flash("Incorrect password!")
+        else:
+            flash("No user %s found!" % form.username.data)
 
     return render_template("login.html", form=form)
 
