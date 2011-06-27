@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% import "forms.html" as forms %}
 
-{% block body %}
+{% block content %}
 <form method="POST" enctype="multipart/form-data"
     action="{{ url_for("characters_create") }}">
     {{ cform.hidden_tag() }}
