@@ -152,7 +152,7 @@ def not_found(error):
 
 @app.route("/")
 def index():
-    return "One second, please."
+    return render_template("index.html")
 
 @app.route("/cast")
 def cast():
