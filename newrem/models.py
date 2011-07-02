@@ -137,6 +137,19 @@ class Comic(db.Model):
         self.position = position
         db.session.add(self)
 
+class Newspost(db.Model):
+
+    __tablename__ = "newsposts"
+
+    time = db.Column(db.DateTime, primary_key=True)
+    title = db.Column(db.Unicode, nullable=False)
+    content = db.Column(db.UnicodeText)
+
+    def __init__(self, title, content=u""):
+        self.time = datetime.utcnow()
+        self.title = title
+        self.content = content
+
 class User(db.Model):
 
     __tablename__ = "users"
