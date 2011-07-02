@@ -8,7 +8,7 @@
         {% for post in newsposts %}
             <div class="newsentry">
                 <h3>{{ post.title }}</h3>
-                <p>{{ post.content }}</p>
+                <p>{{ post.content|safe|urlize }}</p>
             </div>
         {% endfor %}
     </div>
