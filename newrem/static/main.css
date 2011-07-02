@@ -1,3 +1,12 @@
+div.body {
+    width: 760px;
+    position: absolute;
+    left: 0px;
+    top: 100px;
+    margin: auto;
+    text-align: center;
+}
+
 p {
     text-align: left;
     text-indent: 2em;

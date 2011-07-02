@@ -14,29 +14,31 @@
 </head>
 
 <body>
-{% with flashes = get_flashed_messages(True) %}
-    {% if flashes %}
-        <ul>
-        {% for category, flash in flashes %}
-            <li class="{{ category }}">{{ flash }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
+    <div class="body">
+        {% with flashes = get_flashed_messages(True) %}
+            {% if flashes %}
+                <ul>
+                {% for category, flash in flashes %}
+                    <li class="{{ category }}">{{ flash }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 
-<div class="header">
-    {{ macros.render_login(request, current_user, login_form) }}
-    {% block header %}
-    {% endblock %}
-</div>
+        <div class="header">
+            {{ macros.render_login(request, current_user, login_form) }}
+            {% block header %}
+            {% endblock %}
+        </div>
 
-<div class="content">
-    {% block content %}
-    {% endblock %}
-</div>
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
 
-<div class="footer">
-    {% block footer %}
-    {% endblock %}
-</div>
+        <div class="footer">
+            {% block footer %}
+            {% endblock %}
+        </div>
+    </div>
 </body>
