@@ -131,7 +131,8 @@ def upload():
                 % (bottom, top))
             return render_template("upload.html", form=form)
 
-        filename = secure_filename(form.file.file.filename)
+        filename = os.path.join("comics",
+            secure_filename(form.file.file.filename))
         path = os.path.abspath(os.path.join("uploads", filename))
         if os.path.exists(path):
             flash("File already exists!")
