@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "macros.html" as macros %}
 
 {% block head %}
     {% if after %}
@@ -15,14 +16,7 @@
 {% endblock %}
 
 {% block content %}
-    Here's comic number {{ comic.id }} "{{ comic.title }}" uploaded
-    {{ comic.time }}. It features these characters:
-    <ul>
-    {% for character in comic.characters %}
-        <li>{{ character.name }}</li>
-    {% endfor %}
-    </ul>
-    <img src="{{ url_for("static", filename=comic.filename) }}" />
+    {{ macros.render_comic(comic) }}
     {% if before %}
         <a href="{{ url_for("comics", cid=before.id) }}">Previous</a>
     {% endif %}

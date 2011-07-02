@@ -152,7 +152,8 @@ def not_found(error):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    comic = Comic.query.order_by(Comic.id.desc()).first()
+    return render_template("index.html", comic=comic)
 
 @app.route("/cast")
 def cast():

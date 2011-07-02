@@ -1,0 +1,10 @@
+{% macro render_comic(comic) %}
+    Here's comic number {{ comic.id }} "{{ comic.title }}" uploaded
+    {{ comic.time }}. It features these characters:
+    <ul>
+    {% for character in comic.characters %}
+        <li>{{ character.name }}</li>
+    {% endfor %}
+    </ul>
+    <img src="{{ url_for("static", filename=comic.filename) }}" />
+{% endmacro %}
