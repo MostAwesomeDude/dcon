@@ -4,4 +4,12 @@
 {% block content %}
     {{ macros.render_comic(comic) }}
     One second, please.
+    <div class="newsfeed">
+        {% for post in newsposts %}
+            <div class="newsentry">
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.content }}</p>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

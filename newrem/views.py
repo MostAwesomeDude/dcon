@@ -13,7 +13,7 @@ from flaskext.login import login_user, logout_user
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
     CharacterModifyForm, LoginForm, RegisterForm, UploadForm)
 from newrem.main import app
-from newrem.models import db, Character, Comic, User
+from newrem.models import db, Character, Comic, Newspost, User
 
 authenticator = Authenticator({"hurp": "derp"})
 
@@ -163,7 +163,9 @@ def not_found(error):
 @with_login_form
 def index(**kwargs):
     comic = Comic.query.order_by(Comic.id.desc()).first()
-    return render_template("index.html", comic=comic, **kwargs)
+    newsposts = Newspost.query.order_by(Newspost.time.desc())[:5]
+    return render_template("index.html", comic=comic, newsposts=newsposts,
+        **kwargs)
 
 @app.route("/cast")
 @with_login_form
