@@ -237,8 +237,9 @@ def register():
     return render_template("register.html", form=form)
 
 @app.route("/login", methods=("GET", "POST"))
-def login():
-    form = LoginForm()
+@with_login_form
+def login(**kwargs):
+    form = kwargs["login_form"]
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -257,7 +258,7 @@ def login():
         else:
             flash("No user %s found!" % form.username.data)
 
-    return render_template("login.html", form=form)
+    return render_template("login.html", **kwargs)
 
 @app.route("/logout")
 def logout():

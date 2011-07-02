@@ -1,11 +1,1 @@
-{% import "forms.html" as forms %}
 {% extends "base.html" %}
-
-{% block content %}
-<form method="POST" action="{{ url_for("login", **request.args) }}">
-    {{ form.hidden_tag() }}
-    {{ forms.render_field(form.username) }}
-    {{ forms.render_field(form.password) }}
-    {{ forms.render_field(form.submit) }}
-</form>
-{% endblock %}
