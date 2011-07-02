@@ -15,6 +15,12 @@
 
 <body>
     <div class="body">
+        <div class="header">
+            {{ macros.render_login(request, current_user, login_form) }}
+            {% block header %}
+            {% endblock %}
+        </div>
+
         {% with flashes = get_flashed_messages(True) %}
             {% if flashes %}
                 <ul>
@@ -24,12 +30,6 @@
                 </ul>
             {% endif %}
         {% endwith %}
-
-        <div class="header">
-            {{ macros.render_login(request, current_user, login_form) }}
-            {% block header %}
-            {% endblock %}
-        </div>
 
         <div class="content">
             {% block content %}

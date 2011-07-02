@@ -1,10 +1,19 @@
 div.body {
     width: 760px;
-    position: absolute;
     left: 0px;
+    margin: 0px;
+}
+
+div.content {
+    position: relative;
     top: 100px;
-    margin: auto;
     text-align: center;
+}
+
+div.login {
+    float: right;
+    height: 100px;
+    width: 100px;
 }
 
 p {
