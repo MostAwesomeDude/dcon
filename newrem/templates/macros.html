@@ -8,3 +8,15 @@
     </ul>
     <img src="{{ url_for("static", filename=comic.filename) }}" />
 {% endmacro %}
+
+{% macro render_login(user, request) %}
+    {% if user.is_anonymous() %}
+        Not currently logged in (
+        <a href="{{ url_for("login", next=request.path)}}">Login?</a>
+        )
+    {% else %}
+        Logged in as {{ user.username }} (
+        <a href="{{ url_for("logout", next=request.path)}}">Logout?</a>
+        )
+    {% endif %}
+{% endmacro %}

@@ -1,3 +1,5 @@
+{% import "macros.html" as macros %}
+
 <!DOCTYPE html>
 
 <head>
@@ -21,6 +23,7 @@
 {% endwith %}
 
 <div class="header">
+    {{ macros.render_login(current_user, request) }}
     {% block header %}
     {% endblock %}
 </div>
@@ -34,14 +37,4 @@
     {% block footer %}
     {% endblock %}
 </div>
-
-{% if current_user.is_anonymous() %}
-    Not currently logged in (
-    <a href="{{ url_for("login", next=request.path)}}">Login?</a>
-    )
-{% else %}
-    Logged in as {{ current_user.username }} (
-    <a href="{{ url_for("logout", next=request.path)}}">Logout?</a>
-    )
-{% endif %}
 </body>
