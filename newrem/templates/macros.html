@@ -1,3 +1,5 @@
+{% import "forms.html" as forms %}
+
 {% macro render_comic(comic) %}
     Here's comic number {{ comic.id }} "{{ comic.title }}" uploaded
     {{ comic.time }}. It features these characters:
@@ -9,14 +11,23 @@
     <img src="{{ url_for("static", filename=comic.filename) }}" />
 {% endmacro %}
 
-{% macro render_login(user, request) %}
-    {% if user.is_anonymous() %}
-        Not currently logged in (
-        <a href="{{ url_for("login", next=request.path)}}">Login?</a>
-        )
-    {% else %}
-        Logged in as {{ user.username }} (
-        <a href="{{ url_for("logout", next=request.path)}}">Logout?</a>
-        )
-    {% endif %}
+{% macro render_login(request, user, form) %}
+    <div class="login">
+        {% if user.is_anonymous() %}
+            <form method="POST"
+                action="{{ url_for("login", **request.args) }}">
+                {{ form.hidden_tag() }}
+                {{ forms.render_field(form.username) }}
+                {{ forms.render_field(form.password) }}
+                {{ forms.render_field(form.submit) }}
+            </form>
+            Not currently logged in (
+            <a href="{{ url_for("login", next=request.path)}}">Login?</a>
+            )
+        {% else %}
+            Logged in as {{ user.username }} (
+            <a href="{{ url_for("logout", next=request.path)}}">Logout?</a>
+            )
+        {% endif %}
+    </div>
 {% endmacro %}

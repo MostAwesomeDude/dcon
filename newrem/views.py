@@ -27,6 +27,14 @@ def auth_required(f):
         return f(*args, **kwargs)
     return decorated
 
+def with_login_form(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        kwargs["login_form"] = LoginForm()
+
+        return f(*args, **kwargs)
+    return decorated
+
 @app.route("/characters")
 @auth_required
 def characters():
@@ -151,21 +159,24 @@ def not_found(error):
     return "Couldn't find the page!", 404
 
 @app.route("/")
-def index():
+@with_login_form
+def index(**kwargs):
     comic = Comic.query.order_by(Comic.id.desc()).first()
-    return render_template("index.html", comic=comic)
+    return render_template("index.html", comic=comic, **kwargs)
 
 @app.route("/cast")
-def cast():
+@with_login_form
+def cast(**kwargs):
     characters = Character.query.order_by(Character.name)
-    return render_template("cast.html", characters=characters)
+    return render_template("cast.html", characters=characters, **kwargs)
 
 @app.route("/comics/")
 def comics_root():
     return redirect(url_for("comics", cid=1))
 
 @app.route("/comics/<int:cid>")
-def comics(cid):
+@with_login_form
+def comics(cid, **kwargs):
     try:
         comic = Comic.query.filter(Comic.id == cid).one()
     except NoResultFound:
@@ -195,13 +206,13 @@ def comics(cid):
 
         cdict[character.slug] = character, previous, next
 
-    kwargs = {
+    kwargs.update({
         "comic": comic,
         "before": before,
         "after": after,
         "chrono": chrono,
         "characters": cdict,
-    }
+    })
 
     return render_template("comics.html", **kwargs)
 

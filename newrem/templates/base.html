@@ -23,7 +23,7 @@
 {% endwith %}
 
 <div class="header">
-    {{ macros.render_login(current_user, request) }}
+    {{ macros.render_login(request, current_user, login_form) }}
     {% block header %}
     {% endblock %}
 </div>
