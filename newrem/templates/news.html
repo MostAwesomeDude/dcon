@@ -1,0 +1,12 @@
+{% import "forms.html" as forms %}
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST" action="{{ url_for("news") }}"
+    enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    {{ forms.render_field(form.title) }}
+    {{ forms.render_field(form.content) }}
+    {{ forms.render_field(form.submit) }}
+</form>
+{% endblock %}

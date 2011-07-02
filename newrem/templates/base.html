@@ -16,7 +16,9 @@
 <body>
     <div class="body">
         <div class="header">
-            {{ macros.render_login(request, current_user, login_form) }}
+            {% if login_form is defined %}
+                {{ macros.render_login(request, current_user, login_form) }}
+            {% endif %}
             {% block header %}
             {% endblock %}
         </div>

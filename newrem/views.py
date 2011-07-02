@@ -11,7 +11,7 @@ from flask import abort, flash, redirect, render_template, request, url_for
 from flaskext.login import login_user, logout_user
 
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
-    CharacterModifyForm, LoginForm, RegisterForm, UploadForm)
+    CharacterModifyForm, LoginForm, NewsForm, RegisterForm, UploadForm)
 from newrem.main import app
 from newrem.models import db, Character, Comic, Newspost, User
 
@@ -107,6 +107,19 @@ def characters_delete():
         flash("Couldn't validate form...")
 
     return redirect(url_for("characters"))
+
+@app.route("/news", methods=("GET", "POST"))
+@auth_required
+def news():
+    form = NewsForm()
+
+    if form.validate_on_submit():
+        post = Newspost(form.title.data, form.content.data)
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for("index"))
+
+    return render_template("news.html", form=form)
 
 @app.route("/upload", methods=("GET", "POST"))
 @auth_required
