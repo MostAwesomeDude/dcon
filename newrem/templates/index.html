@@ -13,6 +13,7 @@
                 </div>
                 <h3>{{ post.title }}</h3>
                 <p>{{ post.content|safe|urlize }}</p>
+                {{ lipsum(2) }}
             </div>
         {% endfor %}
     </div>
