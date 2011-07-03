@@ -16,6 +16,10 @@ div.login {
     width: 100px;
 }
 
+div.newsentry {
+    clear: left;
+}
+
 div.portrait {
     float: left;
     margin-right: 1em;
