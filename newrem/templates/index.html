@@ -7,6 +7,10 @@
     <div class="newsfeed">
         {% for post in newsposts %}
             <div class="newsentry">
+                <div class="portrait">
+                    <img src="{{ url_for("static", filename="portrait.png")
+                    }}" />
+                </div>
                 <h3>{{ post.title }}</h3>
                 <p>{{ post.content|safe|urlize }}</p>
             </div>

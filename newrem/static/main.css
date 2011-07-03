@@ -16,6 +16,11 @@ div.login {
     width: 100px;
 }
 
+div.portrait {
+    float: left;
+    margin-right: 1em;
+}
+
 p {
     text-align: left;
     text-indent: 2em;
