@@ -145,10 +145,46 @@ class Newspost(db.Model):
     title = db.Column(db.Unicode, nullable=False)
     content = db.Column(db.UnicodeText)
 
+    # Reference to the attached portrait.
+    portrait_id = db.Column(db.String, db.ForeignKey("portraits.slug"),
+        nullable=False)
+    portrait = db.relationship("Portrait", backref="newsposts")
+
     def __init__(self, title, content=u""):
         self.time = datetime.utcnow()
         self.title = title
         self.content = content
+
+class Portrait(db.Model):
+
+    __tablename__ = "portraits"
+
+    name = db.Column(db.String)
+    slug = db.Column(db.String, primary_key=True)
+
+    def __init__(self, name):
+        self.rename(name)
+
+    def __repr__(self):
+        return "<Portrait(%r)>" % self.name
+
+    def rename(self, name):
+        self.name = name
+
+        # ASCIIfy slug. Based on http://flask.pocoo.org/snippets/5/.
+        l = []
+        for word in punctuation.split(self.name):
+            l.extend(unidecode(word).split())
+        self.slug = "-".join(word.strip().lower() for word in l)
+
+    @property
+    def portrait(self):
+        png = "%s.png" % self.slug
+        return os.path.join("portraits", png)
+
+    @portrait.setter
+    def portrait(self, filename):
+        os.rename(filename, self.portrait)
 
 class User(db.Model):
 

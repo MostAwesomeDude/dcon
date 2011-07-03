@@ -8,7 +8,7 @@ from flaskext.wtf import (Form, FileAllowed, FileRequired,
     PasswordField, SubmitField, TextField, TextAreaField)
 
 from newrem.main import app
-from newrem.models import Character
+from newrem.models import Character, Portrait
 
 images = UploadSet("images", IMAGES)
 pngs = UploadSet("pngs", ("png",))
@@ -52,6 +52,20 @@ class CharacterDeleteForm(Form):
         get_label="name")
     submit = SubmitField("Delete!")
 
+class PortraitCreateForm(Form):
+    name = TextField(u"New name", validators=(Required(),))
+    portrait = FileField("Select a portrait",
+        validators=(FileAllowed(pngs, "PNGs only!"),))
+    submit = SubmitField("Create!")
+
+class PortraitModifyForm(Form):
+    portraits = QuerySelectField(u"Portraits",
+        query_factory=lambda: Portrait.query.order_by(Portrait.name),
+        get_label="name")
+    portrait = FileField("Select a portrait",
+        validators=(FileAllowed(pngs, "PNGs only!"),))
+    submit = SubmitField("Modify!")
+
 class LoginForm(Form):
     username = TextField("Username", validators=(Required(),))
     password = PasswordField("Password", validators=(Required(),))
@@ -65,6 +79,9 @@ class RegisterForm(LoginForm):
 class NewsForm(Form):
     title = TextField("Title", validators=(Required(),))
     content = TextAreaField("Content")
+    portrait = QuerySelectField(u"Portrait",
+        query_factory=lambda: Portrait.query.order_by(Portrait.name),
+        get_label="name")
     submit = SubmitField("Post!")
 
 class UploadForm(Form):

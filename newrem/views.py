@@ -11,9 +11,10 @@ from flask import abort, flash, redirect, render_template, request, url_for
 from flaskext.login import login_user, logout_user
 
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
-    CharacterModifyForm, LoginForm, NewsForm, RegisterForm, UploadForm)
+    CharacterModifyForm, LoginForm, NewsForm, PortraitCreateForm,
+    PortraitModifyForm, RegisterForm, UploadForm)
 from newrem.main import app
-from newrem.models import db, Character, Comic, Newspost, User
+from newrem.models import db, Character, Comic, Newspost, Portrait, User
 
 authenticator = Authenticator({"hurp": "derp"})
 
@@ -108,6 +109,51 @@ def characters_delete():
 
     return redirect(url_for("characters"))
 
+@app.route("/portraits")
+@auth_required
+def portraits():
+    cform = PortraitCreateForm(prefix="create")
+    mform = PortraitModifyForm(prefix="modify")
+
+    return render_template("portraits.html", cform=cform, mform=mform)
+
+@app.route("/portraits/create", methods=("POST",))
+def portraits_create():
+    form = PortraitCreateForm(prefix="create")
+
+    if form.validate_on_submit():
+        portrait = Portrait(form.name.data)
+        db.session.add(portrait)
+        db.session.commit()
+
+        path = os.path.abspath(os.path.join("uploads", portrait.portrait))
+        form.portrait.file.save(path)
+
+        flash("Successfully created portrait %s!" % portrait.name)
+    else:
+        flash("Couldn't validate form...")
+
+    return redirect(url_for("portraits"))
+
+@app.route("/portraits/modify", methods=("POST",))
+def portraits_modify():
+    form = PortraitModifyForm(prefix="modify")
+
+    if form.validate_on_submit():
+        portrait = form.portraits.data
+        if portrait and form.portrait.file:
+            path = os.path.abspath(os.path.join("uploads", portrait.portrait))
+            form.portrait.file.save(path)
+            flash("Successfully changed portrait for portrait %s!" %
+                portrait.name)
+        else:
+            flash("Couldn't find portrait for slug %s..." %
+                form.portraits.data)
+    else:
+        flash("Couldn't validate form...")
+
+    return redirect(url_for("portraits"))
+
 @app.route("/news", methods=("GET", "POST"))
 @auth_required
 def news():
@@ -115,6 +161,7 @@ def news():
 
     if form.validate_on_submit():
         post = Newspost(form.title.data, form.content.data)
+        post.portrait = form.portrait.data
         db.session.add(post)
         db.session.commit()
         return redirect(url_for("index"))
