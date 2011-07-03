@@ -3,7 +3,6 @@
 
 {% block content %}
     {{ macros.render_comic(comic) }}
-    One second, please.
     <div class="newsfeed">
         {% for post in newsposts %}
             {% set portrait = post.portrait.portrait %}
