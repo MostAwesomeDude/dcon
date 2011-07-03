@@ -6,10 +6,10 @@
     One second, please.
     <div class="newsfeed">
         {% for post in newsposts %}
+            {% set portrait = post.portrait.portrait %}
             <div class="newsentry">
                 <div class="portrait">
-                    <img src="{{ url_for("static", filename="portrait.png")
-                    }}" />
+                    <img src="{{ url_for("static", filename=portrait) }}" />
                 </div>
                 <h3>{{ post.title }}</h3>
                 <p>{{ post.content|safe|urlize }}</p>
