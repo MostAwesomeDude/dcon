@@ -16,6 +16,11 @@ div.login {
     width: 100px;
 }
 
+div.navigation {
+    clear: both;
+    text-align: center;
+}
+
 div.newsentry {
     clear: left;
 }

@@ -2,7 +2,7 @@
 {% import "macros.html" as macros %}
 
 {% block content %}
-    {{ macros.render_comic(comic) }}
+    {{ macros.render_comic(comic, comics) }}
     <div class="newsfeed">
         {% for post in newsposts %}
             {% set portrait = post.portrait.portrait %}

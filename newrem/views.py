@@ -219,13 +219,33 @@ def upload():
 def not_found(error):
     return "Couldn't find the page!", 404
 
+def get_neighbors_for(comic):
+    """
+    Grab the comics around a given comic.
+    """
+
+    comics = {}
+
+    q = Comic.query.filter(Comic.time < comic.time)
+    a = q.order_by(Comic.time.desc()).first()
+    b = q.order_by(Comic.time).first()
+    q = Comic.query.filter(Comic.time > comic.time)
+    c = q.order_by(Comic.time).first()
+    d = q.order_by(Comic.time.desc()).first()
+
+    comics["upload"] = a, b, c, d
+
+    return comics
+
 @app.route("/")
 @with_login_form
 def index(**kwargs):
     comic = Comic.query.order_by(Comic.id.desc()).first()
+    comics = get_neighbors_for(comic)
+
     newsposts = Newspost.query.order_by(Newspost.time.desc())[:5]
-    return render_template("index.html", comic=comic, newsposts=newsposts,
-        **kwargs)
+    return render_template("index.html", comic=comic, comics=comics,
+        newsposts=newsposts, **kwargs)
 
 @app.route("/cast")
 @with_login_form
@@ -244,6 +264,8 @@ def comics(cid, **kwargs):
         comic = Comic.query.filter(Comic.id == cid).one()
     except NoResultFound:
         abort(404)
+
+    comics = get_neighbors_for(comic)
 
     q = Comic.query.filter(Comic.time < comic.time)
     before = q.order_by(Comic.time.desc()).first()
@@ -271,6 +293,7 @@ def comics(cid, **kwargs):
 
     kwargs.update({
         "comic": comic,
+        "comics": comics,
         "before": before,
         "after": after,
         "chrono": chrono,
