@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "forms.html" as forms %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data"
+    action="{{ url_for("portraits_create") }}">
+    {{ cform.hidden_tag() }}
+    {{ forms.render_field(cform.name) }}
+    {{ forms.render_field(cform.portrait) }}
+    {{ forms.render_field(cform.submit) }}
+</form>
+
+<form method="POST" enctype="multipart/form-data"
+    action="{{ url_for("portraits_modify") }}">
+    {{ mform.hidden_tag() }}
+    {{ forms.render_field(mform.portraits) }}
+    {{ forms.render_field(mform.portrait) }}
+    {{ forms.render_field(mform.submit) }}
+</form>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% macro render_field(field) %}
+    {{ field.label }}
+        {{ field(**kwargs)|safe }}
+        {% if field.errors %}
+            <ul class="errors">
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+{% endmacro %}
+
+{% macro render_comic(comic, comics) %}
+    <div class="navigation">
+        {% if comics["upload"][0] %}
+            <a href="{{ url_for("comics", cid=comics["upload"][0].id) }}">
+                <img src="{{ url_for("static", filename="first.png") }}">
+            </a>
+        {% endif %}
+        {% if comics["upload"][1] %}
+            <a href="{{ url_for("comics", cid=comics["upload"][1].id) }}">
+                <img src="{{ url_for("static", filename="previous.png") }}">
+            </a>
+        {% endif %}
+        {% if comics["upload"][2] %}
+            <a href="{{ url_for("comics", cid=comics["upload"][2].id) }}">
+                <img src="{{ url_for("static", filename="next.png") }}">
+            </a>
+        {% endif %}
+        {% if comics["upload"][3] %}
+            <a href="{{ url_for("comics", cid=comics["upload"][3].id) }}">
+                <img src="{{ url_for("static", filename="last.png") }}">
+            </a>
+        {% endif %}
+    </div>
+    <div class="comic">
+        Here's comic number {{ comic.id }} "{{ comic.title }}" uploaded
+        {{ comic.time }}. It features these characters:
+        <ul>
+        {% for character in comic.characters %}
+            <li>{{ character.name }}</li>
+        {% endfor %}
+        </ul>
+        <img src="{{ url_for("static", filename=comic.filename) }}" />
+    </div>
+{% endmacro %}
+
+{% macro render_login(request, user, form) %}
+    <div class="login">
+        {% if user.is_anonymous() %}
+            <form method="POST"
+                action="{{ url_for("login", **request.args) }}">
+                {{ form.hidden_tag() }}
+                {{ render_field(form.username) }}
+                {{ render_field(form.password) }}
+                {{ render_field(form.submit) }}
+            </form>
+            Not currently logged in (
+            <a href="{{ url_for("login", next=request.path)}}">Login?</a>
+            )
+        {% else %}
+            Logged in as {{ user.username }} (
+            <a href="{{ url_for("logout", next=request.path)}}">Logout?</a>
+            )
+        {% endif %}
+    </div>
+{% endmacro %}
