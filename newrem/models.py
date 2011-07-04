@@ -27,7 +27,7 @@ class Character(db.Model):
 
     __tablename__ = "characters"
 
-    name = db.Column(db.String)
+    name = db.Column(db.Unicode)
     slug = db.Column(db.String, primary_key=True)
 
     def __init__(self, name):
@@ -191,7 +191,7 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, unique=True)
+    username = db.Column(db.Unicode, unique=True)
     password = db.Column(db.String)
     logged_in = db.Column(db.Boolean)
 
