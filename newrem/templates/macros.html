@@ -1,13 +1,17 @@
 {% macro render_field(field) %}
-    {{ field.label }}
-        {{ field(**kwargs)|safe }}
-        {% if field.errors %}
-            <ul class="errors">
-            {% for error in field.errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
+    {# Hack: Don't show SubmitField labels, since they merely repeat the
+     # content of the button. #}
+    {% if field.__class__.__name__ != "SubmitField" %}
+        {{ field.label }}
+    {% endif %}
+    {{ field(**kwargs)|safe }}
+    {% if field.errors %}
+        <ul class="errors">
+        {% for error in field.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
 {% endmacro %}
 
 {% macro render_comic(comic, comics) %}
@@ -56,7 +60,8 @@
                 {{ render_field(form.submit) }}
             </form>
             Not currently logged in (
-            <a href="{{ url_for("login", next=request.path)}}">Login?</a>
+            <a href="{{ url_for("login", next=request.path)}}">Login</a>,
+            <a href="{{ url_for("register", next=request.path)}}">Register?</a>
             )
         {% else %}
             Logged in as {{ user.username }} (
