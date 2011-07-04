@@ -1,14 +1,14 @@
-{% import "forms.html" as forms %}
+{% import "macros.html" as macros %}
 {% extends "base.html" %}
 
 {% block content %}
 <form method="POST" action="{{ url_for("upload") }}"
     enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-    {{ forms.render_field(form.file) }}
-    {{ forms.render_field(form.title) }}
-    {{ forms.render_field(form.index) }}
-    {{ forms.render_field(form.characters) }}
-    {{ forms.render_field(form.submit) }}
+    {{ macros.render_field(form.file) }}
+    {{ macros.render_field(form.title) }}
+    {{ macros.render_field(form.index) }}
+    {{ macros.render_field(form.characters) }}
+    {{ macros.render_field(form.submit) }}
 </form>
 {% endblock %}

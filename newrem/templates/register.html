@@ -1,12 +1,12 @@
-{% import "forms.html" as forms %}
+{% import "macros.html" as macros %}
 {% extends "base.html" %}
 
 {% block content %}
 <form method="POST" action="{{ url_for("register") }}">
     {{ form.hidden_tag() }}
-    {{ forms.render_field(form.username) }}
-    {{ forms.render_field(form.password) }}
-    {{ forms.render_field(form.confirm) }}
-    {{ forms.render_field(form.submit) }}
+    {{ macros.render_field(form.username) }}
+    {{ macros.render_field(form.password) }}
+    {{ macros.render_field(form.confirm) }}
+    {{ macros.render_field(form.submit) }}
 </form>
 {% endblock %}
