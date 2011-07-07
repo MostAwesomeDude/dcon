@@ -18,8 +18,6 @@
         <div class="header">
             <a href="#" class="left">
             </a>
-            <a href="#" class="right">
-            </a>
             <div class="banner">
             </div>
             <a href="#" class="button1">
@@ -36,9 +34,8 @@
             </a>
             <a href="#" class="button7">
             </a>
-            {% if login_form is defined %}
-                {{ macros.render_login(request, current_user, login_form) }}
-            {% endif %}
+            <a href="{{ url_for("login", next=request.path) }}" class="right">
+            </a>
             {% block header %}
             {% endblock %}
         </div>

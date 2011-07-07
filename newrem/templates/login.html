@@ -1,1 +1,6 @@
 {% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block content %}
+    {{ macros.render_login(request, current_user, login_form) }}
+{% endblock %}
