@@ -28,14 +28,6 @@ def auth_required(f):
         return f(*args, **kwargs)
     return decorated
 
-def with_login_form(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        kwargs["login_form"] = LoginForm()
-
-        return f(*args, **kwargs)
-    return decorated
-
 @app.route("/characters")
 @auth_required
 def characters():
@@ -238,28 +230,25 @@ def get_neighbors_for(comic):
     return comics
 
 @app.route("/")
-@with_login_form
-def index(**kwargs):
+def index():
     comic = Comic.query.order_by(Comic.id.desc()).first()
     comics = get_neighbors_for(comic)
 
     newsposts = Newspost.query.order_by(Newspost.time.desc())[:5]
     return render_template("index.html", comic=comic, comics=comics,
-        newsposts=newsposts, **kwargs)
+        newsposts=newsposts)
 
 @app.route("/cast")
-@with_login_form
-def cast(**kwargs):
+def cast():
     characters = Character.query.order_by(Character.name)
-    return render_template("cast.html", characters=characters, **kwargs)
+    return render_template("cast.html", characters=characters)
 
 @app.route("/comics/")
 def comics_root():
     return redirect(url_for("comics", cid=1))
 
 @app.route("/comics/<int:cid>")
-@with_login_form
-def comics(cid, **kwargs):
+def comics(cid):
     try:
         comic = Comic.query.filter(Comic.id == cid).one()
     except NoResultFound:
@@ -291,14 +280,14 @@ def comics(cid, **kwargs):
 
         cdict[character.slug] = character, previous, next
 
-    kwargs.update({
+    kwargs = {
         "comic": comic,
         "comics": comics,
         "before": before,
         "after": after,
         "chrono": chrono,
         "characters": cdict,
-    })
+    }
 
     return render_template("comics.html", **kwargs)
 
@@ -323,9 +312,8 @@ def register():
     return render_template("register.html", form=form)
 
 @app.route("/login", methods=("GET", "POST"))
-@with_login_form
-def login(**kwargs):
-    form = kwargs["login_form"]
+def login():
+    form = LoginForm()
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -344,7 +332,7 @@ def login(**kwargs):
         else:
             flash("No user %s found!" % form.username.data)
 
-    return render_template("login.html", **kwargs)
+    return render_template("login.html", login_form=form)
 
 @app.route("/logout")
 def logout():
