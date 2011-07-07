@@ -250,17 +250,11 @@ def comics_root():
 @app.route("/comics/<int:cid>")
 def comics(cid):
     try:
-        comic = Comic.query.filter(Comic.id == cid).one()
+        comic = Comic.query.filter_by(id=cid).one()
     except NoResultFound:
         abort(404)
 
     comics = get_neighbors_for(comic)
-
-    q = Comic.query.filter(Comic.time < comic.time)
-    before = q.order_by(Comic.time.desc()).first()
-
-    q = Comic.query.filter(Comic.time > comic.time)
-    after = q.order_by(Comic.time).first()
 
     q = Comic.query.filter(Comic.position < comic.position)
     previous = q.order_by(Comic.position.desc()).first()
@@ -283,8 +277,6 @@ def comics(cid):
     kwargs = {
         "comic": comic,
         "comics": comics,
-        "before": before,
-        "after": after,
         "chrono": chrono,
         "characters": cdict,
     }
