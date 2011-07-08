@@ -58,94 +58,101 @@ p {
 
 .button1 {
   display: block;
-  height: 58px;
-  width: 50px;
   position: absolute;
+  height: 58px;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-image: url(images/shine.png);
+  width: 50px;
   left: 100px;
-  background: url(images/shine.png) bottom no-repeat;
   top: 42px; }
+  .button1:hover {
+    top: 0px;
+    height: 100px; }
 
 .button2 {
   display: block;
-  background: url(images/shaeshae.png) bottom no-repeat;
-  height: 58px;
-  width: 50px;
   position: absolute;
+  height: 58px;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-image: url(images/shaeshae.png);
+  width: 50px;
   left: 151px;
   top: 42px; }
+  .button2:hover {
+    top: 0px;
+    height: 100px; }
 
 .button3 {
   display: block;
-  background: url(images/alex.png) bottom no-repeat;
-  height: 58px;
-  width: 98px;
   position: absolute;
+  height: 58px;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-image: url(images/alex.png);
+  width: 98px;
   left: 202px;
   top: 42px; }
+  .button3:hover {
+    top: 0px;
+    height: 100px; }
 
 .button4 {
   display: block;
-  background: url(images/heather.png) bottom no-repeat;
-  height: 58px;
-  width: 63px;
   position: absolute;
+  height: 58px;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-image: url(images/heather.png);
+  width: 63px;
   left: 317px;
   top: 42px; }
+  .button4:hover {
+    top: 0px;
+    height: 100px; }
 
 .button5 {
   display: block;
-  background: url(images/mika.png) bottom no-repeat;
-  height: 58px;
-  width: 50px;
   position: absolute;
+  height: 58px;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-image: url(images/mika.png);
+  width: 50px;
   left: 400px;
   top: 42px; }
+  .button5:hover {
+    top: 0px;
+    height: 100px; }
 
 .button6 {
   display: block;
-  background: url(images/cid.png) bottom no-repeat;
-  height: 58px;
-  width: 80px;
   position: absolute;
+  height: 58px;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-image: url(images/cid.png);
+  width: 80px;
   left: 468px;
   top: 42px; }
+  .button6:hover {
+    top: 0px;
+    height: 100px; }
 
 .button7 {
   display: block;
-  background: url(images/secretman.png) bottom no-repeat;
-  height: 58px;
-  width: 82px;
   position: absolute;
+  height: 58px;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-image: url(images/secretman.png);
+  width: 82px;
   left: 577px;
   top: 42px; }
-
-.button1:hover {
-  top: 0px;
-  height: 100px; }
-
-.button2:hover {
-  top: 0px;
-  height: 100px; }
-
-.button3:hover {
-  top: 0px;
-  height: 100px; }
-
-.button4:hover {
-  top: 0px;
-  height: 100px; }
-
-.button5:hover {
-  top: 0px;
-  height: 100px; }
-
-.button6:hover {
-  top: 0px;
-  height: 100px; }
-
-.button7:hover {
-  top: 0px;
-  height: 100px; }
+  .button7:hover {
+    top: 0px;
+    height: 100px; }
 
 .newsfeed {
   width: 560px; }
