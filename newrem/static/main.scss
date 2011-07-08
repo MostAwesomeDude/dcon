@@ -1,0 +1,198 @@
+div.body {
+  width : 760px;
+  left : 0px;
+  margin : 0px
+}
+
+div.content {
+  position : relative;
+  top : 100px;
+  text-align : center
+}
+
+div.login {
+  float : right;
+  height : 100px;
+  width : 100px
+}
+
+div.navigation {
+  clear : both;
+  text-align : center
+}
+
+div.newsentry {
+  clear : left
+}
+
+div.portrait {
+  float : left;
+  margin-right : 1em
+}
+
+p {
+  text-align : left;
+  text-indent : 2em;
+  text-align : justify
+}
+
+.header {
+  width : 760px;
+  height : 100px;
+  text-align : center;
+  position : absolute
+}
+
+.left {
+  display : block;
+  height : 100px;
+  width : 100px;
+  float : left;
+  background-image : url(images/logo.png)
+}
+
+.right {
+  display : block;
+  height : 100px;
+  width : 100px;
+  float : right;
+  background-image : url(images/login.png)
+}
+
+.banner {
+  height : 100px;
+  width : 560px;
+  position : absolute;
+  background : url(images/banner.png);
+  left : 100px
+}
+
+.button1 {
+  display : block;
+  height : 58px;
+  width : 50px;
+  position : absolute;
+  left : 100px;
+  background : url(images/shine.png) bottom no-repeat;
+  top : 42px
+}
+
+.button2 {
+  display : block;
+  background : url(images/shaeshae.png) bottom no-repeat;
+  height : 58px;
+  width : 50px;
+  position : absolute;
+  left : 151px;
+  top : 42px
+}
+
+.button3 {
+  display : block;
+  background : url(images/alex.png) bottom no-repeat;
+  height : 58px;
+  width : 98px;
+  position : absolute;
+  left : 202px;
+  top : 42px
+}
+
+.button4 {
+  display : block;
+  background : url(images/heather.png) bottom no-repeat;
+  height : 58px;
+  width : 63px;
+  position : absolute;
+  left : 317px;
+  top : 42px
+}
+
+.button5 {
+  display : block;
+  background : url(images/mika.png) bottom no-repeat;
+  height : 58px;
+  width : 50px;
+  position : absolute;
+  left : 400px;
+  top : 42px
+}
+
+.button6 {
+  display : block;
+  background : url(images/cid.png) bottom no-repeat;
+  height : 58px;
+  width : 80px;
+  position : absolute;
+  left : 468px;
+  top : 42px
+}
+
+.button7 {
+  display : block;
+  background : url(images/secretman.png) bottom no-repeat;
+  height : 58px;
+  width : 82px;
+  position : absolute;
+  left : 577px;
+  top : 42px
+}
+
+.button1:hover {
+  top : 0px;
+  height : 100px
+}
+
+.button2:hover {
+  top : 0px;
+  height : 100px
+}
+
+.button3:hover {
+  top : 0px;
+  height : 100px
+}
+
+.button4:hover {
+  top : 0px;
+  height : 100px
+}
+
+.button5:hover {
+  top : 0px;
+  height : 100px
+}
+
+.button6:hover {
+  top : 0px;
+  height : 100px
+}
+
+.button7:hover {
+  top : 0px;
+  height : 100px
+}
+
+.newsfeed {
+  width : 560px
+}
+
+.newsentry h3 {
+  clear : left;
+  background : #001133;
+  border : #003355 solid;
+  color : #0099AA;
+  margin : 0px;
+  width : 548px;
+  left : 0px;
+  position : absolute;
+  top : 0px
+}
+
+.newsentry {
+  color : #C0FFEE;
+  background : #001122;
+  padding : 20px;
+  margin-bottom : 5px;
+  border : solid green;
+  position : relative
+}
