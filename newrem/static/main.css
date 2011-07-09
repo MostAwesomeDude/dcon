@@ -17,8 +17,25 @@ div.navigation {
   clear: both;
   text-align: center; }
 
-div.newsentry {
-  clear: left; }
+.newsentry {
+  clear: left;
+  position: relative;
+  background-color: #001122;
+  color: #C0FFEE;
+  padding: 20px;
+  margin-bottom: 5px;
+  border-style: solid;
+  border-color: green; }
+  .newsentry h3 {
+    background: #001133;
+    color: #0099AA;
+    margin: 0px;
+    border-style: solid;
+    border-color: #003355;
+    /*width : 548px;
+    left : 0px;
+    position : absolute;
+    top : 0px*/ }
 
 div.portrait {
   float: left;
@@ -59,13 +76,13 @@ p {
 .button1 {
   display: block;
   position: absolute;
+  top: 42px;
   height: 58px;
   background-position: center bottom;
   background-repeat: no-repeat;
   background-image: url(images/shine.png);
   width: 50px;
-  left: 100px;
-  top: 42px; }
+  left: 100px; }
   .button1:hover {
     top: 0px;
     height: 100px; }
@@ -73,13 +90,13 @@ p {
 .button2 {
   display: block;
   position: absolute;
+  top: 42px;
   height: 58px;
   background-position: center bottom;
   background-repeat: no-repeat;
   background-image: url(images/shaeshae.png);
   width: 50px;
-  left: 151px;
-  top: 42px; }
+  left: 151px; }
   .button2:hover {
     top: 0px;
     height: 100px; }
@@ -87,13 +104,13 @@ p {
 .button3 {
   display: block;
   position: absolute;
+  top: 42px;
   height: 58px;
   background-position: center bottom;
   background-repeat: no-repeat;
   background-image: url(images/alex.png);
   width: 98px;
-  left: 202px;
-  top: 42px; }
+  left: 202px; }
   .button3:hover {
     top: 0px;
     height: 100px; }
@@ -101,13 +118,13 @@ p {
 .button4 {
   display: block;
   position: absolute;
+  top: 42px;
   height: 58px;
   background-position: center bottom;
   background-repeat: no-repeat;
   background-image: url(images/heather.png);
   width: 63px;
-  left: 317px;
-  top: 42px; }
+  left: 317px; }
   .button4:hover {
     top: 0px;
     height: 100px; }
@@ -115,13 +132,13 @@ p {
 .button5 {
   display: block;
   position: absolute;
+  top: 42px;
   height: 58px;
   background-position: center bottom;
   background-repeat: no-repeat;
   background-image: url(images/mika.png);
   width: 50px;
-  left: 400px;
-  top: 42px; }
+  left: 400px; }
   .button5:hover {
     top: 0px;
     height: 100px; }
@@ -129,13 +146,13 @@ p {
 .button6 {
   display: block;
   position: absolute;
+  top: 42px;
   height: 58px;
   background-position: center bottom;
   background-repeat: no-repeat;
   background-image: url(images/cid.png);
   width: 80px;
-  left: 468px;
-  top: 42px; }
+  left: 468px; }
   .button6:hover {
     top: 0px;
     height: 100px; }
@@ -143,35 +160,16 @@ p {
 .button7 {
   display: block;
   position: absolute;
+  top: 42px;
   height: 58px;
   background-position: center bottom;
   background-repeat: no-repeat;
   background-image: url(images/secretman.png);
   width: 82px;
-  left: 577px;
-  top: 42px; }
+  left: 577px; }
   .button7:hover {
     top: 0px;
     height: 100px; }
 
 .newsfeed {
   width: 560px; }
-
-.newsentry h3 {
-  clear: left;
-  background: #001133;
-  border: #003355 solid;
-  color: #0099AA;
-  margin: 0px;
-  width: 548px;
-  left: 0px;
-  position: absolute;
-  top: 0px; }
-
-.newsentry {
-  color: #C0FFEE;
-  background: #001122;
-  padding: 20px;
-  margin-bottom: 5px;
-  border: solid green;
-  position: relative; }
