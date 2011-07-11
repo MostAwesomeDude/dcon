@@ -173,31 +173,49 @@ p {
 background:url(images/comicbackground.png) repeat-y;
 padding:10px;
 }
+
 .navigation {clear:both;
     text-align:center;
 }
+
 .information {
-background:#DFDFFE;
-}
-.information h1 {
-color: #001122;
-       text-align:left;
-       text-indent: 10px;
-clear:none;
-      font-size:large;
-      font-family:Arial;
-      font-variant:small-caps;
+    background: #DFDFFE;
+
+    h1 {
+        color: #001122;
+        clear:none;
       letter-spacing:4pt;
       margin-bottom:0px;
+
+        font: {
+            family: "Arial";
+            size: large;
+            variant: small-caps;
+        }
+
+        text: {
+            align: left;
+            indent: 10px;
+        }
+    }
+
+    h6 {
+        margin: 0px;
+
+        text: {
+            align: left;
+            indent: 10px;
+        }
+    }
+
+    p {
+        padding: 5px;
+
+        text: {
+            align: left;
+            indent: 20pt;
+        }
+    }
 }
-.information h6 {
-    text-align:left;
-    text-indent:10px;
-margin:0px;
-}
-.information p {
-    text-align:left;
-    text-indent:20pt;
-padding: 5px;
-}
+
 .cast {font-size:x-small}
