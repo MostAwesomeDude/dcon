@@ -188,7 +188,7 @@ p {
   .information h1 {
     color: #001122;
     clear: none;
-    letter-spacing: 4pt;
+    letter-spacing: 0.3em;
     margin-bottom: 0px;
     font-family: "Arial";
     font-size: large;
@@ -202,7 +202,7 @@ p {
   .information p {
     padding: 5px;
     text-align: left;
-    text-indent: 20pt; }
+    text-indent: 1.6em; }
 
 .cast {
   font-size: x-small; }
