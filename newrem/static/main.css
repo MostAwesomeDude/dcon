@@ -177,7 +177,8 @@ p {
 
 .comic {
   text-align: center;
-  background: url(images/comicbackground.png) repeat-y;
+  background-image: url(images/comicbg.png);
+  background-repeat: repeat-y;
   padding: 10px; }
 
 .navigation {
