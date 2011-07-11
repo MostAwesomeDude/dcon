@@ -40,14 +40,17 @@
     <div class="comic">
         <img src="{{ url_for("static", filename=comic.filename) }}" />
         <div class="information">
-            Here's comic number {{ comic.id }} "{{ comic.title }}" uploaded
-            {{ comic.time }}. It features these characters:
+            <h1>{{ comic.title }}</h1>
+            <h6>Uploaded on
+            {{ comic.time.strftime("%B %d %Y at %I %M %S %p") }}</h6>
             <div class="cast">
-                <ul>
+                Starring:
                 {% for character in comic.characters %}
-                    <li>{{ character.name }}</li>
+                    {{ character.name }}
+                    {% if not loop.last %}
+                        |
+                    {% endif %}
                 {% endfor %}
-                </ul>
             </div>
         </div>
     </div>
