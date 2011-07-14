@@ -1,5 +1,8 @@
+from datetime import datetime
 from functools import wraps
 import os.path
+
+from PyRSS2Gen import Guid, RSS2, RSSItem
 
 from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
@@ -282,6 +285,20 @@ def comics(cid):
     }
 
     return render_template("comics.html", **kwargs)
+
+@app.route("/rss.xml")
+def rss():
+    comics = Comic.query.order_by(Comic.id.desc())[:10]
+    items = []
+    for comic in comics:
+        url = url_for("comics", cid=comic.id)
+        item = RSSItem(title=comic.title, link=url, description=comic.title,
+            guid=Guid(url), pubDate=comic.time)
+        items.append(item)
+
+    rss2 = RSS2(title="RSS", link=url_for("index"), description="Hurp!",
+        lastBuildDate=datetime.utcnow(), items=items)
+    return rss2.to_xml(encoding="utf8")
 
 @app.route("/register", methods=("GET", "POST"))
 def register():
