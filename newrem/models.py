@@ -70,7 +70,11 @@ class Comic(db.Model):
     # Position in the timeline.
     position = db.Column(db.Integer, nullable=False)
     # Title of the comic.
-    title = db.Column(db.String, nullable=False)
+    title = db.Column(db.Unicode, nullable=False)
+    # Description/alt text.
+    description = db.Column(db.Unicode)
+    # Commentary.
+    comment = db.Column(db.UnicodeText)
 
     # List of characters in this comic.
     characters = db.relationship("Character", secondary=casts,
