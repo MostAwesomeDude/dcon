@@ -291,13 +291,13 @@ def rss():
     comics = Comic.query.order_by(Comic.id.desc())[:10]
     items = []
     for comic in comics:
-        url = url_for("comics", cid=comic.id)
+        url = url_for("comics", _external=True, cid=comic.id)
         item = RSSItem(title=comic.title, link=url, description=comic.title,
             guid=Guid(url), pubDate=comic.time)
         items.append(item)
 
-    rss2 = RSS2(title="RSS", link=url_for("index"), description="Hurp!",
-        lastBuildDate=datetime.utcnow(), items=items)
+    rss2 = RSS2(title="RSS", link=url_for("index", _external=True),
+        description="Hurp!", lastBuildDate=datetime.utcnow(), items=items)
     return rss2.to_xml(encoding="utf8")
 
 @app.route("/register", methods=("GET", "POST"))
