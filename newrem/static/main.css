@@ -76,6 +76,7 @@ p {
 
 .button1 {
   display: block;
+  z-index: 1;
   position: absolute;
   top: 42px;
   height: 58px;
@@ -90,6 +91,7 @@ p {
 
 .button2 {
   display: block;
+  z-index: 1;
   position: absolute;
   top: 42px;
   height: 58px;
@@ -104,6 +106,7 @@ p {
 
 .button3 {
   display: block;
+  z-index: 1;
   position: absolute;
   top: 42px;
   height: 58px;
@@ -118,6 +121,7 @@ p {
 
 .button4 {
   display: block;
+  z-index: 1;
   position: absolute;
   top: 42px;
   height: 58px;
@@ -132,6 +136,7 @@ p {
 
 .button5 {
   display: block;
+  z-index: 1;
   position: absolute;
   top: 42px;
   height: 58px;
@@ -146,6 +151,7 @@ p {
 
 .button6 {
   display: block;
+  z-index: 1;
   position: absolute;
   top: 42px;
   height: 58px;
@@ -160,6 +166,7 @@ p {
 
 .button7 {
   display: block;
+  z-index: 1;
   position: absolute;
   top: 42px;
   height: 58px;

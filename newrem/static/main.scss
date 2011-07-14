@@ -103,6 +103,7 @@ p {
 
 @mixin banner-rollover {
     display: block;
+    z-index: 1;
 
     position: absolute;
     top: 42px;
