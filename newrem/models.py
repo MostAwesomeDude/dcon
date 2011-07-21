@@ -194,8 +194,8 @@ class User(db.Model):
 
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Unicode, unique=True)
+    username = db.Column(db.Unicode, primary_key=True, unique=True,
+        nullable=False)
     password = db.Column(db.String)
     logged_in = db.Column(db.Boolean)
 
@@ -226,16 +226,11 @@ class User(db.Model):
         return False
 
     def get_id(self):
-        return unicode(self.id)
+        return self.username
 
     def get_auth_token(self):
-        return make_secure_token(self.id, self.username, self.password)
+        return make_secure_token(self.username, self.password)
 
 @lm.user_loader
-def user_loader(uid):
-    try:
-        uid = int(uid)
-    except ValueError:
-        return None
-
-    return User.query.filter_by(id=uid).first()
+def user_loader(username):
+    return User.query.filter_by(username=username).first()
