@@ -307,7 +307,9 @@ def register():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
 
-        if not user:
+        if user:
+            flash("Username already taken; please pick another!")
+        else:
             user = User(form.username.data, form.password.data)
             db.session.add(user)
             user.login()
