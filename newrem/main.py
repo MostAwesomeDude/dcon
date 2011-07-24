@@ -1,9 +1,11 @@
 import os
 
 from flask import Flask
-from flaskext.login import LoginManager
+from flaskext.uploads import configure_uploads
 
 from newrem.comics import comics
+from newrem.forms import images, pngs
+from newrem.models import db, lm
 from newrem.users import users
 
 wd = os.getcwd()
@@ -14,7 +16,9 @@ app.config["SQLALCHEMY_ECHO"] = True
 app.config["SECRET_KEY"] = "just a test!"
 app.config["UPLOADS_DEFAULT_DEST"] = os.path.join(wd, "uploads")
 
-lm = LoginManager()
+configure_uploads(app, (images, pngs))
+
+db.init_app(app)
 lm.setup_app(app)
 
 app.register_blueprint(users)

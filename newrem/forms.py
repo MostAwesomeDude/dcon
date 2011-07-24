@@ -2,18 +2,15 @@ from wtforms.fields import Field
 from wtforms.widgets import TextInput
 from wtforms.validators import EqualTo
 
-from flaskext.uploads import configure_uploads, IMAGES, UploadSet
+from flaskext.uploads import IMAGES, UploadSet
 from flaskext.wtf import (Form, FileAllowed, FileRequired,
     Required, FileField, QuerySelectField, IntegerField,
     PasswordField, SubmitField, TextField, TextAreaField)
 
-from newrem.main import app
 from newrem.models import Character, Portrait
 
 images = UploadSet("images", IMAGES)
 pngs = UploadSet("pngs", ("png",))
-
-configure_uploads(app, (images, pngs))
 
 class TagListField(Field):
     widget = TextInput()

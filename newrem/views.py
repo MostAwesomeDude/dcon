@@ -10,13 +10,12 @@ from sqlalchemy.orm.exc import NoResultFound
 from werkzeug import secure_filename
 
 from flask import abort, flash, redirect, render_template, request, url_for
-from flaskext.login import login_user, logout_user
 
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
-    CharacterModifyForm, LoginForm, NewsForm, PortraitCreateForm,
-    PortraitModifyForm, RegisterForm, UploadForm)
+    CharacterModifyForm, NewsForm, PortraitCreateForm,
+    PortraitModifyForm, UploadForm)
 from newrem.main import app
-from newrem.models import db, Character, Comic, Newspost, Portrait, User
+from newrem.models import db, Character, Comic, Newspost, Portrait
 from newrem.security import Authenticator
 
 authenticator = Authenticator({"hurp": "derp"})
@@ -299,61 +298,6 @@ def rss():
     rss2 = RSS2(title="RSS", link=url_for("index", _external=True),
         description="Hurp!", lastBuildDate=datetime.utcnow(), items=items)
     return rss2.to_xml(encoding="utf8")
-
-@app.route("/register", methods=("GET", "POST"))
-def register():
-    form = RegisterForm()
-
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-
-        if user:
-            flash("Username already taken; please pick another!")
-        else:
-            user = User(form.username.data, form.password.data)
-            db.session.add(user)
-            user.login()
-            login_user(user, remember=True)
-            flash("Logged in!")
-            if "next" in request.args:
-                return redirect(request.args["next"])
-            else:
-                return redirect(url_for("index"))
-
-    return render_template("register.html", form=form)
-
-@app.route("/login", methods=("GET", "POST"))
-def login():
-    form = LoginForm()
-
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-
-        if user:
-            if user.check_password(form.password.data):
-                user.login()
-                login_user(user, remember=True)
-                flash("Logged in!")
-                if "next" in request.args:
-                    return redirect(request.args["next"])
-                else:
-                    return redirect(url_for("index"))
-            else:
-                flash("Incorrect password!")
-        else:
-            flash("No user %s found!" % form.username.data)
-
-    return render_template("login.html", login_form=form)
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    flash("Logged out!")
-
-    if "next" in request.args:
-        return redirect(request.args["next"])
-    else:
-        return redirect(url_for("index"))
 
 @app.route("/500")
 def ohfuck():
