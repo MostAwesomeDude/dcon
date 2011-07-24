@@ -354,3 +354,13 @@ def logout():
         return redirect(request.args["next"])
     else:
         return redirect(url_for("index"))
+
+@app.route("/500")
+def ohfuck():
+    x = 42
+    y = x // 0
+    return ""
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template("500.html")
