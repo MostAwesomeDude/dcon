@@ -17,7 +17,7 @@
 <body>
     <div class="body">
         <div class="header">
-            <a href="{{ url_for("register") }}" class="left">
+            <a href="{{ url_for("users.register") }}" class="left">
             </a>
             <div class="banner">
             </div>
@@ -35,7 +35,7 @@
             </a>
             <a href="#" class="button7">
             </a>
-            <a href="{{ url_for("login", next=request.path) }}" class="right">
+            <a href="{{ url_for("users.login", next=request.path) }}" class="right">
             </a>
             {% block header %}
             {% endblock %}

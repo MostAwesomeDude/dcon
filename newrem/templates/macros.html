@@ -60,19 +60,19 @@
     <div class="login">
         {% if user.is_anonymous() %}
             <form method="POST"
-                action="{{ url_for("login", **request.args) }}">
+                action="{{ url_for("users.login", **request.args) }}">
                 {{ form.hidden_tag() }}
                 {{ render_field(form.username) }}
                 {{ render_field(form.password) }}
                 {{ render_field(form.submit) }}
             </form>
             Not currently logged in (
-            <a href="{{ url_for("login", next=request.path)}}">Login</a>,
-            <a href="{{ url_for("register", next=request.path)}}">Register?</a>
+            <a href="{{ url_for("users.login", next=request.path)}}">Login</a>,
+            <a href="{{ url_for("users.register", next=request.path)}}">Register?</a>
             )
         {% else %}
             Logged in as {{ user.username }} (
-            <a href="{{ url_for("logout", next=request.path)}}">Logout?</a>
+            <a href="{{ url_for("users.logout", next=request.path)}}">Logout?</a>
             )
         {% endif %}
     </div>
