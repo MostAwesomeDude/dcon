@@ -8,7 +8,6 @@ from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
 
 from werkzeug import secure_filename
-from werkzeug.security import Authenticator
 
 from flask import abort, flash, redirect, render_template, request, url_for
 from flaskext.login import login_user, logout_user
@@ -18,6 +17,7 @@ from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
     PortraitModifyForm, RegisterForm, UploadForm)
 from newrem.main import app
 from newrem.models import db, Character, Comic, Newspost, Portrait, User
+from newrem.security import Authenticator
 
 authenticator = Authenticator({"hurp": "derp"})
 
