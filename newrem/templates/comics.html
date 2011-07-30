@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% import "macros.html" as macros %}
+{% import "oc/macros.html" as ocmacros %}
 
 {% block title %} - {{ comic.title }}{% endblock %}
 
@@ -38,7 +39,9 @@
         {% endif %}
     {% endfor %}
     <div class="shareables"></div>
-    <div class="news"></div>
+    <div class="discussion">
+        {{ ocmacros.render_posts(comic.thread) }}
+    </div>
     <div class="money"></div>
 {% endblock %}
 
