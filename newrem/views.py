@@ -168,13 +168,18 @@ def upload():
     form = UploadForm()
 
     if form.validate_on_submit():
-        d = dict((c.name, c) for c in
-            Character.query.order_by(Character.name).all())
-        try:
-            characters = [d[name] for name in form.characters.data]
-        except KeyError, ke:
-            flash("Couldn't find character %s..." % ke.args)
-            return render_template("upload.html", form=form)
+        # If any characters are listed, validate them.
+        # Permit character-less artsy comics, though.
+        if any(form.characters.data):
+            d = dict((c.name, c) for c in
+                Character.query.order_by(Character.name).all())
+            try:
+                characters = [d[name] for name in form.characters.data]
+            except KeyError, ke:
+                flash("Couldn't find character %s..." % ke.args)
+                return render_template("upload.html", form=form)
+        else:
+            characters = []
 
         bottom = db.session.query(func.min(Comic.position)).first()[0]
         top = db.session.query(func.max(Comic.position)).first()[0]
