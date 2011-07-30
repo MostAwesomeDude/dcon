@@ -1,7 +1,28 @@
-body section {
-  background: #ccc;
-  border: 5px;
-  border-color: #000000; }
+#discussion {
+  margin-top: 40px;
+  align: center;
+  font-family: "Lucida Grande", "Droid Sans", sans-serif; }
+  #discussion label {
+    float: left;
+    width: 25%;
+    text-align: right;
+    font-weight: bold; }
+  #discussion section {
+    background: #ccc;
+    border: 5px;
+    border-color: #000000; }
+    #discussion section article {
+      background: #B7C5D9;
+      margin: 10px;
+      padding: 5px;
+      display: block;
+      border-style: none solid solid none;
+      border-right: 1px solid #AAAAAA;
+      border-bottom: 1px solid #AAAAAA; }
+      #discussion section article header {
+        color: #117743;
+        font-weight: 800;
+        font-size: 10pt; }
 
 form {
   border: 1px solid #000000;
@@ -16,39 +37,15 @@ header {
 footer {
   font-size: 2.0em; }
 
-body {
-  margin-top: 40px;
-  background: #F4F4F4;
-  align: center;
-  font-family: "Lucida Grande", "Droid Sans", sans-serif; }
-
-body section article header {
-  color: #117743;
-  font-weight: 800;
-  font-size: 10pt; }
-
-body section article {
-  background: #B7C5D9;
-  border-style: none solid solid none;
-  border-right: 1px solid #AAAAAA;
-  border-bottom: 1px solid #AAAAAA;
-  margin: 10px;
-  padding: 5px;
-  display: block; }
-
-body label {
-  float: left;
-  width: 25%;
-  text-align: right;
-  font-weight: bold; }
-
 table {
   border: 0;
   padding: 5px;
   margin: 5px; }
 
 section#compose form {
+  border-radius: 1em;
   -moz-border-radius: 1em;
+  -webkit-border-radius: 1em;
   padding: 1em;
   width: 50%; }
 
@@ -59,5 +56,7 @@ section#compose label[for=comment] + textarea {
   display: inline; }
 
 section#threads article {
+  border-radius: 1em;
   -moz-border-radius: 1em;
+  -webkit-border-radius: 1em;
   padding: 1em; }

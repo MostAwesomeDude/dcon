@@ -11,7 +11,7 @@
         <link rel="next" href="{{ url_for("comics", cid=after.id) }}">
     {% endif %}
     <link rel="stylesheet"
-        href="{{ url_for("osuchan.static", filename="style.css") }}" />
+        href="{{ url_for("static", filename="oc.css") }}" />
 {% endblock %}
 
 {% block header %}
@@ -41,7 +41,7 @@
         {% endif %}
     {% endfor %}
     <div class="shareables"></div>
-    <div class="discussion">
+    <div id="discussion">
         {{ ocmacros.render_posts(comic.thread) }}
     </div>
     <div class="money"></div>
