@@ -1,5 +1,6 @@
 #discussion {
   margin-top: 40px;
+  background: #F4F4F4;
   align: center;
   font-family: "Lucida Grande", "Droid Sans", sans-serif; }
   #discussion label {
@@ -8,7 +9,6 @@
     text-align: right;
     font-weight: bold; }
   #discussion section {
-    background: #ccc;
     border: 5px;
     border-color: #000000; }
     #discussion section article {
@@ -26,6 +26,7 @@
 
 form {
   border: 1px solid #000000;
+  background: #ccc;
   line-height: 20px;
   padding: 0 5px;
   width: 500px;
@@ -48,11 +49,9 @@ section#compose form {
   -webkit-border-radius: 1em;
   padding: 1em;
   width: 50%; }
-
 section#compose label {
   margin-right: 0.5em; }
-
-section#compose label[for=comment] + textarea {
+section#compose label[for="comment"] + textarea {
   display: inline; }
 
 section#threads article {

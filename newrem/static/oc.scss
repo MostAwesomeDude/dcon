@@ -6,6 +6,7 @@
 
 #discussion {
     margin-top: 40px;
+    background: #F4F4F4;
     align: center;
     font-family: "Lucida Grande", "Droid Sans", sans-serif;
 
@@ -17,7 +18,6 @@
     }
 
     section {
-        background: #ccc;
         border: 5px;
         border-color: #000000;
 
@@ -45,6 +45,7 @@
 
 form {
     border: 1px solid #000000;
+    background: #ccc;
     line-height: 20px;
     padding: 0 5px;
     width: 500px;
@@ -65,18 +66,20 @@ table {
     margin: 5px;
 }
 
-section#compose form {
-    @include corners;
-    padding: 1em;
-    width: 50%;
-}
+section#compose {
+    form {
+        @include corners;
+        padding: 1em;
+        width: 50%;
+    }
 
-section#compose label {
-    margin-right: 0.5em;
-}
+    label {
+        margin-right: 0.5em;
+    }
 
-section#compose label[for=comment] + textarea {
-    display: inline;
+    label[for="comment"] + textarea {
+        display: inline;
+    }
 }
 
 section#threads article {
