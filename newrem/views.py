@@ -18,6 +18,8 @@ from newrem.main import app
 from newrem.models import db, Character, Comic, Newspost, Portrait
 from newrem.security import Authenticator
 
+from osuchan.models import Thread
+
 authenticator = Authenticator({"hurp": "derp"})
 
 def auth_required(f):
@@ -201,6 +203,7 @@ def upload():
         comic = Comic(filename)
         comic.characters = characters
         comic.title = form.title.data
+        comic.thread = Thread("co", comic.title, "Newrem")
 
         if form.index.data == 0:
             comic.insert_at_head()

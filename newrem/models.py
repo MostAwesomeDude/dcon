@@ -9,6 +9,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flaskext.sqlalchemy import SQLAlchemy
 from flaskext.login import LoginManager, make_secure_token
 
+from osuchan.models import Thread
+
 db = SQLAlchemy()
 
 casts = db.Table("casts", db.metadata,
@@ -73,10 +75,13 @@ class Comic(db.Model):
     description = db.Column(db.Unicode)
     # Commentary.
     comment = db.Column(db.UnicodeText)
+    # The discussion thread.
+    threadid = db.Column(db.Integer, db.ForeignKey(Thread.id))
 
     # List of characters in this comic.
-    characters = db.relationship("Character", secondary=casts,
-        backref="comics")
+    characters = db.relationship(Character, secondary=casts, backref="comics")
+    # The thread which discusses this comic.
+    thread = db.relationship(Thread, backref="comic")
 
     def __init__(self, filename):
         self.filename = filename
