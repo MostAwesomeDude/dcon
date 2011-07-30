@@ -212,6 +212,19 @@ def upload():
 def not_found(error):
     return "Couldn't find the page!", 404
 
+def get_comic_query():
+    """
+    Make a comic query.
+
+    This helper mostly just keeps the temporal filter on all comic queries not
+    otherwise safe. The point of the filter is to prevent comics which are
+    posted with a timestamp in the future from being displayed or otherwise
+    referenced; as far as anybody can tell, those comics simply do not exist
+    until after the timestamp elapses.
+    """
+
+    return Comic.query.filter(Comic.time < datetime.now())
+
 def get_neighbors_for(comic):
     """
     Grab the comics around a given comic.
@@ -219,10 +232,13 @@ def get_neighbors_for(comic):
 
     comics = {}
 
+    # Grab the comics corresponding to navigation buttons: First, previous,
+    # next, last. This first query doesn't need to have the temporal filter.
     q = Comic.query.filter(Comic.time < comic.time)
     a = q.order_by(Comic.time.desc()).first()
     b = q.order_by(Comic.time).first()
-    q = Comic.query.filter(Comic.time > comic.time)
+
+    q = get_comic_query().filter(Comic.time > comic.time)
     c = q.order_by(Comic.time).first()
     d = q.order_by(Comic.time.desc()).first()
 
@@ -232,9 +248,9 @@ def get_neighbors_for(comic):
 
 @app.route("/")
 def index():
-    try:
-        comic = Comic.query.order_by(Comic.id.desc()).one()
-    except NoResultFound:
+    comic = get_comic_query().order_by(Comic.id.desc()).first()
+
+    if comic is None:
         abort(404)
 
     comics = get_neighbors_for(comic)
@@ -255,27 +271,25 @@ def comics_root():
 @app.route("/comics/<int:cid>")
 def comics(cid):
     try:
-        comic = Comic.query.filter_by(id=cid).one()
+        comic = get_comic_query().filter_by(id=cid).one()
     except NoResultFound:
         abort(404)
 
     comics = get_neighbors_for(comic)
 
-    q = Comic.query.filter(Comic.position < comic.position)
-    previous = q.order_by(Comic.position.desc()).first()
+    previousq = get_comic_query().filter(Comic.position < comic.position)
+    nextq = get_comic_query().filter(Comic.position > comic.position)
 
-    q = Comic.query.filter(Comic.position > comic.position)
-    chrono = previous, q.order_by(Comic.position).first()
+    previous = previousq.order_by(Comic.position.desc()).first()
+    chrono = previous, nextq.order_by(Comic.position).first()
 
     cdict = {}
 
     for character in list(comic.characters):
-        q = Comic.query.filter(Comic.position < comic.position)
-        q = q.order_by(Comic.position.desc())
+        q = previousq.order_by(Comic.position.desc())
         previous = q.filter(Comic.characters.any(slug=character.slug)).first()
 
-        q = Comic.query.filter(Comic.position > comic.position)
-        next = q.filter(Comic.characters.any(slug=character.slug)).first()
+        next = nextq.filter(Comic.characters.any(slug=character.slug)).first()
 
         cdict[character.slug] = character, previous, next
 
