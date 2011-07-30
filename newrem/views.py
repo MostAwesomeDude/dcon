@@ -1,5 +1,4 @@
 from datetime import datetime
-from functools import wraps
 import os.path
 
 from PyRSS2Gen import Guid, RSS2, RSSItem
@@ -9,28 +8,16 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from werkzeug import secure_filename
 
-from flask import abort, flash, redirect, render_template, request, url_for
+from flask import abort, flash, redirect, render_template, url_for
 
+from newrem.decorators import auth_required, cached
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
     CharacterModifyForm, NewsForm, PortraitCreateForm,
     PortraitModifyForm, UploadForm)
 from newrem.main import app
 from newrem.models import db, Character, Comic, Newspost, Portrait
-from newrem.security import Authenticator
 
 from osuchan.models import Thread
-
-authenticator = Authenticator({"hurp": "derp"})
-
-def auth_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        auth = request.authorization
-        if not auth or not authenticator.validate(auth):
-            return authenticator.make_basic_challenge("Cid's Lair",
-                "Haha, no.")
-        return f(*args, **kwargs)
-    return decorated
 
 @app.route("/characters")
 @auth_required
@@ -295,6 +282,7 @@ def comics(cid):
     return render_template("comics.html", **kwargs)
 
 @app.route("/rss.xml")
+@cached
 def rss():
     comics = Comic.query.order_by(Comic.id.desc())[:10]
     items = []
