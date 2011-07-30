@@ -10,6 +10,8 @@
           -- prefetchers, mark the next page in the sequence. -->
         <link rel="next" href="{{ url_for("comics", cid=after.id) }}">
     {% endif %}
+    <link rel="stylesheet"
+        href="{{ url_for("osuchan.static", filename="style.css") }}" />
 {% endblock %}
 
 {% block header %}
