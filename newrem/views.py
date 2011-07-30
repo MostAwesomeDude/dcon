@@ -229,7 +229,11 @@ def get_neighbors_for(comic):
 
 @app.route("/")
 def index():
-    comic = Comic.query.order_by(Comic.id.desc()).first()
+    try:
+        comic = Comic.query.order_by(Comic.id.desc()).one()
+    except NoResultFound:
+        abort(404)
+
     comics = get_neighbors_for(comic)
 
     newsposts = Newspost.query.order_by(Newspost.time.desc())[:5]
@@ -293,7 +297,7 @@ def rss():
         items.append(item)
 
     rss2 = RSS2(title="RSS", link=url_for("index", _external=True),
-        description="Hurp!", lastBuildDate=datetime.utcnow(), items=items)
+        description="Flavor Text", lastBuildDate=datetime.utcnow(), items=items)
     return rss2.to_xml(encoding="utf8")
 
 @app.route("/500")
