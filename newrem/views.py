@@ -123,7 +123,7 @@ def portraits_create():
         db.session.commit()
 
         path = os.path.abspath(os.path.join("uploads", portrait.portrait))
-        form.portrait.file.save(path)
+        portrait.update_portrait(form.portrait.file, path)
 
         flash("Successfully created portrait %s!" % portrait.name)
     else:
@@ -139,7 +139,8 @@ def portraits_modify():
         portrait = form.portraits.data
         if portrait and form.portrait.file:
             path = os.path.abspath(os.path.join("uploads", portrait.portrait))
-            form.portrait.file.save(path)
+            portrait.update_portrait(form.portrait.file, path)
+
             flash("Successfully changed portrait for portrait %s!" %
                 portrait.name)
         else:

@@ -2,6 +2,8 @@ from datetime import datetime
 import os
 import re
 
+from PIL import Image
+
 from unidecode import unidecode
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -181,14 +183,15 @@ class Portrait(db.Model):
             l.extend(unidecode(word).split())
         self.slug = "-".join(word.strip().lower() for word in l)
 
+    def update_portrait(self, fs, path):
+        image = Image.open(fs)
+        image.thumbnail((250, 250), Image.ANTIALIAS)
+        image.save(path)
+
     @property
     def portrait(self):
         png = "%s.png" % self.slug
         return os.path.join("portraits", png)
-
-    @portrait.setter
-    def portrait(self, filename):
-        os.rename(filename, self.portrait)
 
 class User(db.Model):
 
