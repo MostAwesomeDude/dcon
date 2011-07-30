@@ -193,6 +193,9 @@ def upload():
         comic.title = form.title.data
         comic.thread = Thread("co", comic.title, "Newrem")
 
+        if form.time.data:
+            comic.time = form.time.data
+
         if form.index.data == 0:
             comic.insert_at_head()
         else:
