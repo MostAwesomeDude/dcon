@@ -1,8 +1,4 @@
-@mixin corners($radius: 1em) {
-    border-radius: $radius;
-    -moz-border-radius: $radius;
-    -webkit-border-radius: $radius;
-}
+@import "mixins";
 
 #discussion {
     margin-top: 40px;

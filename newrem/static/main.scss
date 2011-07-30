@@ -1,3 +1,5 @@
+@import "mixins";
+
 div.body {
   width : 760px;
   left : 0px;
@@ -26,6 +28,8 @@ div.navigation {
 }
 
 .newsentry {
+    @include corners(25px);
+
     clear: left;
     position: relative;
 
@@ -174,12 +178,15 @@ p {
 }
 
 .comic {
-    text-align:center;
+    @include corners(25px);
+
+    text-align: center;
+    padding: 10px;
+
     background: {
         image: url(images/comicbg.png);
         repeat: repeat-y;
     }
-padding:10px;
 }
 
 .navigation {clear:both;
@@ -227,3 +234,7 @@ padding:10px;
 }
 
 .cast {font-size:x-small}
+
+.errors li {
+    color: red;
+}

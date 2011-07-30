@@ -19,6 +19,9 @@ div.navigation {
   text-align: center; }
 
 .newsentry {
+  border-radius: 25px;
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
   clear: left;
   position: relative;
   background-color: #001122;
@@ -183,10 +186,13 @@ p {
   width: 560px; }
 
 .comic {
+  border-radius: 25px;
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
   text-align: center;
+  padding: 10px;
   background-image: url(images/comicbg.png);
-  background-repeat: repeat-y;
-  padding: 10px; }
+  background-repeat: repeat-y; }
 
 .navigation {
   clear: both;
@@ -215,3 +221,6 @@ p {
 
 .cast {
   font-size: x-small; }
+
+.errors li {
+  color: red; }
