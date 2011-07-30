@@ -8,6 +8,8 @@ from newrem.forms import images, pngs
 from newrem.models import db, lm
 from newrem.users import users
 
+from osuchan.blueprint import osuchan
+
 wd = os.getcwd()
 
 app = Flask(__name__)
@@ -23,3 +25,4 @@ lm.setup_app(app)
 
 app.register_blueprint(users)
 app.register_blueprint(comics)
+app.register_blueprint(osuchan, url_prefix="/chan")
