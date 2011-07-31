@@ -71,9 +71,9 @@ class Comic(db.Model):
     # Title of the comic.
     title = db.Column(db.Unicode(80), nullable=False)
     # Description/alt text.
-    description = db.Column(db.UnicodeText)
+    description = db.Column(db.UnicodeText(1024*1024))
     # Commentary.
-    comment = db.Column(db.UnicodeText)
+    comment = db.Column(db.UnicodeText(1024*1024))
     # The discussion thread.
     threadid = db.Column(db.Integer, db.ForeignKey(Thread.id))
 
@@ -149,7 +149,7 @@ class Newspost(db.Model):
 
     time = db.Column(db.DateTime, primary_key=True)
     title = db.Column(db.Unicode(80), nullable=False)
-    content = db.Column(db.UnicodeText)
+    content = db.Column(db.UnicodeText(1024*1024))
 
     # Reference to the attached portrait.
     portrait_id = db.Column(db.String, db.ForeignKey("portraits.slug"),
