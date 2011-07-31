@@ -13,7 +13,7 @@ from flaskext.login import LoginManager, make_secure_token
 from osuchan.models import db, Thread
 
 casts = db.Table("casts", db.metadata,
-    db.Column("character_id", db.String, db.ForeignKey("characters.slug")),
+    db.Column("character_id", db.String(45), db.ForeignKey("characters.slug")),
     db.Column("comic_id", db.Integer, db.ForeignKey("comics.id"))
 )
 
@@ -143,24 +143,6 @@ class Comic(db.Model):
         self.position = position
         db.session.add(self)
 
-class Newspost(db.Model):
-
-    __tablename__ = "newsposts"
-
-    time = db.Column(db.DateTime, primary_key=True)
-    title = db.Column(db.Unicode(80), nullable=False)
-    content = db.Column(db.UnicodeText(1024*1024))
-
-    # Reference to the attached portrait.
-    portrait_id = db.Column(db.String, db.ForeignKey("portraits.slug"),
-        nullable=False)
-    portrait = db.relationship("Portrait", backref="newsposts")
-
-    def __init__(self, title, content=u""):
-        self.time = datetime.utcnow()
-        self.title = title
-        self.content = content
-
 class Portrait(db.Model):
 
     __tablename__ = "portraits"
@@ -192,6 +174,24 @@ class Portrait(db.Model):
     def portrait(self):
         png = "%s.png" % self.slug
         return os.path.join("portraits", png)
+
+class Newspost(db.Model):
+
+    __tablename__ = "newsposts"
+
+    time = db.Column(db.DateTime, primary_key=True)
+    title = db.Column(db.Unicode(80), nullable=False)
+    content = db.Column(db.UnicodeText(1024*1024))
+
+    # Reference to the attached portrait.
+    portrait_id = db.Column(db.String(45), db.ForeignKey(Portrait.slug),
+        nullable=False)
+    portrait = db.relationship(Portrait, backref="newsposts")
+
+    def __init__(self, title, content=u""):
+        self.time = datetime.utcnow()
+        self.title = title
+        self.content = content
 
 class User(db.Model):
 
