@@ -4,12 +4,6 @@
 {% block content %}
 <form method="POST" action="{{ url_for("upload") }}"
     enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    {{ macros.render_field(form.file) }}
-    {{ macros.render_field(form.title) }}
-    {{ macros.render_field(form.index) }}
-    {{ macros.render_field(form.characters) }}
-    {{ macros.render_field(form.time) }}
-    {{ macros.render_field(form.submit) }}
+    {{ macros.render_form(form) }}
 </form>
 {% endblock %}

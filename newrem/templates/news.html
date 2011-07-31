@@ -4,10 +4,6 @@
 {% block content %}
 <form method="POST" action="{{ url_for("news") }}"
     enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    {{ macros.render_field(form.title) }}
-    {{ macros.render_field(form.content) }}
-    {{ macros.render_field(form.portrait) }}
-    {{ macros.render_field(form.submit) }}
+    {{ macros.render_form(form) }}
 </form>
 {% endblock %}

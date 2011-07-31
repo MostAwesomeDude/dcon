@@ -4,24 +4,15 @@
 {% block content %}
 <form method="POST" enctype="multipart/form-data"
     action="{{ url_for("characters_create") }}">
-    {{ cform.hidden_tag() }}
-    {{ macros.render_field(cform.name) }}
-    {{ macros.render_field(cform.portrait) }}
-    {{ macros.render_field(cform.submit) }}
+    {{ macros.render_form(cform) }}
 </form>
 
 <form method="POST" enctype="multipart/form-data"
     action="{{ url_for("characters_modify") }}">
-    {{ mform.hidden_tag() }}
-    {{ macros.render_field(mform.characters) }}
-    {{ macros.render_field(mform.name) }}
-    {{ macros.render_field(mform.portrait) }}
-    {{ macros.render_field(mform.submit) }}
+    {{ macros.render_form(mform) }}
 </form>
 
 <form method="POST" action="{{ url_for("characters_delete") }}">
-    {{ dform.hidden_tag() }}
-    {{ macros.render_field(dform.characters) }}
-    {{ macros.render_field(dform.submit) }}
+    {{ macros.render_form(dform) }}
 </form>
 {% endblock %}

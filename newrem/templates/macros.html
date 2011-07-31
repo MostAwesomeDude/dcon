@@ -1,7 +1,9 @@
 {% macro render_field(field) %}
     {# Hack: Don't show SubmitField labels, since they merely repeat the
      # content of the button. #}
-    {% if field.__class__.__name__ != "SubmitField" %}
+    {# Hack: Don't show HiddenField labels, and hide them with undisplayable
+     # divs. #}
+    {% if field.__class__.__name__ not in ("HiddenField", "SubmitField") %}
         {{ field.label }}
     {% endif %}
     {{ field(**kwargs)|safe }}
@@ -12,6 +14,12 @@
         {% endfor %}
         </ul>
     {% endif %}
+{% endmacro %}
+
+{% macro render_form(form) %}
+    {% for field in form %}
+        {{ render_field(field) }}
+    {% endfor %}
 {% endmacro %}
 
 {% macro render_comic(comic, comics) %}
@@ -63,10 +71,7 @@
         {% if user.is_anonymous() %}
             <form method="POST"
                 action="{{ url_for("users.login", **request.args) }}">
-                {{ form.hidden_tag() }}
-                {{ render_field(form.username) }}
-                {{ render_field(form.password) }}
-                {{ render_field(form.submit) }}
+                {{ render_form(form) }}
             </form>
             Not currently logged in (
             <a href="{{ url_for("users.login", next=request.path)}}">Login</a>,
