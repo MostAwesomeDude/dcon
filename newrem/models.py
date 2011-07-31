@@ -44,14 +44,14 @@ class Character(db.Model):
             l.extend(unidecode(word).split())
         self.slug = "-".join(word.strip().lower() for word in l)
 
-    @property
-    def portrait(self):
+    def _get_portrait(self):
         png = "%s.png" % self.slug
         return os.path.join("characters", png)
 
-    @portrait.setter
-    def portrait(self, filename):
+    def _set_portrait(self, filename):
         os.rename(filename, self.portrait)
+
+    portrait = property(_get_portrait, _set_portrait)
 
 class Comic(db.Model):
     """
