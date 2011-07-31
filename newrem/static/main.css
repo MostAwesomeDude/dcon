@@ -191,6 +191,7 @@ p {
   -webkit-border-radius: 25px;
   text-align: center;
   padding: 10px;
+  margin-bottom: 50px;
   background-image: url(images/comicbg.png);
   background-repeat: repeat-y; }
 
