@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask
-from flaskext.uploads import configure_uploads
+from flaskext.uploads import configure_uploads, patch_request_class
 
 from newrem.comics import comics
 from newrem.forms import images, pngs
@@ -19,6 +19,7 @@ app.config["SECRET_KEY"] = "just a test!"
 app.config["UPLOADS_DEFAULT_DEST"] = os.path.join(wd, "uploads")
 
 configure_uploads(app, (images, pngs))
+patch_request_class(app)
 
 db.init_app(app)
 lm.setup_app(app)
