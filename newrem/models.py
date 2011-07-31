@@ -26,8 +26,8 @@ class Character(db.Model):
 
     __tablename__ = "characters"
 
-    name = db.Column(db.Unicode)
-    slug = db.Column(db.String, primary_key=True)
+    name = db.Column(db.Unicode(40))
+    slug = db.Column(db.String(45), primary_key=True)
 
     def __init__(self, name):
         self.rename(name)
@@ -65,13 +65,13 @@ class Comic(db.Model):
     # Upload time.
     time = db.Column(db.DateTime, unique=True, nullable=False)
     # Local filename.
-    filename = db.Column(db.String, unique=True, nullable=False)
+    filename = db.Column(db.String(50), unique=True, nullable=False)
     # Position in the timeline.
     position = db.Column(db.Integer, nullable=False)
     # Title of the comic.
-    title = db.Column(db.Unicode, nullable=False)
+    title = db.Column(db.Unicode(80), nullable=False)
     # Description/alt text.
-    description = db.Column(db.Unicode)
+    description = db.Column(db.UnicodeText)
     # Commentary.
     comment = db.Column(db.UnicodeText)
     # The discussion thread.
@@ -148,7 +148,7 @@ class Newspost(db.Model):
     __tablename__ = "newsposts"
 
     time = db.Column(db.DateTime, primary_key=True)
-    title = db.Column(db.Unicode, nullable=False)
+    title = db.Column(db.Unicode(80), nullable=False)
     content = db.Column(db.UnicodeText)
 
     # Reference to the attached portrait.
@@ -165,8 +165,8 @@ class Portrait(db.Model):
 
     __tablename__ = "portraits"
 
-    name = db.Column(db.String)
-    slug = db.Column(db.String, primary_key=True)
+    name = db.Column(db.String(40))
+    slug = db.Column(db.String(45), primary_key=True)
 
     def __init__(self, name):
         self.rename(name)
@@ -197,9 +197,9 @@ class User(db.Model):
 
     __tablename__ = "users"
 
-    username = db.Column(db.Unicode, primary_key=True, unique=True,
+    username = db.Column(db.Unicode(30), primary_key=True, unique=True,
         nullable=False)
-    password = db.Column(db.String)
+    password = db.Column(db.String(60))
     logged_in = db.Column(db.Boolean)
 
     def __init__(self, username, password):
