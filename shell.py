@@ -6,3 +6,5 @@ from newrem.models import *
 
 db.init_app(app)
 app.test_request_context().push()
+
+db.create_all()
