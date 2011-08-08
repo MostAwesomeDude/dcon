@@ -1,5 +1,6 @@
 from datetime import datetime
 import os.path
+from random import choice
 
 from PyRSS2Gen import Guid, RSS2, RSSItem
 
@@ -208,10 +209,6 @@ def upload():
 
     return render_template("upload.html", form=form)
 
-@app.errorhandler(404)
-def not_found(error):
-    return "Couldn't find the page!", 404
-
 def get_comic_query():
     """
     Make a comic query.
@@ -317,11 +314,12 @@ def rss():
         description="Flavor Text", lastBuildDate=datetime.utcnow(), items=items)
     return rss2.to_xml(encoding="utf8")
 
-@app.route("/500")
-def ohfuck():
-    x = 42
-    y = x // 0
-    return ""
+@app.errorhandler(404)
+def not_found(error):
+    directory = os.path.join(app.root_path, "static/404")
+    filename = choice(os.listdir(directory))
+    image = os.path.join("404", filename)
+    return render_template("404.html", image=image)
 
 @app.errorhandler(500)
 def internal_server_error(error):
