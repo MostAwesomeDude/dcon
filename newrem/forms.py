@@ -32,10 +32,12 @@ class TagListField(Field):
         else:
             self.data = []
 
+portrait = FileField("Select a portrait",
+    validators=(FileAllowed(pngs, "PNGs only!"),))
+
 class CharacterCreateForm(Form):
     name = TextField(u"New name", validators=(Required(),))
-    portrait = FileField("Select a portrait",
-        validators=(FileAllowed(pngs, "PNGs only!"),))
+    portrait = portrait
     submit = SubmitField("Create!")
 
 class CharacterModifyForm(Form):
@@ -43,8 +45,7 @@ class CharacterModifyForm(Form):
         query_factory=lambda: Character.query.order_by(Character.name),
         get_label="name")
     name = TextField(u"New name")
-    portrait = FileField("Select a portrait",
-        validators=(FileAllowed(pngs, "PNGs only!"),))
+    portrait = portrait
     submit = SubmitField("Modify!")
 
 class CharacterDeleteForm(Form):
@@ -55,16 +56,14 @@ class CharacterDeleteForm(Form):
 
 class PortraitCreateForm(Form):
     name = TextField(u"New name", validators=(Required(),))
-    portrait = FileField("Select a portrait",
-        validators=(FileAllowed(pngs, "PNGs only!"),))
+    portrait = portrait
     submit = SubmitField("Create!")
 
 class PortraitModifyForm(Form):
     portraits = QuerySelectField(u"Portraits",
         query_factory=lambda: Portrait.query.order_by(Portrait.name),
         get_label="name")
-    portrait = FileField("Select a portrait",
-        validators=(FileAllowed(pngs, "PNGs only!"),))
+    portrait = portrait
     submit = SubmitField("Modify!")
 
 class LoginForm(Form):
