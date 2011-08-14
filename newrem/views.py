@@ -192,6 +192,8 @@ def upload():
         comic = Comic(filename)
         comic.characters = characters
         comic.title = form.title.data
+        comic.description = form.description.data
+        comic.comment = form.comment.data
         comic.thread = Thread("co", comic.title, "Newrem")
 
         if form.time.data:
