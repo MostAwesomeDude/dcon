@@ -189,6 +189,10 @@ p {
         image: url(images/comicbg.png);
         repeat: repeat-y;
     }
+
+    p {
+        text-align: left;
+    }
 }
 
 .navigation {clear:both;

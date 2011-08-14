@@ -194,6 +194,8 @@ p {
   margin-bottom: 50px;
   background-image: url(images/comicbg.png);
   background-repeat: repeat-y; }
+  .comic p {
+    text-align: left; }
 
 .navigation {
   clear: both;
