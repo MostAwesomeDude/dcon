@@ -2,17 +2,7 @@
 {% import "macros.html" as macros %}
 
 {% block content %}
-<form method="POST" enctype="multipart/form-data"
-    action="{{ url_for("characters_create") }}">
-    {{ macros.render_form(cform) }}
-</form>
-
-<form method="POST" enctype="multipart/form-data"
-    action="{{ url_for("characters_modify") }}">
-    {{ macros.render_form(mform) }}
-</form>
-
-<form method="POST" action="{{ url_for("characters_delete") }}">
-    {{ macros.render_form(dform) }}
-</form>
+    {{ macros.render_form(cform, url_for("characters_create")) }}
+    {{ macros.render_form(mform, url_for("characters_modify")) }}
+    {{ macros.render_form(dform, url_for("characters_delete")) }}
 {% endblock %}

@@ -11,7 +11,7 @@
             </td>
         {% endif %}
         <td {% if hide_label %}colspan="2"{% endif %} >
-            {{ field(**kwargs)|safe }}
+            {{ field()|safe }}
             {% if field.errors %}
                 <ul class="errors">
                 {% for error in field.errors %}
@@ -23,12 +23,14 @@
     </tr>
 {% endmacro %}
 
-{% macro render_form(form) %}
-    <table>
-    {% for field in form %}
-        {{ render_field(field) }}
-    {% endfor %}
-    </table>
+{% macro render_form(form, url) %}
+    <form method="POST" enctype="multipart/form-data" action="{{ url }}">
+        <table>
+        {% for field in form %}
+            {{ render_field(field) }}
+        {% endfor %}
+        </table>
+    </form>
 {% endmacro %}
 
 {% macro render_comic(comic, comics) %}
@@ -78,10 +80,7 @@
 {% macro render_login(request, user, form) %}
     <div class="login">
         {% if user.is_anonymous() %}
-            <form method="POST"
-                action="{{ url_for("users.login", **request.args) }}">
-                {{ render_form(form) }}
-            </form>
+            {{ render_form(form, url_for("users.login", **request.args)) }}
             Not currently logged in (
             <a href="{{ url_for("users.login", next=request.path)}}">Login</a>,
             <a href="{{ url_for("users.register", next=request.path)}}">Register?</a>

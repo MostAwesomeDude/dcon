@@ -2,13 +2,6 @@
 {% import "macros.html" as macros %}
 
 {% block content %}
-<form method="POST" enctype="multipart/form-data"
-    action="{{ url_for("portraits_create") }}">
-    {{ macros.render_form(cform) }}
-</form>
-
-<form method="POST" enctype="multipart/form-data"
-    action="{{ url_for("portraits_modify") }}">
-    {{ macros.render_form(mform) }}
-</form>
+    {{ macros.render_form(cform, url_for("portraits_create")) }}
+    {{ macros.render_form(mform, url_for("portraits_modify")) }}
 {% endblock %}

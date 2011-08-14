@@ -2,8 +2,5 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form method="POST" action="{{ url_for("upload") }}"
-    enctype="multipart/form-data">
-    {{ macros.render_form(form) }}
-</form>
+    {{ macros.render_form(form, url_for("upload")) }}
 {% endblock %}
