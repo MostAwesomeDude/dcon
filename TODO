@@ -1,6 +1,11 @@
-* Blog
-* Threads for blog
-* Achievements
-* Emails for Users and email validation
-* Timeline field on Comics
-* Recaptcha for users
+Before launch:
+ * Character select on /upload should be fixed
+ * Character pics not showing up
+
+Not-so-important:
+ * Blog
+ * Threads for blog
+ * Achievements
+ * Emails for Users and email validation
+ * Timeline field on Comics
+ * Recaptcha for users
