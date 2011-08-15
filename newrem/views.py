@@ -11,7 +11,7 @@ from werkzeug import secure_filename
 
 from flask import abort, flash, redirect, render_template, url_for
 
-from newrem.decorators import auth_required, cached
+from newrem.decorators import cached, make_auth_required
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
     CharacterModifyForm, NewsForm, PortraitCreateForm,
     PortraitModifyForm, UploadForm)
@@ -19,6 +19,8 @@ from newrem.main import app
 from newrem.models import db, Character, Comic, Newspost, Portrait
 
 from osuchan.models import Thread
+
+auth_required = make_auth_required(app)
 
 @app.route("/characters")
 @auth_required

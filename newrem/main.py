@@ -18,6 +18,12 @@ app.config["SQLALCHEMY_ECHO"] = True
 app.config["SECRET_KEY"] = "just a test!"
 app.config["UPLOADS_DEFAULT_DEST"] = os.path.join(wd, "uploads")
 
+app.config["DCON_PATH"] = wd
+path = os.path.join(app.config["DCON_PATH"], "secret.key")
+app.config["SECRET_KEY"] = open(path).read()
+path = os.path.join(app.config["DCON_PATH"], "passwords.dcon")
+app.config["DCON_PASSWORD_FILE"] = path
+
 configure_uploads(app, (images, pngs))
 patch_request_class(app)
 
