@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     {% for character in characters %}
-        <div class="{% if loop.cycle % 2 %}cast-odd{% else %}cast-even{% endif %}">
+        <div class="{{ loop.cycle("cast-odd", "cast-even") }}">
             <h2>{{ character.name }}</h2>
             <img src="{{ url_for("static", filename=character.portrait) }}" />
         <div>
