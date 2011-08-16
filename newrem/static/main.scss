@@ -244,6 +244,14 @@ p {
 
 .cast {font-size:x-small}
 
+.cast-even img {
+    float: left;
+}
+
+.cast-odd img {
+    float: right;
+}
+
 .errors li {
     color: red;
 }

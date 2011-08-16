@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<ul>
-{% for character in characters %}
-    <li>{{ character.name }}</li>
-    <li><img src="{{ url_for("static", filename=character.portrait) }}" /></li>
-{% endfor %}
-</ul>
+    {% for character in characters %}
+        <div class="{% if loop.cycle % 2 %}cast-odd{% else %}cast-even{% endif %}">
+            <h2>{{ character.name }}</h2>
+            <img src="{{ url_for("static", filename=character.portrait) }}" />
+        <div>
+    {% endfor %}
 {% endblock %}
