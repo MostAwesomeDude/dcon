@@ -61,11 +61,8 @@
             title="{{ comic.description }}" />
         <div class="information">
             <h1>{{ comic.title }}</h1>
-            <h6>Uploaded on
-            {{ comic.time.strftime("%B %d, %Y at %I:%M:%S %p") }}</h6>
             {% if comic.characters %}
-                <div class="cast">
-                    Starring:
+                <div class="cast">Starring:
                     {% for character in comic.characters %}
                         {{ character.name }}
                         {% if not loop.last %}
@@ -74,6 +71,8 @@
                     {% endfor %}
                 </div>
             {% endif %}
+            <h6>Uploaded on
+            {{ comic.time.strftime("%B %d, %Y at %I:%M:%S %p") }}</h6>
             {% if comic.comment %}
                 <p>{{ comic.comment }}</p>
             {% endif %}

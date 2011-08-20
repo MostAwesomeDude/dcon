@@ -189,10 +189,6 @@ p {
         image: url(images/comicbg.png);
         repeat: repeat-y;
     }
-
-    p {
-        text-align: left;
-    }
 }
 
 .navigation {clear:both;
@@ -205,6 +201,11 @@ p {
     background: #DFDFFE;
     padding: 0 5px 5px 5px;
 
+    text: {
+        align: left;
+        indent: 1.6em;
+    }
+
     h1 {
         color: #001122;
         clear:none;
@@ -216,33 +217,20 @@ p {
             size: large;
             variant: small-caps;
         }
-
-        text: {
-            align: left;
-            indent: 10px;
-        }
     }
 
     h6 {
         margin: 0px;
-
-        text: {
-            align: left;
-            indent: 10px;
-        }
     }
 
     p {
         padding: 5px;
+    }
 
-        text: {
-            align: left;
-            indent: 1.6em;
-        }
+    div.cast {
+        font-size: x-small;
     }
 }
-
-.cast {font-size:x-small}
 
 .cast-even img {
     float: left;
