@@ -32,6 +32,6 @@ db.init_app(app)
 lm.setup_app(app)
 
 app.register_blueprint(users)
-app.register_blueprint(admin)
+app.register_blueprint(admin, url_prefix="/admin")
 app.register_blueprint(comics)
 app.register_blueprint(osuchan, url_prefix="/chan")
