@@ -3,6 +3,7 @@ import os
 from flask import Flask
 from flaskext.uploads import configure_uploads, patch_request_class
 
+from newrem.admin import admin
 from newrem.comics import comics
 from newrem.forms import images, pngs
 from newrem.models import db, lm
@@ -31,5 +32,6 @@ db.init_app(app)
 lm.setup_app(app)
 
 app.register_blueprint(users)
+app.register_blueprint(admin)
 app.register_blueprint(comics)
 app.register_blueprint(osuchan, url_prefix="/chan")
