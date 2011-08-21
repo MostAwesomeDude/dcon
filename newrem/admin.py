@@ -4,24 +4,53 @@ from sqlalchemy import func
 
 from werkzeug import secure_filename
 
-from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import (Blueprint, flash, redirect, render_template, request,
+    url_for)
 
-from newrem.decorators import make_auth_required
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
     CharacterModifyForm, NewsForm, PortraitCreateForm,
     PortraitModifyForm, UploadForm)
-from newrem.main import app
 from newrem.models import db, Character, Comic, Newspost, Portrait
+from newrem.security import Authenticator
 
 from osuchan.models import Thread
 
-auth_required = make_auth_required(app)
+class AdminBlueprint(Blueprint):
+    """
+    Custom blueprint which automatically authenticates its views.
+    """
 
-admin = Blueprint("admin", __name__, static_folder="static",
+    def register(self, app, options, first_registration=False):
+        """
+        Register this blueprint on an application.
+        """
+
+        path = app.config["DCON_PASSWORD_FILE"]
+        d = {}
+        for line in open(path, "rb").read().split("\n"):
+            try:
+                k, v = line.split(":", 1)
+            except ValueError:
+                pass
+            else:
+                d[k.strip()] = v.strip()
+
+        self._authenticator = Authenticator(d)
+
+        self.before_request(lambda: self._require_authentication(app))
+
+        Blueprint.register(self, app, options, first_registration)
+
+    def _require_authentication(self, app):
+        auth = request.authorization
+        if not auth or not self._authenticator.validate(auth):
+            return self._authenticator.make_basic_challenge("Cid's Lair",
+                "Haha, no.")
+
+admin = AdminBlueprint("admin", __name__, static_folder="static",
     template_folder="templates")
 
 @admin.route("/characters")
-@auth_required
 def characters():
     cform = CharacterCreateForm(prefix="create")
     mform = CharacterModifyForm(prefix="modify")
@@ -94,7 +123,6 @@ def characters_delete():
     return redirect(url_for("characters"))
 
 @admin.route("/portraits")
-@auth_required
 def portraits():
     cform = PortraitCreateForm(prefix="create")
     mform = PortraitModifyForm(prefix="modify")
@@ -117,7 +145,7 @@ def portraits_create():
     else:
         flash("Couldn't validate form...")
 
-    return redirect(url_for("portraits"))
+    return redirect(url_for("admin.portraits"))
 
 @admin.route("/portraits/modify", methods=("POST",))
 def portraits_modify():
@@ -137,10 +165,9 @@ def portraits_modify():
     else:
         flash("Couldn't validate form...")
 
-    return redirect(url_for("portraits"))
+    return redirect(url_for("admin.portraits"))
 
 @admin.route("/news", methods=("GET", "POST"))
-@auth_required
 def news():
     form = NewsForm()
 
@@ -154,7 +181,6 @@ def news():
     return render_template("news.html", form=form)
 
 @admin.route("/upload", methods=("GET", "POST"))
-@auth_required
 def upload():
     form = UploadForm()
 

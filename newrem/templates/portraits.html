@@ -2,6 +2,6 @@
 {% import "macros.html" as macros %}
 
 {% block content %}
-    {{ macros.render_form(cform, url_for("portraits_create")) }}
-    {{ macros.render_form(mform, url_for("portraits_modify")) }}
+    {{ macros.render_form(cform, url_for("admin.portraits_create")) }}
+    {{ macros.render_form(mform, url_for("admin.portraits_modify")) }}
 {% endblock %}
