@@ -50,6 +50,10 @@ class AdminBlueprint(Blueprint):
 admin = AdminBlueprint("admin", __name__, static_folder="static",
     template_folder="templates")
 
+@admin.route("/")
+def root():
+    return render_template("admin.html")
+
 @admin.route("/characters")
 def characters():
     cform = CharacterCreateForm(prefix="create")

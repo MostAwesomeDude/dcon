@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+<ul>
+    <li><a href="{{ url_for("admin.characters") }}">Characters</a></li>
+    <li><a href="{{ url_for("admin.news") }}">News</a></li>
+    <li><a href="{{ url_for("admin.portraits") }}">Portraits</a></li>
+    <li><a href="{{ url_for("admin.upload") }}">Upload</a></li>
+</ul>
+{% endblock %}
