@@ -7,6 +7,7 @@ from PyRSS2Gen import Guid, RSS2, RSSItem
 from sqlalchemy.orm.exc import NoResultFound
 
 from flask import abort, redirect, render_template, url_for
+from flaskext.login import current_user
 
 from newrem.decorators import cached
 from newrem.forms import CommentForm
@@ -108,6 +109,9 @@ def comics(cid):
 
 @app.route("/comics/<int:cid>/comment", methods=("POST",))
 def comment(cid):
+    if current_user.is_anonymous():
+        abort(403)
+
     try:
         comic = get_comic_query().filter_by(id=cid).one()
     except NoResultFound:
@@ -116,7 +120,12 @@ def comment(cid):
     form = CommentForm()
 
     if form.validate_on_submit():
-        post = Post(form.name.data, form.comment.data, form.email.data, "")
+        if form.anonymous.data:
+            name = "Anonymous"
+        else:
+            name = current_user.username
+
+        post = Post(name, form.comment.data, "", "")
         post.thread = comic.thread
 
         db.session.add(post)

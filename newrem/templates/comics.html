@@ -42,7 +42,9 @@
     {% endfor %}
     <div class="shareables"></div>
     <div id="discussion">
-        {{ ocmacros.render_form(ocform, url_for("comment", cid=comic.id), "co") }}
+        {% if not current_user.is_anonymous() %}
+            {{ ocmacros.render_form(ocform, url_for("comment", cid=comic.id), "co") }}
+        {% endif %}
         {{ ocmacros.render_posts(comic.thread) }}
     </div>
     <div class="money"></div>

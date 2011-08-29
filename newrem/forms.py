@@ -3,7 +3,7 @@ from datetime import datetime
 from wtforms.ext.dateutil.fields import DateTimeField
 from wtforms.ext.sqlalchemy.fields import (QuerySelectMultipleField,
     QuerySelectField)
-from wtforms.fields import TextAreaField
+from wtforms.fields import BooleanField, TextAreaField
 from wtforms.validators import EqualTo, Length
 
 from flaskext.uploads import IMAGES, UploadSet
@@ -83,8 +83,8 @@ class UploadForm(Form):
     submit = SubmitField("Upload!")
 
 class CommentForm(Form):
-    name = TextField("Name", default="Anonymous")
-    email = TextField("Email")
+    anonymous = BooleanField("Post anonymously?")
+    sage = BooleanField("Sage?")
     subject = TextField("Subject")
     comment = TextAreaField("Comment")
     datafile = FileField("Image")
