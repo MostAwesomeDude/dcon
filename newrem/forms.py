@@ -81,3 +81,11 @@ class UploadForm(Form):
         get_label="name")
     time = DateTimeField("Activation time", default=datetime.now())
     submit = SubmitField("Upload!")
+
+class CommentForm(Form):
+    name = TextField("Name", default="Anonymous")
+    email = TextField("Email")
+    subject = TextField("Subject")
+    comment = TextAreaField("Comment")
+    datafile = FileField("Image")
+    submit = SubmitField("Submit")

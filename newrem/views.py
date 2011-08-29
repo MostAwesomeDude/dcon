@@ -9,8 +9,11 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask import abort, redirect, render_template, url_for
 
 from newrem.decorators import cached
+from newrem.forms import CommentForm
 from newrem.main import app
-from newrem.models import Character, Comic, Newspost
+from newrem.models import db, Character, Comic, Newspost
+
+from osuchan.models import Post
 
 def get_comic_query():
     """
@@ -98,9 +101,28 @@ def comics(cid):
         "comics": comics,
         "chrono": chrono,
         "characters": cdict,
+        "ocform": CommentForm(),
     }
 
     return render_template("comics.html", **kwargs)
+
+@app.route("/comics/<int:cid>/comment", methods=("POST",))
+def comment(cid):
+    try:
+        comic = get_comic_query().filter_by(id=cid).one()
+    except NoResultFound:
+        abort(404)
+
+    form = CommentForm()
+
+    if form.validate_on_submit():
+        post = Post(form.name.data, form.comment.data, form.email.data, "")
+        post.thread = comic.thread
+
+        db.session.add(post)
+        db.session.commit()
+
+    return redirect(url_for("comics", cid=cid))
 
 @app.route("/rss.xml")
 @cached

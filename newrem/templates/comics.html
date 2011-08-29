@@ -42,6 +42,7 @@
     {% endfor %}
     <div class="shareables"></div>
     <div id="discussion">
+        {{ ocmacros.render_form(ocform, url_for("comment", cid=comic.id), "co") }}
         {{ ocmacros.render_posts(comic.thread) }}
     </div>
     <div class="money"></div>
