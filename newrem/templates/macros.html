@@ -3,15 +3,20 @@
      # content of the button. #}
     {# Hack: Don't show HiddenField labels, and hide them with undisplayable
      # divs. #}
-    {% set hide_label = field.type not in ("HiddenField", "SubmitField") %}
+    {% set hide_label = field.type in ("HiddenField", "SubmitField") %}
     <tr>
-        {% if hide_label %}
+        {% if not hide_label %}
             <td>
                 {{ field.label }}
             </td>
         {% endif %}
         <td {% if hide_label %}colspan="2"{% endif %} >
-            {{ field()|safe }}
+            {# Hack: Textareas should have extra params for display. #}
+            {% if field.type == "TextAreaField" %}
+                {{ field(wrap="soft", rows="4", cols="48")|safe }}
+            {% else %}
+                {{ field()|safe }}
+            {% endif %}
             {% if field.errors %}
                 <ul class="errors">
                 {% for error in field.errors %}
