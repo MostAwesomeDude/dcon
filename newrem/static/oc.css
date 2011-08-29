@@ -23,14 +23,6 @@
         font-weight: 800;
         font-size: 10pt; }
 
-form {
-  border: 1px solid #000000;
-  background: #ccc;
-  line-height: 20px;
-  padding: 0 5px;
-  width: 500px;
-  margin: 0px auto; }
-
 header {
   font-size: 2.0em; }
 
@@ -46,8 +38,16 @@ section#compose form {
   border-radius: 1em;
   -moz-border-radius: 1em;
   -webkit-border-radius: 1em;
+  /* Shrinkwrap. */
+  display: inline-block;
   padding: 1em;
-  width: 50%; }
+  border: 1px solid #000000;
+  background: #ccc;
+  line-height: 20px;
+  padding: 0 5px;
+  margin: 0px auto; }
+  section#compose form table {
+    text-align: left; }
 section#compose label {
   margin-right: 0.5em; }
 section#compose label[for="comment"] + textarea {

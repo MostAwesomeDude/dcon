@@ -38,15 +38,6 @@
     }
 }
 
-form {
-    border: 1px solid #000000;
-    background: #ccc;
-    line-height: 20px;
-    padding: 0 5px;
-    width: 500px;
-    margin: 0px auto;
-}
-
 header {
     font-size: 2.0em;
 }
@@ -62,10 +53,23 @@ table {
 }
 
 section#compose {
+
     form {
         @include corners;
+
+        /* Shrinkwrap. */
+        display: inline-block;
+
         padding: 1em;
-        width: 50%;
+        border: 1px solid #000000;
+        background: #ccc;
+        line-height: 20px;
+        padding: 0 5px;
+        margin: 0px auto;
+
+        table {
+            text-align: left;
+        }
     }
 
     label {
