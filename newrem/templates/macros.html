@@ -3,7 +3,7 @@
      # content of the button. #}
     {# Hack: Don't show HiddenField labels, and hide them with undisplayable
      # divs. #}
-    {% set hide_label = field.__class__.__name__ not in ("HiddenField", "SubmitField") %}
+    {% set hide_label = field.type not in ("HiddenField", "SubmitField") %}
     <tr>
         {% if hide_label %}
             <td>
