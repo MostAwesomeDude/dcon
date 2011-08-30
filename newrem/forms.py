@@ -7,8 +7,9 @@ from wtforms.fields import BooleanField, TextAreaField
 from wtforms.validators import EqualTo, Length
 
 from flaskext.uploads import IMAGES, UploadSet
-from flaskext.wtf import (Form, FileAllowed, FileRequired,
-    Required, FileField, IntegerField, PasswordField, SubmitField, TextField)
+from flaskext.wtf import (Form, FileAllowed, FileRequired, Required,
+    FileField, IntegerField, PasswordField, RecaptchaField, SubmitField,
+    TextField)
 
 from newrem.models import Character, Portrait
 
@@ -57,6 +58,7 @@ class LoginForm(Form):
 class RegisterForm(LoginForm):
     confirm = PasswordField("Confirm password",
         validators=(Required(), EqualTo("password")))
+    captcha = RecaptchaField()
     submit = SubmitField("Register!")
 
 class NewsForm(Form):
