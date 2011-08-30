@@ -2,11 +2,5 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form method="POST" action="{{ url_for("users.register") }}">
-    {{ form.hidden_tag() }}
-    {{ macros.render_field(form.username) }}
-    {{ macros.render_field(form.password) }}
-    {{ macros.render_field(form.confirm) }}
-    {{ macros.render_field(form.submit) }}
-</form>
+    {{ macros.render_form(form, url_for("users.register")) }}
 {% endblock %}
