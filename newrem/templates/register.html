@@ -2,5 +2,6 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <img src="{{ url_for("static", filename="images/captcha.png") }}" />
     {{ macros.render_form(form, url_for("users.register")) }}
 {% endblock %}
