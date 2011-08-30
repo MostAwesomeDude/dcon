@@ -102,22 +102,6 @@ class Comic(db.Model):
                 comic.position = i
                 db.session.add(comic)
 
-    def insert_at_head(self):
-        """
-        Make this comic the very first comic.
-        """
-
-        self.position = 0
-        db.session.add(self)
-
-        q = Comic.query.filter(Comic.id != self.id)
-        q = q.order_by(Comic.position)
-
-        for i, comic in enumerate(q):
-            if comic.position != i + 1:
-                comic.position = i + 1
-                db.session.add(comic)
-
     def insert(self, prior):
         """
         Move this comic to come just after another comic in the timeline.
@@ -126,7 +110,7 @@ class Comic(db.Model):
         if not prior:
             # First insertion in the table, ever. Let's just set ourselves to
             # zero and walk away.
-            self.position = 1
+            self.position = 0
             db.session.add(self)
             return
 
@@ -136,8 +120,11 @@ class Comic(db.Model):
         q = q.order_by(Comic.position)
 
         for i, comic in enumerate(q):
-            if comic.position != i + position:
-                comic.position = i + position
+            # The correct new position. The +1 offset is because this current
+            # comic is shifting the old comics up.
+            target = i + position + 1
+            if comic.position != target:
+                comic.position = target
                 db.session.add(comic)
 
         self.position = position

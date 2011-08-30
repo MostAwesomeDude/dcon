@@ -204,10 +204,7 @@ def upload():
         if form.time.data:
             comic.time = form.time.data
 
-        if form.index.data:
-            comic.insert(form.index.data)
-        else:
-            comic.insert_at_head()
+        comic.insert(form.index.data)
 
         db.session.add(comic)
         db.session.commit()
