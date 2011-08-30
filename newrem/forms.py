@@ -11,7 +11,7 @@ from flaskext.wtf import (Form, FileAllowed, FileRequired, Required,
     FileField, IntegerField, PasswordField, RecaptchaField, SubmitField,
     TextField)
 
-from newrem.models import Character, Portrait
+from newrem.models import Character, Comic, Portrait
 
 images = UploadSet("images", IMAGES)
 pngs = UploadSet("pngs", ("png",))
@@ -58,7 +58,6 @@ class LoginForm(Form):
 class RegisterForm(LoginForm):
     confirm = PasswordField("Confirm password",
         validators=(Required(), EqualTo("password")))
-    captcha = RecaptchaField()
     submit = SubmitField("Register!")
 
 class NewsForm(Form):
@@ -76,8 +75,10 @@ class UploadForm(Form):
     title = TextField("Title", validators=(Required(), Length(max=80)))
     description = TextAreaField("Alternate Text")
     comment = TextAreaField("Commentary")
-    index = IntegerField("Where to insert this comic?",
-        validators=(Required(),))
+    index = QuerySelectField(u"Which comic should come before this one?",
+        query_factory=lambda: Comic.query.order_by(Comic.position),
+        get_label=lambda comic:
+            u"%d: %s, %d" % (comic.position, comic.title, comic.id))
     characters = QuerySelectMultipleField(u"Characters",
         query_factory=lambda: Character.query.order_by(Character.name),
         get_label="name")

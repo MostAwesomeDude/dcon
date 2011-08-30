@@ -1,7 +1,5 @@
 import os
 
-from sqlalchemy import func
-
 from werkzeug import secure_filename
 
 from flask import (Blueprint, flash, redirect, render_template, request,
@@ -189,15 +187,6 @@ def upload():
     form = UploadForm()
 
     if form.validate_on_submit():
-        bottom = db.session.query(func.min(Comic.position)).first()[0]
-        top = db.session.query(func.max(Comic.position)).first()[0]
-
-        if (bottom and top and form.index.data and
-            not bottom <= form.index.data <= top):
-            flash("Couldn't find insertion point between %d and %d"
-                % (bottom, top))
-            return render_template("upload.html", form=form)
-
         filename = os.path.join("comics",
             secure_filename(form.file.file.filename))
         path = os.path.abspath(os.path.join("uploads", filename))
@@ -205,7 +194,6 @@ def upload():
             flash("File already exists!")
             return render_template("upload.html", form=form)
 
-        form.file.file.save(path)
         comic = Comic(filename)
         comic.characters = form.characters.data
         comic.title = form.title.data
@@ -216,14 +204,16 @@ def upload():
         if form.time.data:
             comic.time = form.time.data
 
-        if form.index.data == 0:
-            comic.insert_at_head()
+        if form.index.data:
+            comic.insert(form.index.data)
         else:
-            prior = Comic.query.filter(Comic.position < form.index.data).first()
-            comic.insert(prior)
+            comic.insert_at_head()
 
         db.session.add(comic)
         db.session.commit()
+
+        form.file.file.save(path)
+
         return redirect(url_for("comics", cid=comic.id))
 
     return render_template("upload.html", form=form)
