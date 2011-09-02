@@ -14,7 +14,6 @@
                     <img src="{{ url_for("static", filename=portrait) }}" />
                 </div>
                 {{ post.content|blogify|safe|urlize }}
-                {{ lipsum(2) }}
             </div>
         {% endfor %}
     </div>
