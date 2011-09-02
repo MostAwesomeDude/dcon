@@ -13,7 +13,7 @@
                 <div class="portrait">
                     <img src="{{ url_for("static", filename=portrait) }}" />
                 </div>
-                <p>{{ post.content|safe|urlize }}</p>
+                {{ post.content|blogify|safe|urlize }}
                 {{ lipsum(2) }}
             </div>
         {% endfor %}

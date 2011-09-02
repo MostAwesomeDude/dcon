@@ -11,10 +11,19 @@ from flaskext.login import current_user
 
 from newrem.decorators import cached
 from newrem.forms import CommentForm
+from newrem.grammars import BlogGrammar
 from newrem.main import app
 from newrem.models import db, Character, Comic, Newspost
 
 from osuchan.models import Post
+
+@app.template_filter()
+def blogify(s):
+    """
+    Run a string through a grammar to prettify it somewhat.
+    """
+
+    return BlogGrammar(s).apply("paragraphs")[0]
 
 def get_comic_query():
     """
