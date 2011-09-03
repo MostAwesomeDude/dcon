@@ -25,6 +25,14 @@ def blogify(s):
 
     return BlogGrammar(s).apply("paragraphs")[0]
 
+@app.template_filter()
+def eblogify(s):
+    """
+    Like ``blogify``, but also apply HTML escapes. For untrusted input.
+    """
+
+    return BlogGrammar(s).apply("safe_paragraphs")[0]
+
 def get_comic_query():
     """
     Make a comic query.
