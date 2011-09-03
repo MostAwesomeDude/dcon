@@ -22,6 +22,9 @@ underline ::= '_' (~'_' <nested_decos>)+:u '_' => "<u>%s</u>" % "".join(u)
 
 crlfs ::= <doublecrlf> | <crlf>
 
+quote ::= <crlfs>:head '>' <not_crlf>+:body <crlfs>:tail
+    => '%s<span class="quote">&gt;%s</span>%s' % (head, "".join(body), tail)
+
 decorations ::= <bold> | <italics> | <underline>
 
 nested_decos ::= <decorations> | <not_crlf>

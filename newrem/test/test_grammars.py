@@ -46,6 +46,10 @@ class TestBlogGrammar(TestCase):
         self.assertEqual(BlogGrammar("_a*sd*f_").apply("underline")[0],
             "<u>a<i>sd</i>f</u>")
 
+    def test_quote(self):
+        self.assertEqual(BlogGrammar("\r\n>mfw\r\n").apply("quote")[0],
+            '<br /><span class="quote">&gt;mfw</span><br />')
+
     def test_paragraphs_empty(self):
         self.assertEqual(BlogGrammar("").apply("paragraphs")[0], "<p></p>")
 
