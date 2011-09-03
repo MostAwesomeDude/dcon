@@ -4,16 +4,16 @@ div.body {
   width : 760px;
   left : 0px;
   margin : 0px;
-
-    background: {
-        color: aliceblue;
-    }
 }
 
 div.content {
   position : relative;
   top : 100px;
-  text-align : center
+  text-align : center;
+
+    background: {
+        color: aliceblue;
+    }
 }
 
 div.login {
