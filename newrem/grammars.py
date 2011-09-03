@@ -17,11 +17,30 @@ italics ::= '*' (~'*' <not_crlf>)+:i '*' => "<i>%s</i>" % "".join(i)
 
 underline ::= '_' (~'_' <not_crlf>)+:u '_' => "<u>%s</u>" % "".join(u)
 
-paragraphs ::=
-    (<doublecrlf> | <crlf> | <bold> | <italics> | <underline> | <anything>)*:l
+crlfs ::= <doublecrlf> | <crlf>
+
+decorations ::= <bold> | <italics> | <underline>
+
+entities ::= <crlfs> | <decorations>
+
+paragraphs ::= (<entities> | <anything>)*:l => "<p>%s</p>" % "".join(l)
+
+"""
+
+html_grammar = """
+
+less_than ::= '<' => "&lt;"
+
+greater_than ::= '>' => "&gt;"
+
+ampersand ::= '&' => "&amp;"
+
+safe_entities ::= <less_than> | <greater_than> | <ampersand>
+
+safe_paragraphs ::= (<safe_entities> | <entities> | <anything>)*:l
     => "<p>%s</p>" % "".join(l)
 
 """
 
-class BlogGrammar(OMeta.makeGrammar(blog_grammar, globals())):
+class BlogGrammar(OMeta.makeGrammar(blog_grammar + html_grammar, globals())):
     pass

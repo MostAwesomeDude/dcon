@@ -57,3 +57,13 @@ class TestBlogGrammar(TestCase):
         text = "*as\r\n\r\ndf*"
         self.assertEqual(BlogGrammar(text).apply("paragraphs")[0],
             "<p>*as</p><p>df*</p>")
+
+class TestBlogGrammarSafety(TestCase):
+    """
+    BlogGrammar should be relatively impenetrable in safe mode.
+    """
+
+    def test_basic_html_escapes(self):
+        text = "<br />"
+        self.assertEqual(BlogGrammar(text).apply("safe_paragraphs")[0],
+            "<p>&lt;br /&gt;</p>")
