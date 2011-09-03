@@ -45,10 +45,29 @@
         {% if not current_user.is_anonymous() %}
             {{ ocmacros.render_form(ocform, url_for("comment", cid=comic.id), "co") }}
         {% endif %}
-        {{ ocmacros.render_posts(comic.thread) }}
+        {{ render_posts(comic.thread) }}
     </div>
     <div class="money"></div>
 {% endblock %}
+
+{% macro render_posts(thread) %}
+    <section id="threads">
+        {% for post in thread.posts %}
+        <article>
+            <header>
+                {{ post.author }} <time>{{ post.timestamp }}</time> No. {{ post.id }} <br />
+            </header>
+            <section>
+                {% if post.file %}
+                    <img src="/static/images/{{ post.file }}" />
+                {% endif %}
+                {{ post.comment|eblogify|safe }}
+            </section>
+        </article>
+        <br />
+        {% endfor %}
+    </section>
+{% endmacro %}
 
 {% block footer %}
 {% endblock %}
