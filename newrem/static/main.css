@@ -24,6 +24,7 @@ div.navigation {
   -webkit-border-radius: 25px;
   clear: left;
   position: relative;
+  overflow: auto;
   background-color: #001122;
   color: #C0FFEE;
   padding: 20px;
