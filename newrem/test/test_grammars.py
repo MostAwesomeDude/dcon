@@ -26,9 +26,17 @@ class TestBlogGrammar(TestCase):
         self.assertEqual(BlogGrammar("**asdf**").apply("bold")[0],
             "<b>asdf</b>")
 
+    def test_bold_nested(self):
+        self.assertEqual(BlogGrammar("**a*sd*f**").apply("bold")[0],
+            "<b>a<i>sd</i>f</b>")
+
     def test_italics(self):
         self.assertEqual(BlogGrammar("*asdf*").apply("italics")[0],
             "<i>asdf</i>")
+
+    def test_italics_nested(self):
+        self.assertEqual(BlogGrammar("*a**sd**f*").apply("italics")[0],
+            "<i>a<b>sd</b>f</i>")
 
     def test_underline(self):
         self.assertEqual(BlogGrammar("_asdf_").apply("underline")[0],
