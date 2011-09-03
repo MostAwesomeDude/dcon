@@ -2,11 +2,11 @@ from pymeta.grammar import OMeta
 
 blog_grammar = """
 
-doublecrlf ::= '\r' '\n' '\r' '\n' => "</p><p>"
-
 crlf ::= '\r' '\n' => "<br />"
 
-not_crlf ::= ~'\r' <anything>
+doublecrlf ::= <crlf> <crlf> => "</p><p>"
+
+not_crlf ::= ~<crlf> <anything>
 
 double_star ::= '*' '*'
 

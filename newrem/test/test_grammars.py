@@ -16,8 +16,11 @@ class TestBlogGrammar(TestCase):
     def test_not_crlf(self):
         self.assertEqual(BlogGrammar("a").apply("not_crlf")[0], "a")
 
+    def test_not_crlf_bare_cr(self):
+        self.assertEqual(BlogGrammar("\ra").apply("not_crlf")[0], "\r")
+
     def test_not_crlf_fail(self):
-        self.assertRaises(ParseError, BlogGrammar("\r").apply, "not_crlf")
+        self.assertRaises(ParseError, BlogGrammar("\r\n").apply, "not_crlf")
 
     def test_bold(self):
         self.assertEqual(BlogGrammar("**asdf**").apply("bold")[0],
