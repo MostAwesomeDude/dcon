@@ -34,6 +34,10 @@ class TestBlogGrammar(TestCase):
         self.assertEqual(BlogGrammar("_asdf_").apply("underline")[0],
             "<u>asdf</u>")
 
+    def test_underline_nested(self):
+        self.assertEqual(BlogGrammar("_a*sd*f_").apply("underline")[0],
+            "<u>a<i>sd</i>f</u>")
+
     def test_paragraphs_empty(self):
         self.assertEqual(BlogGrammar("").apply("paragraphs")[0], "<p></p>")
 

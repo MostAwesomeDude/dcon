@@ -10,16 +10,18 @@ not_crlf ::= ~<crlf> <anything>
 
 double_star ::= '*' '*'
 
-bold ::= <double_star> (~<double_star> <not_crlf>)+:b <double_star>
+bold ::= <double_star> (~<double_star> <nested_decos>)+:b <double_star>
     => "<b>%s</b>" % "".join(b)
 
-italics ::= '*' (~'*' <not_crlf>)+:i '*' => "<i>%s</i>" % "".join(i)
+italics ::= '*' (~'*' <nested_decos>)+:i '*' => "<i>%s</i>" % "".join(i)
 
-underline ::= '_' (~'_' <not_crlf>)+:u '_' => "<u>%s</u>" % "".join(u)
+underline ::= '_' (~'_' <nested_decos>)+:u '_' => "<u>%s</u>" % "".join(u)
 
 crlfs ::= <doublecrlf> | <crlf>
 
 decorations ::= <bold> | <italics> | <underline>
+
+nested_decos ::= <decorations> | <not_crlf>
 
 entities ::= <crlfs> | <decorations>
 
