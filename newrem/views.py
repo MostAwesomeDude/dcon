@@ -16,6 +16,7 @@ from newrem.main import app
 from newrem.models import db, Character, Comic, Newspost
 
 from osuchan.models import Post
+from osuchan.utilities import chan_filename
 
 @app.template_filter()
 def blogify(s):
@@ -144,6 +145,12 @@ def comment(cid):
 
         post = Post(name, form.comment.data, "", "")
         post.thread = comic.thread
+
+        image = form.datafile.file
+        if image:
+            post.file = os.path.join("comments", chan_filename(image))
+            filename = os.path.abspath(os.path.join("uploads", post.file))
+            image.save(filename)
 
         db.session.add(post)
         db.session.commit()

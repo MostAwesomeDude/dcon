@@ -8,8 +8,7 @@ from wtforms.validators import EqualTo, Length
 
 from flaskext.uploads import IMAGES, UploadSet
 from flaskext.wtf import (Form, FileAllowed, FileRequired, Required,
-    FileField, IntegerField, PasswordField, RecaptchaField, SubmitField,
-    TextField)
+    FileField, PasswordField, RecaptchaField, SubmitField, TextField)
 
 from newrem.models import Character, Comic, Portrait
 
@@ -91,5 +90,5 @@ class CommentForm(Form):
     sage = BooleanField("Sage?")
     subject = TextField("Subject")
     comment = TextAreaField("Comment")
-    datafile = FileField("Image")
+    datafile = FileField("Image", validators=(FileAllowed(images),))
     submit = SubmitField("Submit")

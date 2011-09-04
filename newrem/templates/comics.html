@@ -59,7 +59,7 @@
             </header>
             <section>
                 {% if post.file %}
-                    <img src="/static/images/{{ post.file }}" />
+                    <img src="{{ url_for("static", filename=post.file) }}" />
                 {% endif %}
                 {{ post.comment|eblogify|safe }}
             </section>
