@@ -58,6 +58,7 @@ class LoginForm(Form):
 class RegisterForm(LoginForm):
     confirm = PasswordField("Confirm password",
         validators=(Required(), EqualTo("password")))
+    captcha = RecaptchaField()
     submit = SubmitField("Register!")
 
 class NewsForm(Form):
