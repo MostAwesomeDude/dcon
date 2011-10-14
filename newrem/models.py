@@ -102,9 +102,11 @@ class Comic(db.Model):
                 comic.position = i
                 db.session.add(comic)
 
-    def insert(self, prior):
+    def insert(self, prior, after=False):
         """
         Move this comic to come just after another comic in the timeline.
+
+        If after is True, move this comic to just *before* another comic.
         """
 
         if not prior:
@@ -114,7 +116,10 @@ class Comic(db.Model):
             db.session.add(self)
             return
 
-        position = prior.position + 1
+        if after:
+            position = max(prior.position - 1, 0)
+        else:
+            position = prior.position + 1
 
         q = Comic.query.filter(Comic.position >= position)
         q = q.order_by(Comic.position)

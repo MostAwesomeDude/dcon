@@ -79,6 +79,7 @@ class UploadForm(Form):
         query_factory=lambda: Comic.query.order_by(Comic.position),
         get_label=lambda comic:
             u"%d: %s, %d" % (comic.position, comic.title, comic.id))
+    after = BooleanField("(After, not before)")
     characters = QuerySelectMultipleField(u"Characters",
         query_factory=lambda: Character.query.order_by(Character.name),
         get_label="name")
