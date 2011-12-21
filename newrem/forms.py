@@ -11,6 +11,7 @@ from flaskext.wtf import (Form, FileAllowed, FileRequired, Required,
     FileField, PasswordField, RecaptchaField, SubmitField, TextField)
 
 from newrem.models import Character, Comic, Portrait
+from newrem.util import split_camel_case
 
 images = UploadSet("images", IMAGES)
 pngs = UploadSet("pngs", ("png",))
@@ -18,12 +19,34 @@ pngs = UploadSet("pngs", ("png",))
 portrait = FileField("Select a portrait",
     validators=(FileAllowed(pngs, "PNGs only!"),))
 
-class CharacterCreateForm(Form):
+class FormBase(Form):
+    """
+    The base of all DCoN forms.
+
+    This class can render its fields. It also knows its name and how to
+    format and display it.
+    """
+
+    _display_name = None
+
+    def display_name(self):
+        if self._display_name is not None:
+            name = self._display_name
+        else:
+            name = self.__class__.__name__
+
+        pieces = split_camel_case(name)
+        if pieces[-1] == "Form":
+            pieces.pop()
+
+        return " ".join(pieces)
+
+class CharacterCreateForm(FormBase):
     name = TextField(u"New name", validators=(Required(),))
     portrait = portrait
     submit = SubmitField("Create!")
 
-class CharacterModifyForm(Form):
+class CharacterModifyForm(FormBase):
     characters = QuerySelectField(u"Characters",
         query_factory=lambda: Character.query.order_by(Character.name),
         get_label="name")
@@ -31,25 +54,25 @@ class CharacterModifyForm(Form):
     portrait = portrait
     submit = SubmitField("Modify!")
 
-class CharacterDeleteForm(Form):
+class CharacterDeleteForm(FormBase):
     characters = QuerySelectField(u"Characters",
         query_factory=lambda: Character.query.order_by(Character.name),
         get_label="name")
     submit = SubmitField("Delete!")
 
-class PortraitCreateForm(Form):
+class PortraitCreateForm(FormBase):
     name = TextField(u"New name", validators=(Required(),))
     portrait = portrait
     submit = SubmitField("Create!")
 
-class PortraitModifyForm(Form):
+class PortraitModifyForm(FormBase):
     portraits = QuerySelectField(u"Portraits",
         query_factory=lambda: Portrait.query.order_by(Portrait.name),
         get_label="name")
     portrait = portrait
     submit = SubmitField("Modify!")
 
-class LoginForm(Form):
+class LoginForm(FormBase):
     username = TextField("Username", validators=(Required(),))
     password = PasswordField("Password", validators=(Required(),))
     submit = SubmitField("Login!")
@@ -60,7 +83,7 @@ class RegisterForm(LoginForm):
     captcha = RecaptchaField()
     submit = SubmitField("Register!")
 
-class NewsForm(Form):
+class NewsForm(FormBase):
     title = TextField("Title", validators=(Required(),))
     content = TextAreaField("Content")
     portrait = QuerySelectField(u"Portrait",
@@ -68,7 +91,7 @@ class NewsForm(Form):
         get_label="name")
     submit = SubmitField("Post!")
 
-class UploadForm(Form):
+class UploadForm(FormBase):
     file = FileField("Select a file to upload",
         validators=(FileRequired("Must upload a comic!"),
             FileAllowed(images, "Images only!")))
@@ -86,7 +109,7 @@ class UploadForm(Form):
     time = DateTimeField("Activation time", default=datetime.now())
     submit = SubmitField("Upload!")
 
-class CommentForm(Form):
+class CommentForm(FormBase):
     anonymous = BooleanField("Post anonymously?")
     sage = BooleanField("Sage?")
     subject = TextField("Subject")

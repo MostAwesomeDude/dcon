@@ -31,6 +31,7 @@
 {% macro render_form(form, url) %}
     <form method="POST" enctype="multipart/form-data" action="{{ url }}">
         <div class="form">
+            <h3>{{ form.display_name() }}</h3>
             <table>
             {% for field in form %}
                 {{ render_field(field) }}
