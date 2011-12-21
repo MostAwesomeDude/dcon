@@ -86,3 +86,8 @@ class TestBlogGrammarSafety(TestCase):
         text = "<br />"
         self.assertEqual(BlogGrammar(text).apply("safe_paragraphs")[0],
             "<p>&lt;br /&gt;</p>")
+
+    def test_reddit_xss_sword(self):
+        text = """;!--"<XSS>=&{()}"""
+        sanitized = BlogGrammar(text).apply("safe_paragraphs")[0]
+        self.assertTrue("<XSS>" not in sanitized)
