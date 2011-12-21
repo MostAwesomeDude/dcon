@@ -30,11 +30,13 @@
 
 {% macro render_form(form, url) %}
     <form method="POST" enctype="multipart/form-data" action="{{ url }}">
-        <table>
-        {% for field in form %}
-            {{ render_field(field) }}
-        {% endfor %}
-        </table>
+        <div class="form">
+            <table>
+            {% for field in form %}
+                {{ render_field(field) }}
+            {% endfor %}
+            </table>
+        </div>
     </form>
 {% endmacro %}
 

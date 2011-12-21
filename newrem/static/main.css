@@ -234,3 +234,7 @@ p {
 
 span.quote {
   color: #00ff00; }
+
+.form {
+  margin: 1em;
+  border: 1px black solid; }
