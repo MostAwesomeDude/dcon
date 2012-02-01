@@ -16,6 +16,23 @@ casts = db.Table("casts", db.metadata,
     db.Column("comic_id", db.Integer, db.ForeignKey("comics.id"))
 )
 
+class Universe(db.Model):
+
+    __tablename__ = "universes"
+
+    slug = db.Column(db.String(85), primary_key=True)
+    title = db.Column(db.Unicode(80), nullable=False)
+
+    def __init__(self, title):
+        self.rename(title)
+
+    def __repr__(self):
+        return "<Universe(%r)>" % self.title
+
+    def rename(self, title):
+        self.title = title
+        self.slug = slugify(title)
+
 class Character(db.Model):
     """
     A character.
@@ -23,14 +40,17 @@ class Character(db.Model):
 
     __tablename__ = "characters"
 
-    name = db.Column(db.Unicode(40))
     slug = db.Column(db.String(45), primary_key=True)
+    name = db.Column(db.Unicode(40))
+    universe_fk = db.Column(db.String(85), db.ForeignKey(Universe.slug),
+        nullable=False)
+    universe = db.relationship(Universe, backref="characters")
 
     def __init__(self, name):
         self.rename(name)
 
     def __repr__(self):
-        return "<Character(%r)>" % self.name
+        return "<Character(%r) in %r>" % (self.name, self.universe)
 
     def rename(self, name):
         self.name = name
@@ -171,23 +191,6 @@ class Newspost(db.Model):
         self.time = datetime.utcnow()
         self.title = title
         self.content = content
-
-class Universe(db.Model):
-
-    __tablename__ = "universes"
-
-    slug = db.Column(db.String(85), primary_key=True)
-    title = db.Column(db.Unicode(80), nullable=False)
-
-    def __init__(self, title):
-        self.rename(title)
-
-    def __repr__(self):
-        return "<Universe(%r)>" % self.title
-
-    def rename(self, title):
-        self.title = title
-        self.slug = slugify(title)
 
 class User(db.Model):
 

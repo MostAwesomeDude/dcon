@@ -1,5 +1,6 @@
 from datetime import datetime
 import os.path
+from operator import attrgetter
 from random import choice
 
 from PyRSS2Gen import Guid, RSS2, RSSItem
@@ -80,9 +81,9 @@ def index():
 
     return render_template("root.html", universes=universes)
 
-@app.route("/<universe:universe>")
-def universe(universe):
-    return "Hurp %r" % universe
+@app.route("/<universe:u>")
+def universe(u):
+    return "Hurp %r" % u
 
     comic = get_comic_query().order_by(Comic.id.desc()).first()
 
@@ -95,9 +96,11 @@ def universe(universe):
     return render_template("index.html", comic=comic, comics=comics,
         newsposts=newsposts)
 
-@app.route("/cast")
-def cast():
-    characters = Character.query.order_by(Character.name)
+@app.route("/<universe:u>/cast")
+def cast(u):
+    # Re-add the universe to the session so that we can query it.
+    db.session.add(u)
+    characters = sorted(u.characters, key=attrgetter("name"))
     return render_template("cast.html", characters=characters)
 
 @app.route("/comics/")
