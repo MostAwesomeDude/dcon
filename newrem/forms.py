@@ -41,6 +41,22 @@ class FormBase(Form):
 
         return " ".join(pieces)
 
+class UniverseCreateForm(FormBase):
+    name = TextField(u"New name", validators=(Required(),))
+    submit = SubmitField("Create!")
+
+class UniverseModifyForm(FormBase):
+    name = TextField(u"New name", validators=(Required(),))
+    submit = SubmitField("Modify!")
+
+class UniverseDeleteForm(FormBase):
+    verify = BooleanField(u"""Really delete this universe? Deletion will
+        destroy all comics, characters, and other data associated with this
+        universe. It cannot be undone. Seriously. It can't. We've tried. This
+        universe will cease to be. It will be shuffled off the coil. If you're
+        still sure, check this box.""")
+    submit = SubmitField("Delete!")
+
 class CharacterCreateForm(FormBase):
     name = TextField(u"New name", validators=(Required(),))
     portrait = portrait

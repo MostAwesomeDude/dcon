@@ -1,0 +1,7 @@
+{% extends "base-admin.html" %}
+{% import "macros.html" as macros %}
+
+{% block content %}
+    {{ macros.render_form(form,
+        url_for("admin.universe_delete", u=universe)) }}
+{% endblock %}

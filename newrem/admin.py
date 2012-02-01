@@ -7,8 +7,9 @@ from flask import (Blueprint, flash, redirect, render_template, request,
 
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
     CharacterModifyForm, NewsForm, PortraitCreateForm,
-    PortraitModifyForm, UploadForm)
-from newrem.models import db, Character, Comic, Newspost, Portrait
+    PortraitModifyForm, UniverseCreateForm, UniverseModifyForm,
+    UniverseDeleteForm, UploadForm)
+from newrem.models import db, Character, Comic, Newspost, Portrait, Universe
 from newrem.security import Authenticator
 
 from osuchan.models import Thread
@@ -49,19 +50,73 @@ admin = AdminBlueprint("admin", __name__, static_folder="static",
     template_folder="templates")
 
 @admin.route("/")
-def root():
-    return render_template("admin.html")
+def index():
+    form = UniverseCreateForm()
+    universes = Universe.query.order_by(Universe.title)
 
-@admin.route("/characters")
-def characters():
+    return render_template("admin.html", form=form, universes=universes)
+
+@admin.route("/<universe:u>/")
+def universe(u):
+    form = UniverseModifyForm()
+
+    return render_template("admin-universe.html", form=form, universe=u)
+
+@admin.route("/universe/create", methods=("POST",))
+def universe_create():
+    form = UniverseCreateForm()
+
+    if form.validate_on_submit():
+        universe = Universe(form.name.data)
+        db.session.add(universe)
+        db.session.commit()
+
+        flash("Successfully created the universe of %s!" % universe.title)
+        return redirect(url_for("admin.universe", u=universe))
+    else:
+        flash("Couldn't validate form. How'd that happen?")
+        return redirect(url_for("admin.index"))
+
+@admin.route("/<universe:u>/modify", methods=("POST",))
+def universe_modify(u):
+    form = UniverseModifyForm()
+
+    if form.validate_on_submit():
+        old = u.title
+        u.rename(form.name.data)
+        db.session.add(u)
+        db.session.commit()
+        flash("Successfully renamed the universe of %s to %s!" %
+            (old, u.title))
+
+    return redirect(url_for("admin.universe", u=u))
+
+@admin.route("/<universe:u>/delete", methods=("GET", "POST"))
+def universe_delete(u):
+    form = UniverseDeleteForm()
+
+    if form.validate_on_submit():
+        if form.verify.data:
+            db.session.delete(u)
+            db.session.commit()
+            flash("Successfully destroyed universe %s!" % u.title)
+        else:
+            flash("Guess you changed your mind, huh? No worries.")
+
+        return redirect(url_for("admin.index"))
+    else:
+        return render_template("universe-delete.html", form=form, universe=u)
+
+@admin.route("/<universe:u>/characters")
+def characters(u):
     cform = CharacterCreateForm(prefix="create")
     mform = CharacterModifyForm(prefix="modify")
     dform = CharacterDeleteForm(prefix="delete")
 
     return render_template("characters.html", cform=cform, mform=mform, dform=dform)
 
-@admin.route("/characters/create", methods=("POST",))
-def characters_create():
+@admin.route("/<universe:u>/characters/create", methods=("POST",))
+def characters_create(u):
     form = CharacterCreateForm(prefix="create")
 
     if form.validate_on_submit():
@@ -78,8 +133,8 @@ def characters_create():
 
     return redirect(url_for("characters"))
 
-@admin.route("/characters/modify", methods=("POST",))
-def characters_modify():
+@admin.route("/<universe:u>/characters/modify", methods=("POST",))
+def characters_modify(u):
     form = CharacterModifyForm(prefix="modify")
 
     if form.validate_on_submit():
@@ -106,8 +161,8 @@ def characters_modify():
 
     return redirect(url_for("characters"))
 
-@admin.route("/characters/delete", methods=("POST",))
-def characters_delete():
+@admin.route("/<universe:u>/characters/delete", methods=("POST",))
+def characters_delete(u):
     form = CharacterDeleteForm(prefix="delete")
 
     if form.validate_on_submit():
@@ -124,15 +179,15 @@ def characters_delete():
 
     return redirect(url_for("characters"))
 
-@admin.route("/portraits")
-def portraits():
+@admin.route("/<universe:u>/portraits")
+def portraits(u):
     cform = PortraitCreateForm(prefix="create")
     mform = PortraitModifyForm(prefix="modify")
 
     return render_template("portraits.html", cform=cform, mform=mform)
 
-@admin.route("/portraits/create", methods=("POST",))
-def portraits_create():
+@admin.route("/<universe:u>/portraits/create", methods=("POST",))
+def portraits_create(u):
     form = PortraitCreateForm(prefix="create")
 
     if form.validate_on_submit():
@@ -149,8 +204,8 @@ def portraits_create():
 
     return redirect(url_for("admin.portraits"))
 
-@admin.route("/portraits/modify", methods=("POST",))
-def portraits_modify():
+@admin.route("/<universe:u>/portraits/modify", methods=("POST",))
+def portraits_modify(u):
     form = PortraitModifyForm(prefix="modify")
 
     if form.validate_on_submit():
@@ -182,8 +237,8 @@ def news():
 
     return render_template("news.html", form=form)
 
-@admin.route("/upload", methods=("GET", "POST"))
-def upload():
+@admin.route("/<universe:u>/upload", methods=("GET", "POST"))
+def upload(u):
     form = UploadForm()
 
     if form.validate_on_submit():

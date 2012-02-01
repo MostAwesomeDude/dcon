@@ -1,0 +1,24 @@
+{% extends "base-admin.html" %}
+{% import "macros.html" as macros %}
+
+{% block content %}
+    {{ macros.render_form(form,
+        url_for("admin.universe_modify", u=universe)) }}
+    <p>
+        <a href="{{ url_for("admin.universe_delete", u=universe) }}">
+            Delete this universe
+        </a>
+    </p>
+    <ul>
+        <li><a href="{{ url_for("admin.characters", u=universe) }}">
+            Characters
+        </a></li>
+        <li><a href="{{ url_for("admin.news") }}">News</a></li>
+        <li><a href="{{ url_for("admin.portraits", u=universe) }}">
+            Portraits
+        </a></li>
+        <li><a href="{{ url_for("admin.upload", u=universe) }}">
+            Upload
+        </a></li>
+    </ul>
+{% endblock %}
