@@ -1,6 +1,27 @@
 import unittest
 
-from newrem.util import split_camel_case
+from newrem.util import slugify, split_camel_case
+
+class TestSlugify(unittest.TestCase):
+
+    def test_noop(self):
+        s = "noop"
+        self.assertEqual(s, slugify(s))
+
+    def test_lower(self):
+        s = "Lower"
+        e = "lower"
+        self.assertEqual(e, slugify(s))
+
+    def test_space(self):
+        s = "spheres in space"
+        e = "spheres-in-space"
+        self.assertEqual(e, slugify(s))
+
+    def test_flavor_text(self):
+        s = "Flavor Text"
+        e = "flavor-text"
+        self.assertEqual(e, slugify(s))
 
 class TestSplitCamelCase(unittest.TestCase):
 

@@ -1,4 +1,20 @@
 import string
+import re
+
+from unidecode import unidecode
+
+punctuation = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+
+def slugify(s):
+    """
+    Turn a Unicode string into a URL-safe ASCII slug.
+    """
+
+    # ASCIIfy slug. Based on http://flask.pocoo.org/snippets/5/.
+    l = []
+    for word in punctuation.split(s):
+        l.extend(unidecode(word).split())
+    return "-".join(word.strip().lower() for word in l)
 
 def split_camel_case(s):
     """

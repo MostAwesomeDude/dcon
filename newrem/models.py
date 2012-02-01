@@ -1,10 +1,7 @@
 from datetime import datetime
 import os
-import re
 
 from PIL import Image
-
-from unidecode import unidecode
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -12,12 +9,12 @@ from flaskext.login import LoginManager, make_secure_token
 
 from osuchan.models import db, Thread
 
+from newrem.util import slugify
+
 casts = db.Table("casts", db.metadata,
     db.Column("character_id", db.String(45), db.ForeignKey("characters.slug")),
     db.Column("comic_id", db.Integer, db.ForeignKey("comics.id"))
 )
-
-punctuation = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
 
 class Character(db.Model):
     """
@@ -37,12 +34,7 @@ class Character(db.Model):
 
     def rename(self, name):
         self.name = name
-
-        # ASCIIfy slug. Based on http://flask.pocoo.org/snippets/5/.
-        l = []
-        for word in punctuation.split(self.name):
-            l.extend(unidecode(word).split())
-        self.slug = "-".join(word.strip().lower() for word in l)
+        self.slug = slugify(name)
 
     def _get_portrait(self):
         png = "%s.png" % self.slug
@@ -150,12 +142,7 @@ class Portrait(db.Model):
 
     def rename(self, name):
         self.name = name
-
-        # ASCIIfy slug. Based on http://flask.pocoo.org/snippets/5/.
-        l = []
-        for word in punctuation.split(self.name):
-            l.extend(unidecode(word).split())
-        self.slug = "-".join(word.strip().lower() for word in l)
+        self.slug = slugify(name)
 
     def update_portrait(self, fs, path):
         image = Image.open(fs)
