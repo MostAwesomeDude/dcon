@@ -6,17 +6,18 @@ from PyRSS2Gen import Guid, RSS2, RSSItem
 
 from sqlalchemy.orm.exc import NoResultFound
 
-from flask import abort, redirect, render_template, url_for
+from flask import Flask, abort, redirect, render_template, url_for
 from flaskext.login import current_user
 
 from newrem.decorators import cached
 from newrem.forms import CommentForm
 from newrem.grammars import BlogGrammar
-from newrem.main import app
-from newrem.models import db, Character, Comic, Newspost
+from newrem.models import db, Character, Comic, Newspost, Universe
 
 from osuchan.models import Post
 from osuchan.utilities import chan_filename
+
+app = Flask(__name__)
 
 @app.template_filter()
 def blogify(s):
@@ -70,6 +71,10 @@ def get_neighbors_for(comic):
 
 @app.route("/")
 def index():
+    universes = Universe.query.all()
+
+    return render_template("root.html", universes=universes)
+
     comic = get_comic_query().order_by(Comic.id.desc()).first()
 
     if comic is None:
