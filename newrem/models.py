@@ -88,31 +88,23 @@ class Comic(db.Model):
     comment = db.Column(db.UnicodeText(1024*1024))
     # The discussion thread.
     threadid = db.Column(db.Integer, db.ForeignKey(Thread.id))
+    # The universe in which this comic occurs.
+    universe_fk = db.Column(db.String(85), db.ForeignKey(Universe.slug),
+        nullable=False)
 
     # List of characters in this comic.
     characters = db.relationship(Character, secondary=casts, backref="comics")
     # The thread which discusses this comic.
     thread = db.relationship(Thread, backref="comic")
+    # The universe which owns this comic.
+    universe = db.relationship(Universe, backref="comics")
 
     def __init__(self, filename):
         self.filename = filename
         self.time = datetime.utcnow()
 
     def __repr__(self):
-        return "<Comic(%r)>" % self.filename
-
-    @classmethod
-    def reorder(cls):
-        """
-        Compact chronological ordering.
-
-        The reason for doing this is almost completely aesthetic.
-        """
-
-        for i, comic in enumerate(cls.query.order_by(cls.position)):
-            if comic.position != i:
-                comic.position = i
-                db.session.add(comic)
+        return "<Comic(%r) in %r>" % (self.filename, self.universe)
 
     def insert(self, prior, after=False):
         """
@@ -128,13 +120,18 @@ class Comic(db.Model):
             db.session.add(self)
             return
 
+        if prior.universe_fk != self.universe_fk:
+            raise Exception(
+                "Comic.insert called with differing universes %r and %r" %
+                (self.universe, prior.universe))
+
         if after:
             position = max(prior.position - 1, 0)
         else:
             position = prior.position + 1
 
-        q = Comic.query.filter(Comic.position >= position)
-        q = q.order_by(Comic.position)
+        q = Comic.query.filter(Comic.universe == self.universe)
+        q = q.filter(Comic.position >= position).order_by(Comic.position)
 
         for i, comic in enumerate(q):
             # The correct new position. The +1 offset is because this current
