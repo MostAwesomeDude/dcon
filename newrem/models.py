@@ -172,6 +172,23 @@ class Newspost(db.Model):
         self.title = title
         self.content = content
 
+class Universe(db.Model):
+
+    __tablename__ = "universes"
+
+    slug = db.Column(db.String(85), primary_key=True)
+    title = db.Column(db.Unicode(80), nullable=False)
+
+    def __init__(self, title):
+        self.rename(title)
+
+    def __repr__(self):
+        return "<Universe(%r)>" % self.title
+
+    def rename(self, title):
+        self.title = title
+        self.slug = slugify(title)
+
 class User(db.Model):
 
     __tablename__ = "users"
