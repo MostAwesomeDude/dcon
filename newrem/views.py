@@ -41,18 +41,20 @@ def eblogify(s):
 
     return BlogGrammar(s).apply("safe_paragraphs")[0]
 
-def get_comic_query():
+def get_comic_query(universe):
     """
     Make a comic query.
 
-    This helper mostly just keeps the temporal filter on all comic queries not
-    otherwise safe. The point of the filter is to prevent comics which are
-    posted with a timestamp in the future from being displayed or otherwise
-    referenced; as far as anybody can tell, those comics simply do not exist
-    until after the timestamp elapses.
+    This helper keeps the temporal filter on all comic queries not otherwise
+    safe. The point of the filter is to prevent comics which are posted with a
+    timestamp in the future from being displayed or otherwise referenced; as
+    far as anybody can tell, those comics simply do not exist until after the
+    timestamp elapses. The filter also prevents comics in other universes from
+    being selected.
     """
 
-    return Comic.query.filter(Comic.time < datetime.now())
+    q = Comic.query.filter(Comic.universe == universe)
+    q = q.filter(Comic.time < datetime.now())
 
 def get_neighbors_for(comic):
     """
@@ -63,7 +65,8 @@ def get_neighbors_for(comic):
 
     # Grab the comics corresponding to navigation buttons: First, previous,
     # next, last. This first query doesn't need to have the temporal filter.
-    q = Comic.query.filter(Comic.time < comic.time)
+    q = Comic.query.filter(Comic.universe == universe)
+    q = q.filter(Comic.time < comic.time)
     a = q.order_by(Comic.time.desc()).first()
     b = q.order_by(Comic.time).first()
 
@@ -83,7 +86,7 @@ def index():
 
 @app.route("/<universe:u>")
 def universe(u):
-    return "Hurp %r" % u
+    newsposts = Newspost.query.order_by(Newspost.time.desc())[:5]
 
     comic = get_comic_query().order_by(Comic.id.desc()).first()
 
@@ -92,9 +95,8 @@ def universe(u):
 
     comics = get_neighbors_for(comic)
 
-    newsposts = Newspost.query.order_by(Newspost.time.desc())[:5]
-    return render_template("index.html", comic=comic, comics=comics,
-        newsposts=newsposts)
+    return render_template("universe.html", universe=u, comic=comic,
+        comics=comics, newsposts=newsposts)
 
 @app.route("/<universe:u>/cast")
 def cast(u):
@@ -103,21 +105,17 @@ def cast(u):
     characters = sorted(u.characters, key=attrgetter("name"))
     return render_template("cast.html", universe=u, characters=characters)
 
-@app.route("/comics/")
-def comics_root():
-    return redirect(url_for("comics", cid=1))
-
-@app.route("/comics/<int:cid>")
-def comics(cid):
+@app.route("/<universe:u>/comics/<int:cid>")
+def comics(u, cid):
     try:
-        comic = get_comic_query().filter_by(id=cid).one()
+        comic = get_comic_query(u).filter_by(id=cid).one()
     except NoResultFound:
         abort(404)
 
     comics = get_neighbors_for(comic)
 
-    previousq = get_comic_query().filter(Comic.position < comic.position)
-    nextq = get_comic_query().filter(Comic.position > comic.position)
+    previousq = get_comic_query(u).filter(Comic.position < comic.position)
+    nextq = get_comic_query(u).filter(Comic.position > comic.position)
 
     previous = previousq.order_by(Comic.position.desc()).first()
     chrono = previous, nextq.order_by(Comic.position).first()
@@ -142,13 +140,13 @@ def comics(cid):
 
     return render_template("comics.html", **kwargs)
 
-@app.route("/comics/<int:cid>/comment", methods=("POST",))
-def comment(cid):
+@app.route("/<universe:u>/comics/<int:cid>/comment", methods=("POST",))
+def comment(u, cid):
     if current_user.is_anonymous():
         abort(403)
 
     try:
-        comic = get_comic_query().filter_by(id=cid).one()
+        comic = get_comic_query(u).filter_by(id=cid).one()
     except NoResultFound:
         abort(404)
 
@@ -172,21 +170,23 @@ def comment(cid):
         db.session.add(post)
         db.session.commit()
 
-    return redirect(url_for("comics", cid=cid))
+    return redirect(url_for("comics", universe=u, cid=cid))
 
-@app.route("/rss.xml")
+@app.route("/<universe:u>/rss.xml")
 @cached
-def rss():
+def rss(u):
     comics = Comic.query.order_by(Comic.id.desc())[:10]
     items = []
     for comic in comics:
-        url = url_for("comics", _external=True, cid=comic.id)
+        url = url_for("comics", _external=True, universe=u, cid=comic.id)
         item = RSSItem(title=comic.title, link=url, description=comic.title,
             guid=Guid(url), pubDate=comic.time)
         items.append(item)
 
-    rss2 = RSS2(title="RSS", link=url_for("index", _external=True),
-        description="Flavor Text", lastBuildDate=datetime.utcnow(), items=items)
+    link = url_for("universe", _external=True, universe=u)
+
+    rss2 = RSS2(title="RSS", link=link, description=universe.title,
+        lastBuildDate=datetime.utcnow(), items=items)
     return rss2.to_xml(encoding="utf8")
 
 @app.errorhandler(404)
