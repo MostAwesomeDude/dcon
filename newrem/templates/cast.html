@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% block title %}{{ universe.title }} - Cast{% endblock %}
+
 {% block content %}
     {% for character in characters %}
         <div class="{{ loop.cycle("cast-odd", "cast-even") }}">
