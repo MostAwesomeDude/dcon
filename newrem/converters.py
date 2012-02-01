@@ -16,7 +16,8 @@ class ModelConverter(BaseConverter):
 
     def to_python(self, value):
         try:
-            obj = self.model.query.filter({self.field: value}).one()
+            with self.app.test_request_context():
+                obj = self.model.query.filter_by(**{self.field: value}).one()
         except (MultipleResultsFound, NoResultFound):
             raise ValidationError()
 
@@ -25,13 +26,14 @@ class ModelConverter(BaseConverter):
     def to_url(self, value):
         return getattr(value, self.field)
 
-def make_model_converter(model, field):
+def make_model_converter(a, m, f):
     """
-    Create a ModelConverter for the given model and field.
+    Create a ModelConverter for the given app, model, and field.
     """
 
     class Subclass(ModelConverter):
-        field = field
-        model = model
+        app = a
+        field = f
+        model = m
 
     return Subclass

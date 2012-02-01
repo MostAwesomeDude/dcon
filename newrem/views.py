@@ -9,6 +9,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask import Flask, abort, redirect, render_template, url_for
 from flaskext.login import current_user
 
+from newrem.converters import make_model_converter
 from newrem.decorators import cached
 from newrem.forms import CommentForm
 from newrem.grammars import BlogGrammar
@@ -18,6 +19,10 @@ from osuchan.models import Post
 from osuchan.utilities import chan_filename
 
 app = Flask(__name__)
+
+# Register converters.
+app.url_map.converters["universe"] = make_model_converter(app, Universe,
+    "slug")
 
 @app.template_filter()
 def blogify(s):
@@ -74,6 +79,10 @@ def index():
     universes = Universe.query.all()
 
     return render_template("root.html", universes=universes)
+
+@app.route("/<universe:universe>")
+def universe(universe):
+    return "Hurp %r" % universe
 
     comic = get_comic_query().order_by(Comic.id.desc()).first()
 
