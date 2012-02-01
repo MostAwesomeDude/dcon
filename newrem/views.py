@@ -3,8 +3,6 @@ import os.path
 from operator import attrgetter
 from random import choice
 
-from PyRSS2Gen import Guid, RSS2, RSSItem
-
 from sqlalchemy.orm.exc import NoResultFound
 
 from flask import Flask, abort, redirect, render_template, url_for
@@ -15,6 +13,7 @@ from newrem.decorators import cached
 from newrem.forms import CommentForm
 from newrem.grammars import BlogGrammar
 from newrem.models import db, Comic, Newspost, Universe
+from newrem.util import make_rss2
 
 from osuchan.models import Post
 from osuchan.utilities import chan_filename
@@ -172,23 +171,33 @@ def comment(u, cid):
 
     return redirect(url_for("comics", universe=u, cid=cid))
 
+@app.route("/rss.xml")
+@cached
+def rss():
+    comics = Comic.query.order_by(Comic.id.desc())[:10]
+    stuff = {}
+    for comic in comics:
+        url = url_for("comics", _external=True, universe=comic.universe,
+            cid=comic.id)
+        stuff[url] = comic
+
+    link = url_for("index", _external=True)
+
+    return make_rss2(link, "DCoN", stuff)
+
 @app.route("/<universe:u>/rss.xml")
 @cached
 def universe_rss(u):
     q = Comic.query.filter(Comic.universe == u).order_by(Comic.id.desc())
     comics = q[:10]
-    items = []
+    stuff = {}
     for comic in comics:
         url = url_for("comics", _external=True, universe=u, cid=comic.id)
-        item = RSSItem(title=comic.title, link=url, description=comic.title,
-            guid=Guid(url), pubDate=comic.time)
-        items.append(item)
+        stuff[url] = comic
 
     link = url_for("universe", _external=True, universe=u)
 
-    rss2 = RSS2(title="RSS", link=link, description=universe.title,
-        lastBuildDate=datetime.utcnow(), items=items)
-    return rss2.to_xml(encoding="utf8")
+    return make_rss2(link, u.title, stuff)
 
 @app.errorhandler(404)
 def not_found(error):

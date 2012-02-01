@@ -1,5 +1,8 @@
+from datetime import datetime
 import string
 import re
+
+from PyRSS2Gen import Guid, RSS2, RSSItem
 
 from unidecode import unidecode
 
@@ -52,3 +55,24 @@ def split_camel_case(s):
     pieces.append(s[beginning:])
 
     return pieces
+
+def make_rss2(url, title, stuff):
+    """
+    Make an RSS2 feed from stuff.
+
+    Practically, the stuff is nearly always comics, but it could be anything
+    else meeting the polymorphic requirements.
+
+    `url` is a URL. `header` is a title for the feed.  `stuff` is a dictionary
+    of URLs to objects with `title` and `time` attributes.
+    """
+
+    items = []
+    for url, obj in stuff:
+        item = RSSItem(title=obj.title, link=url, description=obj.title,
+            guid=Guid(url), pubDate=obj.time)
+        items.append(item)
+
+    rss2 = RSS2(title="RSS", link=url, description=title,
+        lastBuildDate=datetime.utcnow(), items=items)
+    return rss2.to_xml(encoding="utf8")
