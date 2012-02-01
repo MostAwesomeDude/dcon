@@ -14,7 +14,7 @@ from newrem.converters import make_model_converter
 from newrem.decorators import cached
 from newrem.forms import CommentForm
 from newrem.grammars import BlogGrammar
-from newrem.models import db, Character, Comic, Newspost, Universe
+from newrem.models import db, Comic, Newspost, Universe
 
 from osuchan.models import Post
 from osuchan.utilities import chan_filename
@@ -174,8 +174,9 @@ def comment(u, cid):
 
 @app.route("/<universe:u>/rss.xml")
 @cached
-def rss(u):
-    comics = Comic.query.order_by(Comic.id.desc())[:10]
+def universe_rss(u):
+    q = Comic.query.filter(Comic.universe == u).order_by(Comic.id.desc())
+    comics = q[:10]
     items = []
     for comic in comics:
         url = url_for("comics", _external=True, universe=u, cid=comic.id)
