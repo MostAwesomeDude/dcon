@@ -249,6 +249,7 @@ def upload(u):
             return render_template("upload.html", form=form)
 
         comic = Comic(filename)
+        comic.universe = u
         comic.characters = form.characters.data
         comic.title = form.title.data
         comic.description = form.description.data
