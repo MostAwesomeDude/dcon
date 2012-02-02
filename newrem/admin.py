@@ -60,7 +60,7 @@ def index():
 def universe(u):
     form = UniverseModifyForm()
 
-    return render_template("admin-universe.html", form=form, universe=u)
+    return render_template("admin-universe.html", form=form, u=u)
 
 @admin.route("/universe/create", methods=("POST",))
 def universe_create():
@@ -105,22 +105,31 @@ def universe_delete(u):
 
         return redirect(url_for("admin.index"))
     else:
-        return render_template("universe-delete.html", form=form, universe=u)
+        return render_template("universe-delete.html", form=form, u=u)
 
 @admin.route("/<universe:u>/characters")
 def characters(u):
-    cform = CharacterCreateForm(prefix="create")
+    characters = Character.query.order_by(Character.name)
+    form = CharacterCreateForm()
+
+    return render_template("characters.html", form=form, u=u,
+        characters=characters)
+
+@admin.route("/<universe:u>/characters/<character:c>")
+def character(u, c):
     mform = CharacterModifyForm(prefix="modify")
     dform = CharacterDeleteForm(prefix="delete")
 
-    return render_template("characters.html", cform=cform, mform=mform, dform=dform)
+    return render_template("character.html", mform=mform, dform=dform, u=u,
+        c=c)
 
 @admin.route("/<universe:u>/characters/create", methods=("POST",))
 def characters_create(u):
-    form = CharacterCreateForm(prefix="create")
+    form = CharacterCreateForm()
 
     if form.validate_on_submit():
         character = Character(form.name.data)
+        character.universe = u
         db.session.add(character)
         db.session.commit()
 
@@ -131,63 +140,53 @@ def characters_create(u):
     else:
         flash("Couldn't validate form...")
 
-    return redirect(url_for("characters"))
+    return redirect(url_for("admin.characters", u=u))
 
-@admin.route("/<universe:u>/characters/modify", methods=("POST",))
-def characters_modify(u):
+@admin.route("/<universe:u>/characters/<character:c>/modify",
+    methods=("POST",))
+def characters_modify(u, c):
     form = CharacterModifyForm(prefix="modify")
 
     if form.validate_on_submit():
-        character = form.characters.data
-        if character:
-            # Which modifications do we want to make?
-            if form.name.data:
-                character.rename(form.name.data)
-                db.session.add(character)
-                db.session.commit()
-                flash("Successfully renamed character %s!" % character.name)
+        # Which modifications do we want to make?
+        if form.name.data and form.name.data != c.name:
+            c.rename(form.name.data)
+            db.session.add(c)
+            db.session.commit()
+            flash("Successfully renamed character %s!" % c.name)
 
-            if form.portrait.file:
-                path = os.path.abspath(os.path.join("uploads",
-                    character.portrait))
-                form.portrait.file.save(path)
-                flash("Successfully changed portrait for character %s!" %
-                    character.name)
-        else:
-            flash("Couldn't find character for slug %s..." %
-                form.characters.data)
+        if form.portrait.file:
+            path = os.path.abspath(os.path.join("uploads", c.portrait))
+            form.portrait.file.save(path)
+            flash("Successfully changed portrait for character %s!" % c.name)
     else:
         flash("Couldn't validate form...")
 
-    return redirect(url_for("characters"))
+    return redirect(url_for("admin.character", u=u, c=c))
 
-@admin.route("/<universe:u>/characters/delete", methods=("POST",))
-def characters_delete(u):
+@admin.route("/<universe:u>/characters/<character:c>/delete",
+    methods=("POST",))
+def characters_delete(u, c):
     form = CharacterDeleteForm(prefix="delete")
 
     if form.validate_on_submit():
-        character = form.characters.data
-        if character:
-            db.session.delete(character)
-            db.session.commit()
-            flash("Successfully removed character %s!" % character.name)
-        else:
-            flash("Couldn't find character for slug %s..." %
-                form.characters.data)
+        db.session.delete(c)
+        db.session.commit()
+        flash("Successfully removed character %s!" % c.name)
     else:
         flash("Couldn't validate form...")
 
-    return redirect(url_for("characters"))
+    return redirect(url_for("admin.characters", u=u))
 
-@admin.route("/<universe:u>/portraits")
-def portraits(u):
+@admin.route("/portraits")
+def portraits():
     cform = PortraitCreateForm(prefix="create")
     mform = PortraitModifyForm(prefix="modify")
 
     return render_template("portraits.html", cform=cform, mform=mform)
 
-@admin.route("/<universe:u>/portraits/create", methods=("POST",))
-def portraits_create(u):
+@admin.route("/portraits/create", methods=("POST",))
+def portraits_create():
     form = PortraitCreateForm(prefix="create")
 
     if form.validate_on_submit():
@@ -204,8 +203,8 @@ def portraits_create(u):
 
     return redirect(url_for("admin.portraits"))
 
-@admin.route("/<universe:u>/portraits/modify", methods=("POST",))
-def portraits_modify(u):
+@admin.route("/portraits/modify", methods=("POST",))
+def portraits_modify():
     form = PortraitModifyForm(prefix="modify")
 
     if form.validate_on_submit():

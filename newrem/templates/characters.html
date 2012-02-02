@@ -2,7 +2,12 @@
 {% import "macros.html" as macros %}
 
 {% block content %}
-    {{ macros.render_form(cform, url_for("admin.characters_create")) }}
-    {{ macros.render_form(mform, url_for("admin.characters_modify")) }}
-    {{ macros.render_form(dform, url_for("admin.characters_delete")) }}
+    <ul>
+        {% for character in characters %}
+            <li><a href="{{ url_for("admin.character", u=u, c=character) }}">
+                {{ character.name }}
+            </a></li>
+        {% endfor %}
+    </ul>
+    {{ macros.render_form(form, url_for("admin.characters_create", u=u)) }}
 {% endblock %}

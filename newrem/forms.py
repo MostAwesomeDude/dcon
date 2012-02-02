@@ -63,17 +63,11 @@ class CharacterCreateForm(FormBase):
     submit = SubmitField("Create!")
 
 class CharacterModifyForm(FormBase):
-    characters = QuerySelectField(u"Characters",
-        query_factory=lambda: Character.query.order_by(Character.name),
-        get_label="name")
     name = TextField(u"New name")
     portrait = portrait
     submit = SubmitField("Modify!")
 
 class CharacterDeleteForm(FormBase):
-    characters = QuerySelectField(u"Characters",
-        query_factory=lambda: Character.query.order_by(Character.name),
-        get_label="name")
     submit = SubmitField("Delete!")
 
 class PortraitCreateForm(FormBase):

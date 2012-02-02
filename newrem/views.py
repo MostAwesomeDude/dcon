@@ -12,7 +12,7 @@ from newrem.converters import make_model_converter
 from newrem.decorators import cached
 from newrem.forms import CommentForm
 from newrem.grammars import BlogGrammar
-from newrem.models import db, Comic, Newspost, Universe
+from newrem.models import db, Character, Comic, Newspost, Universe
 from newrem.util import make_rss2
 
 from osuchan.models import Post
@@ -21,6 +21,8 @@ from osuchan.utilities import chan_filename
 app = Flask(__name__)
 
 # Register converters.
+app.url_map.converters["character"] = make_model_converter(app, Character,
+    "slug")
 app.url_map.converters["universe"] = make_model_converter(app, Universe,
     "slug")
 
@@ -94,7 +96,7 @@ def universe(u):
 
     comics = get_neighbors_for(comic)
 
-    return render_template("universe.html", universe=u, comic=comic,
+    return render_template("universe.html", u=u, comic=comic,
         comics=comics, newsposts=newsposts)
 
 @app.route("/<universe:u>/cast")
@@ -102,7 +104,7 @@ def cast(u):
     # Re-add the universe to the session so that we can query it.
     db.session.add(u)
     characters = sorted(u.characters, key=attrgetter("name"))
-    return render_template("cast.html", universe=u, characters=characters)
+    return render_template("cast.html", u=u, characters=characters)
 
 @app.route("/<universe:u>/comics/<int:cid>")
 def comics(u, cid):
@@ -169,7 +171,7 @@ def comment(u, cid):
         db.session.add(post)
         db.session.commit()
 
-    return redirect(url_for("comics", universe=u, cid=cid))
+    return redirect(url_for("comics", u=u, cid=cid))
 
 @app.route("/rss.xml")
 @cached
@@ -192,10 +194,10 @@ def universe_rss(u):
     comics = q[:10]
     stuff = {}
     for comic in comics:
-        url = url_for("comics", _external=True, universe=u, cid=comic.id)
+        url = url_for("comics", _external=True, u=u, cid=comic.id)
         stuff[url] = comic
 
-    link = url_for("universe", _external=True, universe=u)
+    link = url_for("universe", _external=True, u=u)
 
     return make_rss2(link, u.title, stuff)
 
