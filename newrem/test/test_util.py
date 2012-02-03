@@ -1,6 +1,18 @@
 import unittest
 
-from newrem.util import slugify, split_camel_case
+from newrem.util import abbreviate, slugify, split_camel_case
+
+class TestAbbreviate(unittest.TestCase):
+
+    def test_single(self):
+        s = "Anime"
+        e = "a"
+        self.assertEqual(e, abbreviate(s))
+
+    def test_double(self):
+        s = "Papercraft & Origami"
+        e = "po"
+        self.assertEqual(e, abbreviate(s))
 
 class TestSlugify(unittest.TestCase):
 

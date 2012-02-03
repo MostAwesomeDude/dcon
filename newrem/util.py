@@ -6,7 +6,25 @@ from PyRSS2Gen import Guid, RSS2, RSSItem
 
 from unidecode import unidecode
 
+alphanum = string.digits + string.lowercase
 punctuation = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+
+def abbreviate(s):
+    """
+    Abbreviate a string to provide a board name.
+
+    There is no guarantee that the abbreviation will be unique.
+
+    This function is hardcoded to provide strings of length five or less.
+    """
+
+    letters = []
+    for word in s.split():
+        l = word.strip()[:1].lower()
+        if l in alphanum:
+            letters.append(l)
+
+    return "".join(letters)
 
 def slugify(s):
     """
