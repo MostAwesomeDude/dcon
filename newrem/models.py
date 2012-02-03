@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from flaskext.login import LoginManager, make_secure_token
 
-from osuchan.models import db, Thread
+from osuchan.models import db, Board, Thread
 
 from newrem.util import slugify
 
@@ -22,6 +22,9 @@ class Universe(db.Model):
 
     slug = db.Column(db.String(85), primary_key=True)
     title = db.Column(db.Unicode(80), nullable=False)
+    board_fk = db.Column(db.String(5), db.ForeignKey(Board.abbreviation))
+
+    board = db.relationship(Board, backref="universe", uselist=False)
 
     def __init__(self, title):
         self.rename(title)
@@ -95,7 +98,7 @@ class Comic(db.Model):
     # List of characters in this comic.
     characters = db.relationship(Character, secondary=casts, backref="comics")
     # The thread which discusses this comic.
-    thread = db.relationship(Thread, backref="comic")
+    thread = db.relationship(Thread, backref="comic", uselist=False)
     # The universe which owns this comic.
     universe = db.relationship(Universe, backref="comics")
 

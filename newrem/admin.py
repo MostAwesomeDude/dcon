@@ -11,8 +11,9 @@ from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
     UniverseDeleteForm, UploadForm)
 from newrem.models import db, Character, Comic, Newspost, Portrait, Universe
 from newrem.security import Authenticator
+from newrem.util import abbreviate
 
-from osuchan.models import Thread
+from osuchan.models import Board, Thread
 
 class AdminBlueprint(Blueprint):
     """
@@ -68,6 +69,7 @@ def universe_create():
 
     if form.validate_on_submit():
         universe = Universe(form.name.data)
+        universe.board = Board(abbreviate(universe.title), universe.title)
         db.session.add(universe)
         db.session.commit()
 
@@ -246,7 +248,7 @@ def upload(u):
         path = os.path.abspath(os.path.join("uploads", filename))
         if os.path.exists(path):
             flash("File already exists!")
-            return render_template("upload.html", form=form)
+            return render_template("upload.html", form=form, u=u)
 
         comic = Comic(filename)
         comic.universe = u
@@ -254,7 +256,7 @@ def upload(u):
         comic.title = form.title.data
         comic.description = form.description.data
         comic.comment = form.comment.data
-        #comic.thread = Thread("co", comic.title, "Newrem")
+        comic.thread = Thread(universe.board, comic.title, "DCoN")
 
         if form.time.data:
             comic.time = form.time.data
