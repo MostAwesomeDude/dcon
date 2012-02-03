@@ -55,9 +55,9 @@ def get_comic_query(universe):
     """
 
     q = Comic.query.filter(Comic.universe == universe)
-    q = q.filter(Comic.time < datetime.now())
+    return q.filter(Comic.time < datetime.now())
 
-def get_neighbors_for(comic):
+def get_neighbors_for(universe, comic):
     """
     Grab the comics around a given comic.
     """
@@ -71,7 +71,7 @@ def get_neighbors_for(comic):
     a = q.order_by(Comic.time.desc()).first()
     b = q.order_by(Comic.time).first()
 
-    q = get_comic_query().filter(Comic.time > comic.time)
+    q = get_comic_query(universe).filter(Comic.time > comic.time)
     c = q.order_by(Comic.time).first()
     d = q.order_by(Comic.time.desc()).first()
 
@@ -89,12 +89,12 @@ def index():
 def universe(u):
     newsposts = Newspost.query.order_by(Newspost.time.desc())[:5]
 
-    comic = get_comic_query().order_by(Comic.id.desc()).first()
+    comic = get_comic_query(u).order_by(Comic.id.desc()).first()
 
     if comic is None:
         abort(404)
 
-    comics = get_neighbors_for(comic)
+    comics = get_neighbors_for(u, comic)
 
     return render_template("universe.html", u=u, comic=comic,
         comics=comics, newsposts=newsposts)
@@ -113,7 +113,7 @@ def comics(u, cid):
     except NoResultFound:
         abort(404)
 
-    comics = get_neighbors_for(comic)
+    comics = get_neighbors_for(u, comic)
 
     previousq = get_comic_query(u).filter(Comic.position < comic.position)
     nextq = get_comic_query(u).filter(Comic.position > comic.position)

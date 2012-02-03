@@ -4,7 +4,7 @@ from wtforms.ext.dateutil.fields import DateTimeField
 from wtforms.ext.sqlalchemy.fields import (QuerySelectMultipleField,
     QuerySelectField)
 from wtforms.fields import BooleanField, TextAreaField
-from wtforms.validators import EqualTo, Length
+from wtforms.validators import EqualTo, Length, Optional
 
 from flaskext.uploads import IMAGES, UploadSet
 from flaskext.wtf import (Form, FileAllowed, FileRequired, Required,
@@ -102,6 +102,7 @@ class NewsForm(FormBase):
     submit = SubmitField("Post!")
 
 class UploadForm(FormBase):
+
     file = FileField("Select a file to upload",
         validators=(FileRequired("Must upload a comic!"),
             FileAllowed(images, "Images only!")))
@@ -111,13 +112,21 @@ class UploadForm(FormBase):
     index = QuerySelectField(u"Which comic should come before this one?",
         query_factory=lambda: Comic.query.order_by(Comic.position),
         get_label=lambda comic:
-            u"%d: %s, %d" % (comic.position, comic.title, comic.id))
+            u"%d: %s, %d" % (comic.position, comic.title, comic.id),
+        validators=(Optional(),))
     after = BooleanField("(After, not before)")
     characters = QuerySelectMultipleField(u"Characters",
         query_factory=lambda: Character.query.order_by(Character.name),
         get_label="name")
     time = DateTimeField("Activation time", default=datetime.now())
     submit = SubmitField("Upload!")
+
+    def __init__(self, universe, *args, **kwargs):
+        super(UploadForm, self).__init__(*args, **kwargs)
+        def qf():
+            q = Comic.query.filter_by(universe=universe)
+            return q.order_by(Comic.position)
+        self.index.query_factory = qf
 
 class CommentForm(FormBase):
     anonymous = BooleanField("Post anonymously?")

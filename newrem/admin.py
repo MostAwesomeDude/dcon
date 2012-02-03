@@ -238,7 +238,7 @@ def news():
 
 @admin.route("/<universe:u>/upload", methods=("GET", "POST"))
 def upload(u):
-    form = UploadForm()
+    form = UploadForm(u)
 
     if form.validate_on_submit():
         filename = os.path.join("comics",
@@ -254,7 +254,7 @@ def upload(u):
         comic.title = form.title.data
         comic.description = form.description.data
         comic.comment = form.comment.data
-        comic.thread = Thread("co", comic.title, "Newrem")
+        #comic.thread = Thread("co", comic.title, "Newrem")
 
         if form.time.data:
             comic.time = form.time.data
@@ -266,6 +266,6 @@ def upload(u):
 
         form.file.file.save(path)
 
-        return redirect(url_for("comics", cid=comic.id))
+        return redirect(url_for("comics", u=u, cid=comic.id))
 
-    return render_template("upload.html", form=form)
+    return render_template("upload.html", form=form, u=u)
