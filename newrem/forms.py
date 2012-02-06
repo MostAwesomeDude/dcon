@@ -135,3 +135,15 @@ class CommentForm(FormBase):
     comment = TextAreaField("Comment")
     datafile = FileField("Image", validators=(FileAllowed(images),))
     submit = SubmitField("Submit")
+
+class ChanForm(FormBase):
+    """
+    A basic ?chan-style form for both new threads and new replies.
+    """
+
+    name = TextField("Name", default="Anonymous")
+    email = TextField("Email")
+    subject = TextField("Subject")
+    comment = TextAreaField("Comment")
+    datafile = FileField("Image")
+    submit = SubmitField("Submit")
