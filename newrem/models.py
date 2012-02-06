@@ -6,15 +6,86 @@ from PIL import Image
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flaskext.login import LoginManager, make_secure_token
-
-from osuchan.models import db, Board, Thread
+from flaskext.sqlalchemy import SQLAlchemy
 
 from newrem.util import slugify
+
+db = SQLAlchemy()
+lm = LoginManager()
 
 casts = db.Table("casts", db.metadata,
     db.Column("character_id", db.String(45), db.ForeignKey("characters.slug")),
     db.Column("comic_id", db.Integer, db.ForeignKey("comics.id"))
 )
+
+class Wordfilter(db.Model):
+    __tablename__ = "badwords"
+
+    name = db.Column(db.Unicode(30), primary_key=True)
+    replacement = db.Column(db.Unicode(30))
+
+class Category(db.Model):
+    __tablename__ = "boardcategory"
+
+    title = db.Column(db.Unicode(30), primary_key=True)
+
+class Board(db.Model):
+    __tablename__ = "board"
+
+    name = db.Column(db.Unicode(30))
+    abbreviation = db.Column(db.String(5), primary_key=True)
+    category_fk = db.Column(db.Unicode(30), db.ForeignKey(Category.title))
+
+    category = db.relationship(Category, backref="boards")
+
+    def __init__(self, abbreviation, name):
+        self.abbreviation = abbreviation
+        self.name = name
+
+class Thread(db.Model):
+    __tablename__ = "thread"
+
+    id = db.Column(db.Integer, primary_key=True)
+    subject = db.Column(db.Unicode(50))
+    author = db.Column(db.Unicode(30))
+    board_fk = db.Column(db.String(5), db.ForeignKey(Board.abbreviation))
+
+    board = db.relationship(Board, backref="threads")
+
+    def __init__(self, board, subject, author):
+        self.board = board
+        self.subject = subject
+        self.author = author
+
+class Post(db.Model):
+    __tablename__ = "post"
+
+    id = db.Column(db.Integer, primary_key=True)
+    author = db.Column(db.Unicode(30), nullable=False)
+    threadid = db.Column(db.Integer, db.ForeignKey(Thread.id), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
+    comment = db.Column(db.UnicodeText(1024*1024))
+    email = db.Column(db.String(30))
+    filename = db.Column(db.String(50))
+
+    thread = db.relationship(Thread, backref="posts", single_parent=True,
+        cascade="all, delete, delete-orphan")
+
+    def __init__(self, author, comment, email, file):
+        self.comment = comment
+        self.author = author
+        self.email = email
+        self.file = file
+
+        self.timestamp = datetime.now()
+
+class File(db.Model):
+    __tablename__ = "file"
+
+    postid = db.Column(db.Integer, db.ForeignKey(Post.id))
+    filename = db.Column(db.String(50), primary_key=True)
+
+    post = db.relationship(Post, backref="file", uselist=False)
 
 class Universe(db.Model):
 
@@ -235,8 +306,6 @@ class User(db.Model):
 
     def get_auth_token(self):
         return make_secure_token(self.username, self.password)
-
-lm = LoginManager()
 
 @lm.user_loader
 def user_loader(username):
