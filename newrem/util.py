@@ -1,4 +1,6 @@
 from datetime import datetime
+from hashlib import md5
+from mimetypes import guess_extension
 import string
 import re
 
@@ -25,6 +27,22 @@ def abbreviate(s):
             letters.append(l)
 
     return "".join(letters)
+
+def chan_filename(f):
+    """
+    Given an uploaded file, determine a filename for it.
+
+    The filenames produced by this function are always reasonable and secure.
+    """
+
+    hash = md5(f.stream.read())
+    f.stream.seek(0)
+
+    md5sum = hash.hexdigest()
+
+    extension = guess_extension(f.content_type)
+
+    return "%s%s" % (md5sum, extension)
 
 def slugify(s):
     """
