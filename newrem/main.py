@@ -3,13 +3,12 @@ import os
 from flaskext.uploads import configure_uploads, patch_request_class
 
 from newrem.admin import admin
+from newrem.chan import osuchan
 from newrem.comics import comics
 from newrem.forms import images, pngs
 from newrem.models import db, lm
 from newrem.users import users
 from newrem.views import app
-
-from osuchan.blueprint import osuchan
 
 wd = os.getcwd()
 

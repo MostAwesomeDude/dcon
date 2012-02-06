@@ -1,0 +1,15 @@
+{% extends "oc/base.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block body %}
+    <section id="boards">
+        <table>
+        {% for (boardname, abbreviation) in boards %}
+            <tr>
+                <td><a href="{{ url_for("osuchan.showboard", board=abbreviation) }}">{{ boardname }}</a></td>
+            </tr>
+        {% endfor %}
+        </table>
+    </section>
+{% endblock %}

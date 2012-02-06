@@ -12,11 +12,8 @@ from newrem.converters import make_model_converter
 from newrem.decorators import cached
 from newrem.forms import CommentForm
 from newrem.grammars import BlogGrammar
-from newrem.models import db, Character, Comic, Newspost, Universe
-from newrem.util import make_rss2
-
-from osuchan.models import Post
-from osuchan.utilities import chan_filename
+from newrem.models import db, Character, Comic, Newspost, Post, Universe
+from newrem.util import chan_filename, make_rss2
 
 app = Flask(__name__)
 

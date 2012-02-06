@@ -1,0 +1,20 @@
+{% extends "oc/base.html" %}
+{% import "oc/macros.html" as macros %}
+
+{% block title %}
+    /{{ title }}/
+{% endblock %}
+
+{% block body %}
+    {{ macros.render_form(form, url_for("osuchan.comment", board=board),
+        title) }}
+
+    <section>
+        {% for thread in threads %}
+        <article>
+            {{ thread.author }} - {{ thread.subject }}
+            [<a href="{{ url_for("osuchan.showthread", board=board, tid=thread.id) }}">Reply</a>] <br />
+        </article>
+        {% endfor %}
+    </section>
+{% endblock %}

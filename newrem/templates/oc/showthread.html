@@ -1,0 +1,14 @@
+{% extends "oc/base.html" %}
+{% import "oc/macros.html" as macros %}
+
+{% block title %}
+    {{ title }} - /{{ board }}/
+{% endblock %}
+
+{% block body %}
+    {{ macros.render_form(form,
+        url_for("osuchan.threadcomment", board=thread.board,
+            thread=thread.id),
+        thread.board) }}
+    {{ macros.render_posts(thread) }}
+{% endblock %}

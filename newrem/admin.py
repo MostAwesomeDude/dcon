@@ -9,11 +9,10 @@ from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
     CharacterModifyForm, NewsForm, PortraitCreateForm,
     PortraitModifyForm, UniverseCreateForm, UniverseModifyForm,
     UniverseDeleteForm, UploadForm)
-from newrem.models import db, Character, Comic, Newspost, Portrait, Universe
+from newrem.models import (db, Board, Character, Comic, Newspost, Portrait,
+    Thread, Universe)
 from newrem.security import Authenticator
 from newrem.util import abbreviate
-
-from osuchan.models import Board, Thread
 
 class AdminBlueprint(Blueprint):
     """
