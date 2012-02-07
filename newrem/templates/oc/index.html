@@ -5,9 +5,13 @@
 {% block body %}
     <section id="boards">
         <table>
-        {% for (boardname, abbreviation) in boards %}
+        {% for board in boards %}
             <tr>
-                <td><a href="{{ url_for("osuchan.showboard", board=abbreviation) }}">{{ boardname }}</a></td>
+                <td>
+                    <a href="{{ url_for("osuchan.showboard", b=board) }}">
+                        {{ board.name }}
+                    </a>
+                </td>
             </tr>
         {% endfor %}
         </table>

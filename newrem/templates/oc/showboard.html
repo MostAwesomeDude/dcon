@@ -6,14 +6,14 @@
 {% endblock %}
 
 {% block body %}
-    {{ macros.render_form(form, url_for("osuchan.comment", board=board),
-        title) }}
+    {{ macros.render_form(form, url_for("osuchan.comment", b=board), title) }}
 
     <section>
         {% for thread in threads %}
         <article>
             {{ thread.author }} - {{ thread.subject }}
-            [<a href="{{ url_for("osuchan.showthread", board=board, tid=thread.id) }}">Reply</a>] <br />
+            [<a href="{{ url_for("osuchan.showthread", b=board, tid=thread.id) }}">Reply</a>]
+            <br />
         </article>
         {% endfor %}
     </section>
