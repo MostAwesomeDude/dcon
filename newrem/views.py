@@ -83,7 +83,7 @@ def get_neighbors_for(universe, comic):
 def index():
     universes = Universe.query.all()
 
-    return render_template("root.html", universes=universes)
+    return render_template("index.html", universes=universes)
 
 @app.route("/<universe:u>")
 def universe(u):

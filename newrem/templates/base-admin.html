@@ -1,39 +1,5 @@
-{% import "macros.html" as macros %}
+{% extends "root.html" %}
 
-<!DOCTYPE html>
-
-<head>
-    <title>DCoN - {% block title %}{% endblock %}</title>
-    {% block head %}
-    {% endblock %}
-    <link rel="stylesheet" type="text/css"
-        href="{{ url_for("static", filename="main.css") }}">
-    <link rel='stylesheet' type='text/css'
-        href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono&v2'>
-    <link rel="icon" type="image/png"
-        href="{{ url_for("static", filename="favicon.png") }}" />
-</head>
-
-<body>
-    <div class="body">
-        {% with flashes = get_flashed_messages(True) %}
-            {% if flashes %}
-                <ul>
-                {% for category, flash in flashes %}
-                    <li class="{{ category }}">{{ flash }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-
-        <div class="content">
-            {% block content %}
-            {% endblock %}
-        </div>
-
-        <div class="footer">
-            {% block footer %}
-            {% endblock %}
-        </div>
-    </div>
-</body>
+{% block header %}
+    <h1>Administration Panel</h1>
+{% endblock %}

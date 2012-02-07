@@ -1,20 +1,11 @@
-{% extends "base.html" %}
-{% import "macros.html" as macros %}
-
-{% block title %}Now with slogans!{% endblock %}
+{% extends "root.html" %}
 
 {% block content %}
-    {{ macros.render_comic(comic, comics) }}
-    <div class="newsfeed">
-        {% for post in newsposts %}
-            {% set portrait = post.portrait.portrait %}
-            <div class="newsentry">
-                <h3>{{ post.title }}</h3>
-                <div class="portrait">
-                    <img src="{{ url_for("static", filename=portrait) }}" />
-                </div>
-                {{ post.content|blogify|safe|urlize }}
-            </div>
-        {% endfor %}
-    </div>
+    {% for universe in universes %}
+        <p>
+            <a href="{{ url_for("universe", u=universe) }}">
+                {{ universe.title }}
+            </a>
+        </p>
+    {% endfor %}
 {% endblock %}

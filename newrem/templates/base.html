@@ -1,66 +1,25 @@
+{% extends "root.html" %}
 {% import "macros.html" as macros %}
 
-<!DOCTYPE html>
-
-<head>
-    <title>DCoN - {% block title %}{% endblock %}</title>
-    {% block head %}
-    {% endblock %}
-    <link rel="stylesheet" type="text/css"
-        href="{{ url_for("static", filename="main.css") }}">
-    <link rel='stylesheet' type='text/css'
-        href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono&v2'>
-    <link rel="icon" type="image/png"
-        href="{{ url_for("static", filename="favicon.png") }}" />
-    <link rel="alternate" type="application/rss+xml"
-        href="{{ url_for("rss") }}">
-</head>
-
-<body>
-    <div class="body">
-        <div class="header">
-            <a href="{{ url_for("users.register") }}" class="left">
-            </a>
-            <div class="banner">
-            </div>
-            <a href="#" class="button1">
-            </a>
-            <a href="#" class="button2">
-            </a>
-            <a href="#" class="button3">
-            </a>
-            <a href="#" class="button4">
-            </a>
-            <a href="#" class="button5">
-            </a>
-            <a href="#" class="button6">
-            </a>
-            <a href="#" class="button7">
-            </a>
-            <a href="{{ url_for("users.login", next=request.path) }}" class="right">
-            </a>
-            {% block header %}
-            {% endblock %}
-        </div>
-
-        {% with flashes = get_flashed_messages(True) %}
-            {% if flashes %}
-                <ul>
-                {% for category, flash in flashes %}
-                    <li class="{{ category }}">{{ flash }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-
-        <div class="content">
-            {% block content %}
-            {% endblock %}
-        </div>
-
-        <div class="footer">
-            {% block footer %}
-            {% endblock %}
-        </div>
+{% block header %}
+    <a href="{{ url_for("users.register") }}" class="left">
+    </a>
+    <div class="banner">
     </div>
-</body>
+    <a href="#" class="button1">
+    </a>
+    <a href="#" class="button2">
+    </a>
+    <a href="#" class="button3">
+    </a>
+    <a href="#" class="button4">
+    </a>
+    <a href="#" class="button5">
+    </a>
+    <a href="#" class="button6">
+    </a>
+    <a href="#" class="button7">
+    </a>
+    <a href="{{ url_for("users.login", next=request.path) }}" class="right">
+    </a>
+{% endblock %}

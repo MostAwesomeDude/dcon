@@ -1,3 +1,44 @@
-{% for universe in universes %}
-<p><a href="{{ url_for("universe", u=universe) }}">{{ universe.title }}</a></p>
-{% endfor %}
+<!DOCTYPE html>
+
+<head>
+    <title>DCoN - {% block title %}Untitled Page{% endblock %}</title>
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for("static", filename="main.css") }}">
+    <link rel='stylesheet' type='text/css'
+        href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono&v2'>
+    <link rel="icon" type="image/png"
+        href="{% block favicon %}
+            {{ url_for("static", filename="favicon.png") }}
+        {% endblock %}" />
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+    <div class="body">
+        <div class="header">
+            {% with flashes = get_flashed_messages(True) %}
+                {% if flashes %}
+                    <ul>
+                        {% for category, flash in flashes %}
+                            <li class="{{ category }}">{{ flash }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            {% block header %}
+            {% endblock %}
+        </div>
+
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <div class="footer">
+            {% block footer %}
+            {% endblock %}
+            <p class="credits">Derp.</p>
+        </div>
+    </div>
+</body>
