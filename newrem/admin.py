@@ -255,7 +255,7 @@ def upload(u):
         comic.title = form.title.data
         comic.description = form.description.data
         comic.comment = form.comment.data
-        comic.thread = Thread(universe.board, comic.title, "DCoN")
+        comic.thread = Thread(u.board, comic.title, "DCoN")
 
         if form.time.data:
             comic.time = form.time.data
