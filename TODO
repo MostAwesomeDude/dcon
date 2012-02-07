@@ -1,7 +1,10 @@
+Important:
+ * Why do Posts refuse to take None for their file?
+ * FileAllowed is bonghits, can we fix that?
+
 Not-so-important:
  * Blog
  * Threads for blog
  * Achievements
  * Emails for Users and email validation
  * Timeline field on Comics
- * Recaptcha for users
