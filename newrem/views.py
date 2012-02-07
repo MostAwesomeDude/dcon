@@ -160,7 +160,7 @@ def comment(u, cid):
         else:
             name = current_user.username
 
-        post = Post(name, form.comment.data, "", "")
+        post = Post(name, form.comment.data, "", [None])
         post.thread = comic.thread
 
         image = form.datafile.file

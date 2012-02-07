@@ -133,7 +133,7 @@ class CommentForm(FormBase):
     sage = BooleanField("Sage?")
     subject = TextField("Subject")
     comment = TextAreaField("Comment")
-    datafile = FileField("Image", validators=(FileAllowed(images),))
+    datafile = FileField("Image", validators=(Optional(), FileAllowed(images),))
     submit = SubmitField("Submit")
 
 class ChanForm(FormBase):
