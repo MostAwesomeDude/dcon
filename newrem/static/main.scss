@@ -5,9 +5,14 @@ div.content {
   top : 100px;
   text-align : center;
 
+
     background: {
         color: aliceblue;
     }
+}
+
+div.footer {
+    clear: both;
 }
 
 div.login {
@@ -233,10 +238,6 @@ p {
 
 .cast-odd img {
     float: right;
-}
-
-.errors li {
-    color: red;
 }
 
 span.quote {

@@ -1,7 +1,23 @@
 div.body {
   width: 760px;
-  left: 0px;
+  left: 10px;
   margin: 0px;
+}
+
+.flashes {
+    padding: 1em;
+    margin: 2em;
+    border: {
+        color: dimgray;
+        style: dashed;
+        width: 2px;
+    }
+    background: {
+        color: whitesmoke;
+    }
+    li.errors {
+        color: red;
+    }
 }
 
 .footer {

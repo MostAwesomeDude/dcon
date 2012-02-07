@@ -19,7 +19,7 @@
         <div class="header">
             {% with flashes = get_flashed_messages(True) %}
                 {% if flashes %}
-                    <ul>
+                    <ul class="flashes">
                         {% for category, flash in flashes %}
                             <li class="{{ category }}">{{ flash }}</li>
                         {% endfor %}

@@ -1,7 +1,17 @@
 div.body {
   width: 760px;
-  left: 0px;
+  left: 10px;
   margin: 0px; }
+
+.flashes {
+  padding: 1em;
+  margin: 2em;
+  border-color: dimgray;
+  border-style: dashed;
+  border-width: 2px;
+  background-color: whitesmoke; }
+  .flashes li.errors {
+    color: red; }
 
 .footer {
   font-family: sans-serif;
