@@ -270,7 +270,7 @@ class User(db.Model):
     username = db.Column(db.Unicode(30), primary_key=True, unique=True,
         nullable=False)
     password = db.Column(db.String(60))
-    logged_in = db.Column(db.Boolean)
+    logged_in = db.Column(db.Boolean, default=False)
 
     def __init__(self, username, password):
         self.username = username
