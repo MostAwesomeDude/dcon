@@ -85,7 +85,7 @@ def index():
 
     return render_template("index.html", universes=universes)
 
-@app.route("/<universe:u>")
+@app.route("/<universe:u>/")
 def universe(u):
     newsposts = Newspost.query.order_by(Newspost.time.desc())[:5]
 
