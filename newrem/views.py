@@ -96,7 +96,7 @@ def universe(u):
 
     comics = get_neighbors_for(u, comic)
 
-    return render_template("universe.html", u=u, comic=comic,
+    return render_template("universe/index.html", u=u, comic=comic,
         comics=comics, newsposts=newsposts)
 
 @app.route("/<universe:u>/cast")
@@ -140,7 +140,7 @@ def comics(u, cid):
         "ocform": CommentForm(),
     }
 
-    return render_template("comics.html", **kwargs)
+    return render_template("universe/comics.html", **kwargs)
 
 @app.route("/<universe:u>/comics/<int:cid>/comment", methods=("POST",))
 def comment(u, cid):
