@@ -132,6 +132,7 @@ def comics(u, cid):
         cdict[character.slug] = character, previous, next
 
     kwargs = {
+        "u": u,
         "comic": comic,
         "comics": comics,
         "chrono": chrono,
