@@ -82,13 +82,13 @@ def get_neighbors_for(universe, comic):
 @app.route("/")
 def index():
     universes = Universe.query.all()
+    newsposts = Newspost.query.order_by(Newspost.time.desc())[:5]
 
-    return render_template("index.html", universes=universes)
+    return render_template("index.html", universes=universes,
+        newsposts=newsposts)
 
 @app.route("/<universe:u>/")
 def universe(u):
-    newsposts = Newspost.query.order_by(Newspost.time.desc())[:5]
-
     comic = get_comic_query(u).order_by(Comic.id.desc()).first()
 
     if comic is None:
@@ -97,7 +97,7 @@ def universe(u):
     comics = get_neighbors_for(u, comic)
 
     return render_template("universe/index.html", u=u, comic=comic,
-        comics=comics, newsposts=newsposts)
+        comics=comics)
 
 @app.route("/<universe:u>/cast")
 def cast(u):
