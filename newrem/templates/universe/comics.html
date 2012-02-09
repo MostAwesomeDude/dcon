@@ -17,21 +17,25 @@
 {% endblock %}
 
 {% block content %}
-    {{ macros.render_comic(comic, comics) }}
+    {{ macros.render_comic(u, comic, comics) }}
     {% if chrono[0] %}
-        <a href="{{ url_for("comics", cid=chrono[0].id) }}">Chrono Previous</a>
+        <a href="{{ url_for("comics", u=u, cid=chrono[0].id) }}">
+            Chrono Previous
+        </a>
     {% endif %}
     {% if chrono[1] %}
-        <a href="{{ url_for("comics", cid=chrono[1].id) }}">Chrono Next</a>
+        <a href="{{ url_for("comics", u=u, cid=chrono[1].id) }}">
+            Chrono Next
+        </a>
     {% endif %}
     {% for character, t in characters.items() %}
         {% if t[1] %}
-            <a href="{{ url_for("comics", cid=t[1].id) }}">
+            <a href="{{ url_for("comics", u=u, cid=t[1].id) }}">
                 {{ t[0].name }} Previous
             </a>
         {% endif %}
         {% if t[2] %}
-            <a href="{{ url_for("comics", cid=t[2].id) }}">
+            <a href="{{ url_for("comics", u=u, cid=t[2].id) }}">
                 {{ t[0].name }} Next
             </a>
         {% endif %}
