@@ -1,3 +1,5 @@
+from __future__ import with_statement
+
 from werkzeug.routing import BaseConverter, ValidationError
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
