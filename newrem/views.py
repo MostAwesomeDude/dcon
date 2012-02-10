@@ -106,6 +106,11 @@ def cast(u):
     characters = sorted(u.characters, key=attrgetter("name"))
     return render_template("cast.html", u=u, characters=characters)
 
+@app.route("/<universe:u>/comics/recent")
+def recent(u):
+    comic = get_comic_query(u).order_by(Comic.id.desc()).first()
+    return redirect(url_for("comics", u=u, cid=comic.id))
+
 @app.route("/<universe:u>/comics/<int:cid>")
 def comics(u, cid):
     try:
