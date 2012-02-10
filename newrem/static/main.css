@@ -12,34 +12,6 @@ div.navigation {
   clear: both;
   text-align: center; }
 
-.newsentry {
-  border-radius: 25px;
-  -moz-border-radius: 25px;
-  -webkit-border-radius: 25px;
-  clear: left;
-  position: relative;
-  overflow: auto;
-  background-color: #001122;
-  color: #C0FFEE;
-  padding: 20px;
-  margin-bottom: 5px;
-  border-style: solid;
-  border-color: green; }
-  .newsentry h3 {
-    background: #001133;
-    color: #0099AA;
-    margin: 0px;
-    border-style: solid;
-    border-color: #003355;
-    /*width : 548px;
-    left : 0px;
-    position : absolute;
-    top : 0px*/ }
-
-div.portrait {
-  float: left;
-  margin-right: 1em; }
-
 p {
   text-align: left;
   text-indent: 2em;
@@ -181,9 +153,6 @@ p {
   .button7:hover {
     top: 0px;
     height: 100px; }
-
-.newsfeed {
-  width: 560px; }
 
 .comic {
   border-radius: 25px;

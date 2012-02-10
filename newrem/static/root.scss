@@ -1,3 +1,5 @@
+@import "mixins";
+
 div.body {
   width: 760px;
   left: 10px;
@@ -17,6 +19,51 @@ div.body {
     }
     li.errors {
         color: red;
+    }
+}
+
+.newsfeed {
+  width: 560px;
+}
+
+.newsentry {
+    @include corners(25px);
+
+    clear: left;
+    position: relative;
+    overflow: auto;
+
+    padding: 20px;
+    margin-bottom: 5px;
+
+    border: {
+        color: royalblue;
+        style: solid;
+        width: 2px;
+    }
+    background: {
+        color: lavender;
+    }
+
+    h3 {
+        background: ghostwhite;
+        margin: 0px;
+
+        border: {
+            style: dashed;
+            color: lavender;
+            width: 1px;
+        }
+
+      /*width : 548px;
+      left : 0px;
+      position : absolute;
+      top : 0px*/
+    }
+
+    div.portrait {
+        float: left;
+        margin-right: 1em;
     }
 }
 

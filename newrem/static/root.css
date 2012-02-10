@@ -13,6 +13,36 @@ div.body {
   .flashes li.errors {
     color: red; }
 
+.newsfeed {
+  width: 560px; }
+
+.newsentry {
+  border-radius: 25px;
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
+  clear: left;
+  position: relative;
+  overflow: auto;
+  padding: 20px;
+  margin-bottom: 5px;
+  border-color: royalblue;
+  border-style: solid;
+  border-width: 2px;
+  background-color: lavender; }
+  .newsentry h3 {
+    background: ghostwhite;
+    margin: 0px;
+    border-style: dashed;
+    border-color: lavender;
+    border-width: 1px;
+    /*width : 548px;
+    left : 0px;
+    position : absolute;
+    top : 0px*/ }
+  .newsentry div.portrait {
+    float: left;
+    margin-right: 1em; }
+
 .footer {
   font-family: sans-serif;
   font-size: x-small;

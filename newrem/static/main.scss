@@ -20,46 +20,6 @@ div.navigation {
   text-align : center
 }
 
-.newsentry {
-    @include corners(25px);
-
-    clear: left;
-    position: relative;
-    overflow: auto;
-
-    background-color: #001122;
-
-    color: #C0FFEE;
-    padding: 20px;
-    margin-bottom: 5px;
-
-    border: {
-        style: solid;
-        color: green;
-    }
-
-    h3 {
-      background : #001133;
-      color : #0099AA;
-      margin : 0px;
-
-        border: {
-          style: solid;
-          color: #003355;
-        }
-
-      /*width : 548px;
-      left : 0px;
-      position : absolute;
-      top : 0px*/
-    }
-}
-
-div.portrait {
-  float : left;
-  margin-right : 1em
-}
-
 p {
     text: {
         align: left;
@@ -170,10 +130,6 @@ p {
     background-image: url(images/secretman.png);
     width: 82px;
     left: 477px;
-}
-
-.newsfeed {
-  width : 560px
 }
 
 .comic {
