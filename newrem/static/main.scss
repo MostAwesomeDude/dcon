@@ -1,5 +1,8 @@
 @import "mixins";
 
+$lawngreen: hsl(90, 100%, 49%);
+$springgreen: hsl(150, 100%, 50%);
+
 div.content {
     margin-top: 30px;
     text-align: center;
@@ -133,17 +136,12 @@ p {
 }
 
 .comic {
-    @include corners(25px);
+    @include classy-div($springgreen, 25px);
 
     text-align: center;
     padding: 10px;
 
     margin-bottom: 50px;
-
-    background: {
-        image: url(images/comicbg.png);
-        repeat: repeat-y;
-    }
 }
 
 .navigation {clear:both;

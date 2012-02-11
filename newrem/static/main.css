@@ -158,11 +158,13 @@ p {
   border-radius: 25px;
   -moz-border-radius: 25px;
   -webkit-border-radius: 25px;
+  border-color: #00ff80;
+  border-style: solid;
+  border-width: 2px;
+  background-color: #d1fae6;
   text-align: center;
   padding: 10px;
-  margin-bottom: 50px;
-  background-image: url(images/comicbg.png);
-  background-repeat: repeat-y; }
+  margin-bottom: 50px; }
 
 .navigation {
   clear: both;
