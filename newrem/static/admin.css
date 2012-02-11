@@ -1,7 +1,10 @@
 div.content {
-  margin: 1em;
-  padding: 1em;
-  border-color: silver;
+  border-radius: 1em;
+  -moz-border-radius: 1em;
+  -webkit-border-radius: 1em;
+  border-color: #bfbfbf;
   border-style: solid;
-  border-width: 1px;
-  background-color: gainsboro; }
+  border-width: 2px;
+  background-color: white;
+  margin: 1em;
+  padding: 1em; }

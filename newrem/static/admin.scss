@@ -1,12 +1,10 @@
+@import "mixins";
+
+$silver: hsl(0, 0%, 75%);
+
 div.content {
+    @include classy-div($silver);
+
     margin: 1em;
     padding: 1em;
-    border: {
-        color: silver;
-        style: solid;
-        width: 1px;
-    }
-    background: {
-        color: gainsboro;
-    }
 }

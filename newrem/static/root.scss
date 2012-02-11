@@ -1,5 +1,7 @@
 @import "mixins";
 
+$royalblue: hsl(225, 73%, 57%);
+
 div.body {
   width: 760px;
   left: 10px;
@@ -27,7 +29,7 @@ div.body {
 }
 
 .newsentry {
-    @include corners(25px);
+    @include classy-div($royalblue, 25px);
 
     clear: left;
     position: relative;
@@ -35,15 +37,6 @@ div.body {
 
     padding: 20px;
     margin-bottom: 5px;
-
-    border: {
-        color: royalblue;
-        style: solid;
-        width: 2px;
-    }
-    background: {
-        color: lavender;
-    }
 
     h3 {
         background: ghostwhite;

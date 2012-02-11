@@ -3,3 +3,19 @@
     -moz-border-radius: $radius;
     -webkit-border-radius: $radius;
 }
+
+@mixin shaded-border($color) {
+    border: {
+        color: $color;
+        style: solid;
+        width: 2px;
+    }
+    background: {
+        color: lighten($color, 25%);
+    }
+}
+
+@mixin classy-div($color, $radius: 1em) {
+    @include corners($radius);
+    @include shaded-border($color);
+}
