@@ -116,6 +116,7 @@ class Character(db.Model):
 
     slug = db.Column(db.String(45), primary_key=True)
     name = db.Column(db.Unicode(40))
+    description = db.Column(db.UnicodeText(1024*1024))
     universe_fk = db.Column(db.String(85), db.ForeignKey(Universe.slug),
         nullable=False)
     universe = db.relationship(Universe, backref="characters")
