@@ -104,7 +104,7 @@ def cast(u):
     # Re-add the universe to the session so that we can query it.
     db.session.add(u)
     characters = sorted(u.characters, key=attrgetter("name"))
-    return render_template("cast.html", u=u, characters=characters)
+    return render_template("universe/cast.html", u=u, characters=characters)
 
 @app.route("/<universe:u>/comics/recent")
 def recent(u):
