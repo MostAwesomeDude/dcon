@@ -7,17 +7,35 @@ from wtforms.fields import BooleanField, TextAreaField
 from wtforms.validators import EqualTo, Length, Optional
 
 from flaskext.uploads import IMAGES, UploadSet
-from flaskext.wtf import (Form, FileAllowed, FileRequired, Required,
-    FileField, PasswordField, RecaptchaField, SubmitField, TextField)
+from flaskext.wtf import (Form, FileRequired, Required, FileField,
+    PasswordField, RecaptchaField, SubmitField, TextField, ValidationError)
 
 from newrem.models import Character, Comic, Portrait
 from newrem.util import split_camel_case
+
+class BetterFileAllowed(object):
+    """
+    If a file is present, this verifies that the file is in the given upload
+    set.
+
+    Borrowed from Flask-WTF but with less fail.
+    """
+
+    def __init__(self, upload_set, message=None):
+        self.upload_set = upload_set
+        self.message = message
+
+    def __call__(self, form, field):
+        fs = getattr(field, "file", None)
+
+        if fs and not self.upload_set.file_allowed(fs, fs.filename):
+            raise ValidationError(self.message)
 
 images = UploadSet("images", IMAGES)
 pngs = UploadSet("pngs", ("png",))
 
 portrait = FileField("Select a portrait",
-    validators=(FileAllowed(pngs, "PNGs only!"),))
+    validators=(BetterFileAllowed(pngs, "PNGs only!"),))
 
 class FormBase(Form):
     """
@@ -105,7 +123,7 @@ class UploadForm(FormBase):
 
     file = FileField("Select a file to upload",
         validators=(FileRequired("Must upload a comic!"),
-            FileAllowed(images, "Images only!")))
+            BetterFileAllowed(images, "Images only!")))
     title = TextField("Title", validators=(Required(), Length(max=80)))
     description = TextAreaField("Alternate Text")
     comment = TextAreaField("Commentary")
@@ -133,7 +151,7 @@ class CommentForm(FormBase):
     sage = BooleanField("Sage?")
     subject = TextField("Subject")
     comment = TextAreaField("Comment")
-    datafile = FileField("Image", validators=(Optional(), FileAllowed(images),))
+    datafile = FileField("Image", validators=(BetterFileAllowed(images),))
     submit = SubmitField("Submit")
 
 class ChanForm(FormBase):
