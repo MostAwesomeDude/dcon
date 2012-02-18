@@ -7,6 +7,13 @@
         <div class="{{ loop.cycle("cast-odd", "cast-even") }}">
             <h2>{{ character.name }}</h2>
             <img src="{{ url_for("static", filename=character.portrait) }}" />
+            <p>
+                {% if character.description %}
+                    {{ character.description }}
+                {% else %}
+                    &lt;No data on record&gt;
+                {% endif %}
+            </p>
         </div>
     {% endfor %}
 {% endblock %}
