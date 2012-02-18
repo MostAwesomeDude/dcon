@@ -1,11 +1,17 @@
 @import "mixins";
 
+/* Grab Chango. */
+@import
+url(http://fonts.googleapis.com/css?family=Chango&subset=latin,latin-ext);
+
+$cornflower: hsl(219, 79%, 66%);
 $royalblue: hsl(225, 73%, 57%);
 
 div.body {
-  width: 760px;
-  left: 10px;
-  margin: 0px;
+    width: 760px;
+    min-width: 760px;
+    left: 10px;
+    margin: 0px;
 }
 
 .flashes {
@@ -24,8 +30,47 @@ div.body {
     }
 }
 
+div.universes {
+    width: 200px;
+    float: left;
+
+    ul {
+        margin: 0px;
+        padding: 0px;
+        list-style-type: none;
+    }
+
+    li {
+        margin: 0.2em;
+    }
+
+    a {
+        @include classy-div($royalblue, 5px);
+
+        /* Fill the entirety of the list width; this makes the links appear
+         * uniform. */
+        width: auto;
+
+        color: black;
+        font: {
+            family: "Chango", serif;
+            size: larger;
+        }
+
+        /* XXX hax? */
+        padding: 0.2em 0.8em;
+        display: block;
+        text-decoration: none;
+
+        &:hover {
+            @include shaded-border($cornflower);
+        }
+    }
+}
+
 .newsfeed {
-  width: 560px;
+    width: 560px;
+    float: left;
 }
 
 .newsentry {
@@ -61,6 +106,8 @@ div.body {
 }
 
 .footer {
+    clear: both;
+
     font: {
         family: sans-serif;
         size: x-small;

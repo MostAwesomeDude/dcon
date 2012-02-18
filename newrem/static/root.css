@@ -1,5 +1,8 @@
+/* Grab Chango. */
+@import url(http://fonts.googleapis.com/css?family=Chango&subset=latin,latin-ext);
 div.body {
   width: 760px;
+  min-width: 760px;
   left: 10px;
   margin: 0px; }
 
@@ -13,8 +16,42 @@ div.body {
   .flashes li.errors {
     color: red; }
 
+div.universes {
+  width: 200px;
+  float: left; }
+  div.universes ul {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none; }
+  div.universes li {
+    margin: 0.2em; }
+  div.universes a {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-color: #4169e1;
+    border-style: solid;
+    border-width: 2px;
+    background-color: #f3f5fb;
+    /* Fill the entirety of the list width; this makes the links appear
+     * uniform. */
+    width: auto;
+    color: black;
+    font-family: "Chango", serif;
+    font-size: larger;
+    /* XXX hax? */
+    padding: 0.2em 0.8em;
+    display: block;
+    text-decoration: none; }
+    div.universes a:hover {
+      border-color: #6494ed;
+      border-style: solid;
+      border-width: 2px;
+      background-color: white; }
+
 .newsfeed {
-  width: 560px; }
+  width: 560px;
+  float: left; }
 
 .newsentry {
   border-radius: 25px;
@@ -44,6 +81,7 @@ div.body {
     margin-right: 1em; }
 
 .footer {
+  clear: both;
   font-family: sans-serif;
   font-size: x-small;
   text-align: center; }
