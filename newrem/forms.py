@@ -77,11 +77,13 @@ class UniverseDeleteForm(FormBase):
 
 class CharacterCreateForm(FormBase):
     name = TextField(u"New name", validators=(Required(),))
+    description = TextAreaField("Description")
     portrait = portrait
     submit = SubmitField("Create!")
 
 class CharacterModifyForm(FormBase):
     name = TextField(u"New name")
+    description = TextAreaField("Description")
     portrait = portrait
     submit = SubmitField("Modify!")
 
