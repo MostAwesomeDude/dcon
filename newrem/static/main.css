@@ -196,7 +196,15 @@ p {
   border-radius: 10px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
-  margin: 1em; }
+  margin: 1em;
+  /* It's possible that the floated images inside each of the cast <div>s
+   * will be the tallest thing in the <div>, which can cause them to flow
+   * outside the <div>. To counter this, we force a reflow of the <div>
+   * using the overflow property. As a precaution against certain broken
+   * browser renderers, we also set the width property; it could be unset or
+   * modified if necessary later and doesn't need to be set to "auto". */
+  overflow: auto;
+  width: auto; }
 
 .cast-even {
   border-color: #80ffd4;
