@@ -185,7 +185,7 @@ def rss():
     comics = Comic.query.order_by(Comic.id.desc())[:10]
     stuff = {}
     for comic in comics:
-        url = url_for("comics", _external=True, universe=comic.universe,
+        url = url_for("comics", _external=True, u=comic.universe,
             cid=comic.id)
         stuff[url] = comic
 

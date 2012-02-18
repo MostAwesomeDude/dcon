@@ -104,8 +104,8 @@ def make_rss2(url, title, stuff):
     """
 
     items = []
-    for url, obj in stuff:
-        item = RSSItem(title=obj.title, link=url, description=obj.title,
+    for url, obj in stuff.iteritems():
+        item = RSSItem(title=obj.title, link=url, description=obj.comment,
             guid=Guid(url), pubDate=obj.time)
         items.append(item)
 
