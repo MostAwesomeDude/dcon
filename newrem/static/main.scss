@@ -2,6 +2,8 @@
 
 $lawngreen: hsl(90, 100%, 49%);
 $springgreen: hsl(150, 100%, 50%);
+$green: hsl(120, 100%, 25%);
+$darkgreen: hsl(120, 100%, 20%);
 
 div.content {
     margin-top: 30px;
@@ -181,12 +183,26 @@ p {
     }
 }
 
-.cast-even img {
-    float: left;
+.cast {
+    @include corners(10px);
+
+    margin: 1em;
 }
 
-.cast-odd img {
-    float: right;
+.cast-even {
+    @include shaded-border($darkgreen);
+
+    img {
+        float: left;
+    }
+}
+
+.cast-odd {
+    @include shaded-border($springgreen);
+
+    img {
+        float: right;
+    }
 }
 
 span.quote {

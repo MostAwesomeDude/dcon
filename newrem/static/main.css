@@ -192,11 +192,27 @@ p {
   .information div.cast {
     font-size: x-small; }
 
-.cast-even img {
-  float: left; }
+.cast {
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  margin: 1em; }
 
-.cast-odd img {
-  float: right; }
+.cast-even {
+  border-color: #006600;
+  border-style: solid;
+  border-width: 2px;
+  background-color: #47eb47; }
+  .cast-even img {
+    float: left; }
+
+.cast-odd {
+  border-color: #00ff80;
+  border-style: solid;
+  border-width: 2px;
+  background-color: #d1fae6; }
+  .cast-odd img {
+    float: right; }
 
 span.quote {
   color: #00ff00; }
