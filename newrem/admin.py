@@ -119,6 +119,7 @@ def characters(u):
 @admin.route("/<universe:u>/characters/<character:c>")
 def character(u, c):
     mform = CharacterModifyForm(prefix="modify")
+    mform.description.data = c.description
     dform = CharacterDeleteForm(prefix="delete")
 
     return render_template("character.html", mform=mform, dform=dform, u=u,
@@ -130,6 +131,8 @@ def characters_create(u):
 
     if form.validate_on_submit():
         character = Character(form.name.data)
+        if form.description.data:
+            character.description = form.description.data
         character.universe = u
         db.session.add(character)
         db.session.commit()
@@ -153,13 +156,23 @@ def characters_modify(u, c):
         if form.name.data and form.name.data != c.name:
             c.rename(form.name.data)
             db.session.add(c)
-            db.session.commit()
             flash("Successfully renamed character %s!" % c.name)
 
         if form.portrait.file:
             path = os.path.abspath(os.path.join("uploads", c.portrait))
             form.portrait.file.save(path)
             flash("Successfully changed portrait for character %s!" % c.name)
+
+        if form.description.data != c.description:
+            if form.description.data:
+                c.description = form.description.data
+            else:
+                c.description = None
+            db.session.add(c)
+            flash("Successfully changed description for character %s!" %
+                c.name)
+
+        db.session.commit()
     else:
         flash("Couldn't validate form...")
 
