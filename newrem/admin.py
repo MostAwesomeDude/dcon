@@ -118,8 +118,8 @@ def characters(u):
 
 @admin.route("/<universe:u>/characters/<character:c>")
 def character(u, c):
-    mform = CharacterModifyForm(prefix="modify")
-    mform.description.data = c.description
+    mform = CharacterModifyForm(prefix="modify", name=c.name,
+        description=c.description)
     dform = CharacterDeleteForm(prefix="delete")
 
     return render_template("character.html", mform=mform, dform=dform, u=u,
