@@ -32,7 +32,7 @@ div.universes {
     border-color: #4169e1;
     border-style: solid;
     border-width: 2px;
-    background-color: #f3f5fb;
+    background-color: #cfdafc;
     /* Fill the entirety of the list width; this makes the links appear
      * uniform. */
     width: auto;
@@ -47,7 +47,7 @@ div.universes {
       border-color: #6494ed;
       border-style: solid;
       border-width: 2px;
-      background-color: white; }
+      background-color: #cfdffc; }
 
 .newsfeed {
   width: 560px;
@@ -60,7 +60,7 @@ div.universes {
   border-color: #4169e1;
   border-style: solid;
   border-width: 2px;
-  background-color: #f3f5fb;
+  background-color: #cfdafc;
   clear: left;
   position: relative;
   overflow: auto;

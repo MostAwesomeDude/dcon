@@ -4,6 +4,7 @@ $lawngreen: hsl(90, 100%, 49%);
 $springgreen: hsl(150, 100%, 50%);
 $green: hsl(120, 100%, 25%);
 $darkgreen: hsl(120, 100%, 20%);
+$aquamarine: hsl(160, 100%, 75%);
 
 div.content {
     margin-top: 30px;
@@ -190,7 +191,7 @@ p {
 }
 
 .cast-even {
-    @include shaded-border($darkgreen);
+    @include shaded-border($aquamarine);
 
     img {
         float: left;

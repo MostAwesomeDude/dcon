@@ -160,7 +160,7 @@ p {
   border-color: #00ff80;
   border-style: solid;
   border-width: 2px;
-  background-color: #d1fae6;
+  background-color: #cffce6;
   text-align: center;
   padding: 10px;
   margin-bottom: 50px; }
@@ -199,10 +199,10 @@ p {
   margin: 1em; }
 
 .cast-even {
-  border-color: #006600;
+  border-color: #80ffd4;
   border-style: solid;
   border-width: 2px;
-  background-color: #47eb47; }
+  background-color: #cffced; }
   .cast-even img {
     float: left; }
 
@@ -210,7 +210,7 @@ p {
   border-color: #00ff80;
   border-style: solid;
   border-width: 2px;
-  background-color: #d1fae6; }
+  background-color: #cffce6; }
   .cast-odd img {
     float: right; }
 
