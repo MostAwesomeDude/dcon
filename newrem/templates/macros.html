@@ -45,22 +45,26 @@
     <div class="navigation">
         {% if comics["upload"][0] %}
             <a href="{{ url_for("comics", u=u, cid=comics["upload"][0].id) }}">
-                <img src="{{ url_for("static", filename="first.png") }}">
+                <img src="{{ url_for("static", filename="first.png") }}"
+                    title="First">
             </a>
         {% endif %}
         {% if comics["upload"][1] %}
             <a href="{{ url_for("comics", u=u, cid=comics["upload"][1].id) }}">
-                <img src="{{ url_for("static", filename="previous.png") }}">
+                <img src="{{ url_for("static", filename="previous.png") }}"
+                    title="Previous">
             </a>
         {% endif %}
         {% if comics["upload"][2] %}
             <a href="{{ url_for("comics", u=u, cid=comics["upload"][2].id) }}">
-                <img src="{{ url_for("static", filename="next.png") }}">
+                <img src="{{ url_for("static", filename="next.png") }}"
+                    title="Next">
             </a>
         {% endif %}
         {% if comics["upload"][3] %}
             <a href="{{ url_for("comics", u=u, cid=comics["upload"][3].id) }}">
-                <img src="{{ url_for("static", filename="last.png") }}">
+                <img src="{{ url_for("static", filename="last.png") }}"
+                    title="Last">
             </a>
         {% endif %}
     </div>
