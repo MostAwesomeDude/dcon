@@ -1,5 +1,3 @@
-import os
-
 from werkzeug import secure_filename
 
 from flask import (Blueprint, flash, redirect, render_template, request,
