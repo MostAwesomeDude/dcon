@@ -2,8 +2,8 @@
 {% import "macros.html" as macros %}
 
 {% block content %}
-    <p>{{ c.name }}</p>
-    <img src="{{ url_for("static", filename=c.portrait) }}" />
+    <h3>{{ c.name }}</h3>
+    <img src="{{ url_for("static", filename=c.url()) }}" />
     {{ macros.render_form(mform,
         url_for("admin.characters_modify", u=u, c=c)) }}
     {{ macros.render_form(dform,
