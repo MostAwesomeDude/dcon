@@ -5,6 +5,7 @@ from werkzeug import secure_filename
 from flask import (Blueprint, flash, redirect, render_template, request,
     url_for)
 
+from newrem.files import save_file
 from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
     CharacterModifyForm, NewsForm, PortraitCreateForm,
     PortraitModifyForm, UniverseCreateForm, UniverseModifyForm,
@@ -24,9 +25,9 @@ class AdminBlueprint(Blueprint):
         Register this blueprint on an application.
         """
 
-        path = app.config["DCON_PASSWORD_FILE"]
+        fp = app.config["DCON_PASSWORD_FILE"]
         d = {}
-        for line in open(path, "rb").read().split("\n"):
+        for line in fp.open("rb").read().split("\n"):
             try:
                 k, v = line.split(":", 1)
             except ValueError:
@@ -137,8 +138,8 @@ def characters_create(u):
         db.session.add(character)
         db.session.commit()
 
-        path = os.path.abspath(os.path.join("uploads", character.portrait))
-        form.portrait.file.save(path)
+        if form.portrait.file:
+            save_file(character.fp(), form.portrait.file)
 
         flash("Successfully created character %s!" % character.name)
     else:
@@ -159,9 +160,11 @@ def characters_modify(u, c):
             flash("Successfully renamed character %s!" % c.name)
 
         if form.portrait.file:
-            path = os.path.abspath(os.path.join("uploads", c.portrait))
-            form.portrait.file.save(path)
-            flash("Successfully changed portrait for character %s!" % c.name)
+            if save_file(c.fp(), form.portrait.file):
+                flash("Successfully changed portrait for character %s!" %
+                    c.name)
+            else:
+                flash("Couldn't save portrait for character %s..." % c.name)
 
         if form.description.data != c.description:
             if form.description.data:
@@ -186,6 +189,7 @@ def characters_delete(u, c):
     if form.validate_on_submit():
         db.session.delete(c)
         db.session.commit()
+        c.fp().remove()
         flash("Successfully removed character %s!" % c.name)
     else:
         flash("Couldn't validate form...")
@@ -208,8 +212,7 @@ def portraits_create():
         db.session.add(portrait)
         db.session.commit()
 
-        path = os.path.abspath(os.path.join("uploads", portrait.portrait))
-        portrait.update_portrait(form.portrait.file, path)
+        portrait.update_portrait(form.portrait.file)
 
         flash("Successfully created portrait %s!" % portrait.name)
     else:
@@ -224,8 +227,7 @@ def portraits_modify():
     if form.validate_on_submit():
         portrait = form.portraits.data
         if portrait and form.portrait.file:
-            path = os.path.abspath(os.path.join("uploads", portrait.portrait))
-            portrait.update_portrait(form.portrait.file, path)
+            portrait.update_portrait(form.portrait.file)
 
             flash("Successfully changed portrait for portrait %s!" %
                 portrait.name)
@@ -255,15 +257,14 @@ def upload(u):
     form = UploadForm(u)
 
     if form.validate_on_submit():
-        filename = os.path.join("comics", u.slug,
-            secure_filename(form.file.file.filename))
-        path = os.path.abspath(os.path.join("uploads", filename))
-        if os.path.exists(path):
-            flash("File already exists!")
+        filename = secure_filename(form.file.file.filename)
+
+        try:
+            comic = Comic(u, filename)
+        except Exception, e:
+            flash("Couldn't create comic: %s" % ", ".join(e.args))
             return render_template("upload.html", form=form, u=u)
 
-        comic = Comic(filename)
-        comic.universe = u
         comic.characters = form.characters.data
         comic.title = form.title.data
         comic.description = form.description.data
@@ -278,7 +279,7 @@ def upload(u):
         db.session.add(comic)
         db.session.commit()
 
-        form.file.file.save(path)
+        save_file(comic.fp(), form.file.file)
 
         return redirect(url_for("comics", u=u, cid=comic.id))
 

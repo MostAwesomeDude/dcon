@@ -1,5 +1,7 @@
 import os
 
+from twisted.python.filepath import FilePath
+
 from flaskext.uploads import configure_uploads, patch_request_class
 
 from newrem.admin import admin
@@ -10,20 +12,23 @@ from newrem.models import db, lm
 from newrem.users import users
 from newrem.views import app
 
-wd = os.getcwd()
+wd = None
+if wd is None:
+    wd = os.getcwd()
+
+wd = FilePath(wd)
 
 app.debug = True
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///%s/temp.db" % wd
+app.config["DCON_PATH"] = wd
+app.config["DCON_PASSWORD_FILE"] = wd.child("passwords.dcon")
+app.config["DCON_UPLOAD_PATH"] = wd.child("uploads")
+app.config["SECRET_KEY"] = wd.child("secret.key").open("rb").read()
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///%s/temp.db" % wd.path
 app.config["SQLALCHEMY_ECHO"] = True
 app.config["SECRET_KEY"] = "just a test!"
-app.config["UPLOADS_DEFAULT_DEST"] = os.path.join(wd, "uploads")
-
-app.config["DCON_PATH"] = wd
-path = os.path.join(app.config["DCON_PATH"], "secret.key")
-app.config["SECRET_KEY"] = open(path).read()
-path = os.path.join(app.config["DCON_PATH"], "passwords.dcon")
-app.config["DCON_PASSWORD_FILE"] = path
+app.config["UPLOADS_DEFAULT_DEST"] = app.config["DCON_UPLOAD_PATH"].path
 
 configure_uploads(app, (images, pngs))
 patch_request_class(app)

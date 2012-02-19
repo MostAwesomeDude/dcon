@@ -5,6 +5,8 @@ from PIL import Image
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from flask import current_app
+
 from flaskext.login import LoginManager, make_secure_token
 from flaskext.sqlalchemy import SQLAlchemy
 
@@ -127,18 +129,25 @@ class Character(db.Model):
     def __repr__(self):
         return "<Character(%r) in %r>" % (self.name, self.universe)
 
+    @property
+    def portrait(self):
+        return "%s.png" % self.slug
+
+    def fp(self):
+        fp = current_app.config["DCON_UPLOAD_PATH"]
+        path = fp.child("characters").child(self.universe.slug)
+        return path.child(self.portrait)
+
+    def url(self):
+        return os.path.join("characters", self.universe.slug, self.portrait)
+
     def rename(self, name):
         self.name = name
+        fp = self.fp()
         self.slug = slugify(name)
 
-    def _get_portrait(self):
-        png = "%s.png" % self.slug
-        return os.path.join("characters", self.universe.slug, png)
-
-    def _set_portrait(self, filename):
-        os.rename(filename, self.portrait)
-
-    portrait = property(_get_portrait, _set_portrait)
+        if fp.exists():
+            fp.moveTo(self.fp())
 
 class Comic(db.Model):
     """
@@ -174,12 +183,26 @@ class Comic(db.Model):
     # The universe which owns this comic.
     universe = db.relationship(Universe, backref="comics")
 
-    def __init__(self, filename):
+    def __init__(self, universe, filename):
+        self.universe = universe
         self.filename = filename
         self.time = datetime.utcnow()
 
+        # Check at comic creation. Flat-out refuse to create this comic if
+        # the space for it isn't there.
+        if self.fp().exists():
+            raise Exception("File already exists!")
+
     def __repr__(self):
         return "<Comic(%r) in %r>" % (self.filename, self.universe)
+
+    def fp(self):
+        fp = current_app.config["DCON_UPLOAD_PATH"]
+        path = fp.child("comics").child(self.universe.slug)
+        return path.child(self.filename)
+
+    def url(self):
+        return os.path.join("comics", self.universe.slug, self.filename)
 
     def insert(self, prior, after=False):
         """
@@ -232,19 +255,27 @@ class Portrait(db.Model):
     def __repr__(self):
         return "<Portrait(%r)>" % self.name
 
-    def rename(self, name):
-        self.name = name
-        self.slug = slugify(name)
-
-    def update_portrait(self, fs, path):
-        image = Image.open(fs)
-        image.thumbnail((250, 250), Image.ANTIALIAS)
-        image.save(path)
-
     @property
     def portrait(self):
-        png = "%s.png" % self.slug
-        return os.path.join("portraits", png)
+        return "%s.png" % self.slug
+
+    def fp(self):
+        fp = current_app.config["DCON_UPLOAD_PATH"]
+        path = fp.child("portraits").child(self.universe.slug)
+        return path.child(self.portrait)
+
+    def rename(self, name):
+        self.name = name
+        fp = self.fp()
+        self.slug = slugify(name)
+
+        if fp.exists():
+            fp.moveTo(self.fp())
+
+    def update_portrait(self, fs):
+        image = Image.open(fs)
+        image.thumbnail((250, 250), Image.ANTIALIAS)
+        image.save(self.fp().path)
 
 class Newspost(db.Model):
 

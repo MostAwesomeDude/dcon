@@ -65,7 +65,7 @@
         {% endif %}
     </div>
     <div class="comic">
-        <img src="{{ url_for("static", filename=comic.filename) }}"
+        <img src="{{ url_for("static", filename=comic.url()) }}"
             title="{{ comic.description }}" />
         <div class="information">
             <h1>{{ comic.title }}</h1>
