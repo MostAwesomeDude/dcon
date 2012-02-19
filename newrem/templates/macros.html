@@ -82,7 +82,7 @@
             <h6>Uploaded on
             {{ comic.time.strftime("%B %d, %Y at %I:%M:%S %p") }}</h6>
             {% if comic.comment %}
-                <p>{{ comic.comment }}</p>
+                {{ comic.comment|blogify|safe }}
             {% endif %}
         </div>
     </div>
