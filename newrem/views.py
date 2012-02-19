@@ -68,8 +68,8 @@ def get_neighbors_for(universe, comic):
     # next, last. This first query doesn't need to have the temporal filter.
     q = Comic.query.filter(Comic.universe == universe)
     q = q.filter(Comic.time < comic.time)
-    a = q.order_by(Comic.time.desc()).first()
-    b = q.order_by(Comic.time).first()
+    a = q.order_by(Comic.time).first()
+    b = q.order_by(Comic.time.desc()).first()
 
     q = get_comic_query(universe).filter(Comic.time > comic.time)
     c = q.order_by(Comic.time).first()
