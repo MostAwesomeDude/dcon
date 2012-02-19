@@ -133,7 +133,7 @@ class Character(db.Model):
 
     def _get_portrait(self):
         png = "%s.png" % self.slug
-        return os.path.join("characters", png)
+        return os.path.join("characters", self.universe.slug, png)
 
     def _set_portrait(self, filename):
         os.rename(filename, self.portrait)

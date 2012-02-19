@@ -255,7 +255,7 @@ def upload(u):
     form = UploadForm(u)
 
     if form.validate_on_submit():
-        filename = os.path.join("comics",
+        filename = os.path.join("comics", u.slug,
             secure_filename(form.file.file.filename))
         path = os.path.abspath(os.path.join("uploads", filename))
         if os.path.exists(path):
