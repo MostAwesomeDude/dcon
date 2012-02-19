@@ -1,5 +1,5 @@
+{% extends "base-admin.html" %}
 {% import "macros.html" as macros %}
-{% extends "base.html" %}
 
 {% block content %}
     {{ macros.render_form(form, url_for("admin.news")) }}
