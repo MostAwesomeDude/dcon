@@ -257,6 +257,7 @@ def upload(u):
     form = UploadForm(u)
 
     if form.validate_on_submit():
+        db.session.add(u)
         filename = secure_filename(form.file.file.filename)
 
         try:
