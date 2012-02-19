@@ -123,6 +123,9 @@ def character(u, c):
         description=c.description)
     dform = CharacterDeleteForm(prefix="delete")
 
+    # Character needs to be bound to a session.
+    db.session.add(c)
+
     return render_template("character.html", mform=mform, dform=dform, u=u,
         c=c)
 
