@@ -218,7 +218,7 @@ class Comic(db.Model):
             db.session.add(self)
             return
 
-        if prior.universe_fk != self.universe_fk:
+        if prior.universe != self.universe:
             raise Exception(
                 "Comic.insert called with differing universes %r and %r" %
                 (self.universe, prior.universe))
