@@ -123,7 +123,8 @@ class Character(db.Model):
         nullable=False)
     universe = db.relationship(Universe, backref="characters")
 
-    def __init__(self, name):
+    def __init__(self, universe, name):
+        self.universe = universe
         self.rename(name)
 
     def __repr__(self):

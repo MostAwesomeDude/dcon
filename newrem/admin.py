@@ -132,10 +132,9 @@ def characters_create(u):
     form = CharacterCreateForm()
 
     if form.validate_on_submit():
-        character = Character(form.name.data)
+        character = Character(u, form.name.data)
         if form.description.data:
             character.description = form.description.data
-        character.universe = u
         db.session.add(character)
         db.session.commit()
 
