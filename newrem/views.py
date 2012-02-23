@@ -5,7 +5,8 @@ from random import choice
 
 from sqlalchemy.orm.exc import NoResultFound
 
-from flask import Flask, abort, redirect, render_template, url_for
+from flask import (Flask, abort, flash, redirect, render_template, request,
+    url_for)
 from flaskext.login import current_user
 
 from newrem.converters import make_model_converter
@@ -108,8 +109,49 @@ def cast(u):
 
 @app.route("/<universe:u>/comics/recent")
 def recent(u):
-    comic = get_comic_query(u).order_by(Comic.id.desc()).first()
-    return redirect(url_for("comics", u=u, cid=comic.id))
+    char = request.args.get("char", None)
+    if char is not None:
+        if char == "anything-goes":
+            # Get all characters that exist in this universe who have had any
+            # appearances. This could fail, in which case we bail with a cute
+            # error message.
+            q = Character.query.filter_by(universe=u)
+            chars = q.filter(Character.comics.any()).all()
+            if not chars:
+                flash("No characters have been introduced yet. Patience, "
+                    "grasshopper.")
+                return redirect(url_for("universe", u=u))
+            char = choice(chars)
+        else:
+            char = Character.query.filter_by(universe=u, slug=char).first()
+            if not char:
+                flash("That character doesn't exist. I'm sorry, but we don't "
+                    "have fanfiction-based characters in the story.")
+                return redirect(url_for("universe", u=u))
+            elif not char.comics:
+                flash("That character has not made an appearance yet. We "
+                    "know how popular they are, though, so be prepared for "
+                    "their debut!")
+                return redirect(url_for("universe", u=u))
+
+    q = get_comic_query(u)
+    if char:
+        q = q.filter(Comic.characters.contains(char))
+    comic = q.order_by(Comic.id.desc()).first()
+
+    if not comic:
+        # We probably shouldn't have been able to get here, in general. This
+        # could happen if there are no comics in this universe yet. However,
+        # it could possibly happen if there is some bug in the above
+        # character-sorting logic. Be aware of this when debugging this code
+        # later. :3
+        flash("No comics could be found. Something went wrong, perhaps?")
+        return redirect(url_for("index"))
+
+    if char:
+        return redirect(url_for("comics", u=u, cid=comic.id, char=char.slug))
+    else:
+        return redirect(url_for("comics", u=u, cid=comic.id))
 
 @app.route("/<universe:u>/comics/<int:cid>")
 def comics(u, cid):
@@ -117,6 +159,17 @@ def comics(u, cid):
         comic = get_comic_query(u).filter_by(id=cid).one()
     except NoResultFound:
         abort(404)
+
+    char = request.args.get("char", None)
+    if char is not None:
+        char = Character.query.filter_by(universe=u, slug=char).first()
+        if char is None:
+            flash("That character doesn't exist, and typing them into the "
+                "URL doesn't magically spring them into the comic. Sorry.")
+        elif char not in comic.characters:
+            flash("That character isn't in this particular comic, and won't "
+                "be, no matter how hard you wish. Sorry.")
+            char = None
 
     comics = get_neighbors_for(u, comic)
 
