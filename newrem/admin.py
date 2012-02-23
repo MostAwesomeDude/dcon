@@ -4,10 +4,10 @@ from flask import (Blueprint, flash, redirect, render_template, request,
     url_for)
 
 from newrem.files import save_file
-from newrem.forms import (CharacterCreateForm, CharacterDeleteForm,
-    CharacterModifyForm, NewsForm, PortraitCreateForm,
-    PortraitModifyForm, UniverseCreateForm, UniverseModifyForm,
-    UniverseDeleteForm, UploadForm)
+from newrem.forms import (CreateCharacterForm, DeleteCharacterForm,
+    ModifyCharacterForm, NewsForm, CreatePortraitForm,
+    ModifyPortraitForm, CreateUniverseForm, ModifyUniverseForm,
+    DeleteUniverseForm, UploadForm)
 from newrem.models import (db, Board, Character, Comic, Newspost, Portrait,
     Thread, Universe)
 from newrem.security import Authenticator
@@ -50,20 +50,20 @@ admin = AdminBlueprint("admin", __name__, static_folder="static",
 
 @admin.route("/")
 def index():
-    form = UniverseCreateForm()
+    form = CreateUniverseForm()
     universes = Universe.query.order_by(Universe.title)
 
     return render_template("admin.html", form=form, universes=universes)
 
 @admin.route("/<universe:u>/")
 def universe(u):
-    form = UniverseModifyForm()
+    form = ModifyUniverseForm()
 
     return render_template("admin-universe.html", form=form, u=u)
 
 @admin.route("/universe/create", methods=("POST",))
 def universe_create():
-    form = UniverseCreateForm()
+    form = CreateUniverseForm()
 
     if form.validate_on_submit():
         universe = Universe(form.name.data)
@@ -79,7 +79,7 @@ def universe_create():
 
 @admin.route("/<universe:u>/modify", methods=("POST",))
 def universe_modify(u):
-    form = UniverseModifyForm()
+    form = ModifyUniverseForm()
 
     if form.validate_on_submit():
         old = u.title
@@ -93,7 +93,7 @@ def universe_modify(u):
 
 @admin.route("/<universe:u>/delete", methods=("GET", "POST"))
 def universe_delete(u):
-    form = UniverseDeleteForm()
+    form = DeleteUniverseForm()
 
     if form.validate_on_submit():
         if form.verify.data:
@@ -110,16 +110,16 @@ def universe_delete(u):
 @admin.route("/<universe:u>/characters")
 def characters(u):
     characters = Character.query.order_by(Character.name)
-    form = CharacterCreateForm()
+    form = CreateCharacterForm()
 
     return render_template("characters.html", form=form, u=u,
         characters=characters)
 
 @admin.route("/<universe:u>/characters/<character:c>")
 def character(u, c):
-    mform = CharacterModifyForm(prefix="modify", name=c.name,
+    mform = ModifyCharacterForm(prefix="modify", name=c.name,
         description=c.description)
-    dform = CharacterDeleteForm(prefix="delete")
+    dform = DeleteCharacterForm(prefix="delete")
 
     # Character needs to be bound to a session.
     db.session.add(c)
@@ -129,7 +129,7 @@ def character(u, c):
 
 @admin.route("/<universe:u>/characters/create", methods=("POST",))
 def characters_create(u):
-    form = CharacterCreateForm()
+    form = CreateCharacterForm()
 
     if form.validate_on_submit():
         character = Character(u, form.name.data)
@@ -150,7 +150,7 @@ def characters_create(u):
 @admin.route("/<universe:u>/characters/<character:c>/modify",
     methods=("POST",))
 def characters_modify(u, c):
-    form = CharacterModifyForm(prefix="modify")
+    form = ModifyCharacterForm(prefix="modify")
 
     if form.validate_on_submit():
         # Which modifications do we want to make?
@@ -184,7 +184,7 @@ def characters_modify(u, c):
 @admin.route("/<universe:u>/characters/<character:c>/delete",
     methods=("POST",))
 def characters_delete(u, c):
-    form = CharacterDeleteForm(prefix="delete")
+    form = DeleteCharacterForm(prefix="delete")
 
     if form.validate_on_submit():
         db.session.delete(c)
@@ -198,14 +198,14 @@ def characters_delete(u, c):
 
 @admin.route("/portraits")
 def portraits():
-    cform = PortraitCreateForm(prefix="create")
-    mform = PortraitModifyForm(prefix="modify")
+    cform = CreatePortraitForm(prefix="create")
+    mform = ModifyPortraitForm(prefix="modify")
 
     return render_template("portraits.html", cform=cform, mform=mform)
 
 @admin.route("/portraits/create", methods=("POST",))
 def portraits_create():
-    form = PortraitCreateForm(prefix="create")
+    form = CreatePortraitForm(prefix="create")
 
     if form.validate_on_submit():
         portrait = Portrait(form.name.data)
@@ -222,7 +222,7 @@ def portraits_create():
 
 @admin.route("/portraits/modify", methods=("POST",))
 def portraits_modify():
-    form = PortraitModifyForm(prefix="modify")
+    form = ModifyPortraitForm(prefix="modify")
 
     if form.validate_on_submit():
         portrait = form.portraits.data

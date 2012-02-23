@@ -59,15 +59,15 @@ class FormBase(Form):
 
         return " ".join(pieces)
 
-class UniverseCreateForm(FormBase):
+class CreateUniverseForm(FormBase):
     name = TextField(u"New name", validators=(Required(),))
     submit = SubmitField("Create!")
 
-class UniverseModifyForm(FormBase):
+class ModifyUniverseForm(FormBase):
     name = TextField(u"New name", validators=(Required(),))
     submit = SubmitField("Modify!")
 
-class UniverseDeleteForm(FormBase):
+class DeleteUniverseForm(FormBase):
     verify = BooleanField(u"""Really delete this universe? Deletion will
         destroy all comics, characters, and other data associated with this
         universe. It cannot be undone. Seriously. It can't. We've tried. This
@@ -75,27 +75,27 @@ class UniverseDeleteForm(FormBase):
         still sure, check this box.""")
     submit = SubmitField("Delete!")
 
-class CharacterCreateForm(FormBase):
+class CreateCharacterForm(FormBase):
     name = TextField(u"New name", validators=(Required(),))
     description = TextAreaField("Description")
     portrait = portrait
     submit = SubmitField("Create!")
 
-class CharacterModifyForm(FormBase):
+class ModifyCharacterForm(FormBase):
     name = TextField(u"New name")
     description = TextAreaField("Description")
     portrait = portrait
     submit = SubmitField("Modify!")
 
-class CharacterDeleteForm(FormBase):
+class DeleteCharacterForm(FormBase):
     submit = SubmitField("Delete!")
 
-class PortraitCreateForm(FormBase):
+class CreatePortraitForm(FormBase):
     name = TextField(u"New name", validators=(Required(),))
     portrait = portrait
     submit = SubmitField("Create!")
 
-class PortraitModifyForm(FormBase):
+class ModifyPortraitForm(FormBase):
     portraits = QuerySelectField(u"Portraits",
         query_factory=lambda: Portrait.query.order_by(Portrait.name),
         get_label="name")
