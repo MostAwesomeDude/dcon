@@ -1,16 +1,27 @@
 @import "mixins";
 
 $aquamarine: hsl(160, 100%, 75%);
-$gainsboro: hsl(0, 0%, 86%);
+$royalblue: hsl(225, 73%, 57%);
 $springgreen: hsl(150, 100%, 50%);
 
 .comic {
-    @include classy-div($gainsboro, 25px);
+    @include classy-div($royalblue, 25px);
 
     text-align: center;
     padding: 10px;
 
     margin-bottom: 50px;
+
+    /* Put a nice border around comics, since they tend to be
+     * borderless/white-bordered and that doesn't work well with the eyes on
+     * its own. */
+    img {
+        border: {
+            color: black;
+            width: 5px;
+            style: solid;
+        }
+    }
 }
 
 .cast {
