@@ -5,6 +5,8 @@ from random import choice
 
 from sqlalchemy.orm.exc import NoResultFound
 
+from jinja2.exceptions import TemplateNotFound
+
 from flask import (Flask, abort, flash, redirect, render_template, request,
     url_for)
 from flaskext.login import current_user
@@ -97,15 +99,32 @@ def universe(u):
 
     comics = get_neighbors_for(u, comic)
 
-    return render_template("universe/index.html", u=u, comic=comic,
-        comics=comics)
+    context = {
+        "u": u,
+        "comic": comic,
+        "comics": comics,
+    }
+
+    try:
+        return render_template("universe/%s/index.html" % u.slug, **context)
+    except TemplateNotFound:
+        return render_template("universe/index.html", **context)
 
 @app.route("/<universe:u>/cast")
 def cast(u):
     # Re-add the universe to the session so that we can query it.
     db.session.add(u)
     characters = sorted(u.characters, key=attrgetter("name"))
-    return render_template("universe/cast.html", u=u, characters=characters)
+
+    context = {
+        "u": u,
+        "characters": characters,
+    }
+
+    try:
+        return render_template("universe/%s/cast.html" % u.slug, **context)
+    except TemplateNotFound:
+        return render_template("universe/cast.html", **context)
 
 @app.route("/<universe:u>/comics/recent")
 def recent(u):
@@ -189,7 +208,7 @@ def comics(u, cid):
 
         cdict[character.slug] = character, previous, next
 
-    kwargs = {
+    context = {
         "u": u,
         "comic": comic,
         "comics": comics,
@@ -198,7 +217,10 @@ def comics(u, cid):
         "ocform": CommentForm(),
     }
 
-    return render_template("universe/comics.html", **kwargs)
+    try:
+        return render_template("universe/%s/comics.html" % u.slug, **context)
+    except TemplateNotFound:
+        return render_template("universe/comics.html", **context)
 
 @app.route("/<universe:u>/comics/<int:cid>/comment", methods=("POST",))
 def comment(u, cid):
