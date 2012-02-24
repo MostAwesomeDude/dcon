@@ -13,19 +13,3 @@
         <link rel="next" href="{{ url_for("comics", cid=after.id) }}">
     {% endif %}
 {% endblock %}
-
-{% block header %}
-    <a href="{{ url_for("users.register") }}" class="left">
-    </a>
-    <div class="banner">
-        <a href="{{ url_for("recent", u=u, char="shine-m-orunitia") }}" class="button1"></a>
-        <a href="{{ url_for("recent", u=u, char="shaedo-orunitia") }}" class="button2"></a>
-        <a href="{{ url_for("recent", u=u, char="alex-t-spiegal") }}" class="button3"></a>
-        <a href="{{ url_for("recent", u=u, char="heather-arika") }}" class="button4"></a>
-        <a href="{{ url_for("recent", u=u, char="mika-mala") }}" class="button5"></a>
-        <a href="{{ url_for("recent", u=u, char="cid") }}" class="button6"></a>
-        <a href="{{ url_for("recent", u=u, char="anything-goes") }}" class="button7"></a>
-    </div>
-    <a href="{{ url_for("users.login", next=request.path) }}" class="right">
-    </a>
-{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "universe/flavor-text/base.html" %}
+{% import "macros.html" as macros %}
+{% import "oc/macros.html" as ocmacros %}
+
+{% block title %}{{ super() }} - {{ comic.title }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet"
+        href="{{ url_for("static", filename="oc.css") }}" />
+{% endblock %}
+
+{% block header %}
+    {{ super() }}
+    <div class="links"></div>
+    <div class="login"></div>
+{% endblock %}
+
+{% block content %}
+    {{ macros.render_comic(u, comic, comics) }}
+    {% if chrono[0] %}
+        <a href="{{ url_for("comics", u=u, cid=chrono[0].id) }}">
+            Chrono Previous
+        </a>
+    {% endif %}
+    {% if chrono[1] %}
+        <a href="{{ url_for("comics", u=u, cid=chrono[1].id) }}">
+            Chrono Next
+        </a>
+    {% endif %}
+    {% for character, t in characters.items() %}
+        {% if t[1] %}
+            <a href="{{ url_for("comics", u=u, cid=t[1].id) }}">
+                {{ t[0].name }} Previous
+            </a>
+        {% endif %}
+        {% if t[2] %}
+            <a href="{{ url_for("comics", u=u, cid=t[2].id) }}">
+                {{ t[0].name }} Next
+            </a>
+        {% endif %}
+    {% endfor %}
+    <div class="shareables"></div>
+    <div id="discussion">
+        {% if not current_user.is_anonymous() %}
+            {{ ocmacros.render_form(ocform, url_for("comment", u=u, cid=comic.id), "co") }}
+        {% endif %}
+        {{ render_posts(comic.thread) }}
+    </div>
+    <div class="money"></div>
+{% endblock %}
+
+{% macro render_posts(thread) %}
+    <section id="threads">
+        {% for post in thread.posts %}
+        <article>
+            <header>
+                {{ post.author }} <time>{{ post.timestamp }}</time> No. {{ post.id }} <br />
+            </header>
+            <section>
+                {% if post.file %}
+                    <img src="{{ url_for("static", filename=post.file) }}" />
+                {% endif %}
+                {{ post.comment|eblogify|safe }}
+            </section>
+        </article>
+        <br />
+        {% endfor %}
+    </section>
+{% endmacro %}

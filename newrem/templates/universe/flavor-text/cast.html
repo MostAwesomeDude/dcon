@@ -1,0 +1,19 @@
+{% extends "universe/flavor-text/base.html" %}
+
+{% block title %}{{ u.title }} - Cast{% endblock %}
+
+{% block content %}
+    {% for character in characters %}
+        <div class="cast {{ loop.cycle("cast-odd", "cast-even") }}">
+            <img src="{{ url_for("static", filename=character.url()) }}" />
+            <h2>{{ character.name }}</h2>
+            <p>
+                {% if character.description %}
+                    {{ character.description }}
+                {% else %}
+                    &lt;No data on record&gt;
+                {% endif %}
+            </p>
+        </div>
+    {% endfor %}
+{% endblock %}
