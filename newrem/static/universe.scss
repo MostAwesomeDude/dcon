@@ -1,0 +1,49 @@
+@import "mixins";
+
+$aquamarine: hsl(160, 100%, 75%);
+$gainsboro: hsl(0, 0%, 86%);
+$springgreen: hsl(150, 100%, 50%);
+
+.comic {
+    @include classy-div($gainsboro, 25px);
+
+    text-align: center;
+    padding: 10px;
+
+    margin-bottom: 50px;
+}
+
+.cast {
+    @include corners(10px);
+
+    margin: 1em;
+    /* It's possible that the floated images inside each of the cast <div>s
+     * will be the tallest thing in the <div>, which can cause them to flow
+     * outside the <div>. To counter this, we force a reflow of the <div>
+     * using the overflow property. As a precaution against certain broken
+     * browser renderers, we also set the width property; it could be unset or
+     * modified if necessary later and doesn't need to be set to "auto". */
+    overflow: auto;
+    width: auto;
+}
+
+.cast-even {
+    @include shaded-border($aquamarine);
+
+    img {
+        float: left;
+    }
+}
+
+.cast-odd {
+    @include shaded-border($springgreen);
+
+    img {
+        float: right;
+    }
+}
+
+.form {
+    margin: 1em;
+    border: 1px black solid;
+}

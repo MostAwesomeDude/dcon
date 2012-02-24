@@ -192,39 +192,5 @@ p {
   .information div.cast {
     font-size: x-small; }
 
-.cast {
-  border-radius: 10px;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  margin: 1em;
-  /* It's possible that the floated images inside each of the cast <div>s
-   * will be the tallest thing in the <div>, which can cause them to flow
-   * outside the <div>. To counter this, we force a reflow of the <div>
-   * using the overflow property. As a precaution against certain broken
-   * browser renderers, we also set the width property; it could be unset or
-   * modified if necessary later and doesn't need to be set to "auto". */
-  overflow: auto;
-  width: auto; }
-
-.cast-even {
-  border-color: #80ffd4;
-  border-style: solid;
-  border-width: 2px;
-  background-color: #cffced; }
-  .cast-even img {
-    float: left; }
-
-.cast-odd {
-  border-color: #00ff80;
-  border-style: solid;
-  border-width: 2px;
-  background-color: #cffce6; }
-  .cast-odd img {
-    float: right; }
-
 span.quote {
   color: #00ff00; }
-
-.form {
-  margin: 1em;
-  border: 1px black solid; }

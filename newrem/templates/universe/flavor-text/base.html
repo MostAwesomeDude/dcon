@@ -3,15 +3,9 @@
 {% block title %}{{ u.title }}{% endblock %}
 
 {% block head %}
+    {{ super() }}
     <link rel="stylesheet" type="text/css"
-        href="{{ url_for("static", filename="main.css") }}">
-    <link rel="alternate" type="application/rss+xml"
-        href="{{ url_for("universe_rss", u=u) }}">
-    {% if after %}
-        <!-- For Serialist and other indexers, as well as for readers and
-             prefetchers, mark the next page in the sequence. -->
-        <link rel="next" href="{{ url_for("comics", cid=after.id) }}">
-    {% endif %}
+        href="{{ url_for("static", filename="flavor-text/main.css") }}">
 {% endblock %}
 
 {% block header %}
