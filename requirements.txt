@@ -1,4 +1,5 @@
 Flask-Login
+Flask-SQLAlchemy
 Flask-Uploads
 Flask-WTF
 Flask>=0.7
