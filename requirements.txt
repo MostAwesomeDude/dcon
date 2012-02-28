@@ -1,6 +1,8 @@
-Flask>=0.7
 Flask-Login
 Flask-Uploads
 Flask-WTF
+Flask>=0.7
+PIL
 PyRSS2Gen>=1.0
 Twisted>=10.0
+Unidecode
