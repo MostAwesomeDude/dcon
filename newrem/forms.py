@@ -3,6 +3,7 @@ from datetime import datetime
 from wtforms.ext.dateutil.fields import DateTimeField
 from wtforms.ext.sqlalchemy.fields import (QuerySelectMultipleField,
     QuerySelectField)
+from wtforms.ext.sqlalchemy.orm import model_form
 from wtforms.fields import BooleanField, TextAreaField
 from wtforms.validators import EqualTo, Length, Optional
 
@@ -10,7 +11,7 @@ from flaskext.uploads import IMAGES, UploadSet
 from flaskext.wtf import (Form, FileRequired, Required, FileField,
     PasswordField, RecaptchaField, SubmitField, TextField, ValidationError)
 
-from newrem.models import Character, Comic, Portrait
+from newrem.models import Character, Comic, Newspost, Portrait
 from newrem.util import split_camel_case
 
 class BetterFileAllowed(object):
@@ -113,13 +114,15 @@ class RegisterForm(LoginForm):
     captcha = RecaptchaField()
     submit = SubmitField("Register!")
 
-class NewsForm(FormBase):
-    title = TextField("Title", validators=(Required(),))
-    content = TextAreaField("Content")
+class NewsFormBase(
+    model_form(Newspost, base_class=FormBase, exclude=("portrait_id",))):
     portrait = QuerySelectField(u"Portrait",
         query_factory=lambda: Portrait.query.order_by(Portrait.name),
         get_label="name")
     submit = SubmitField("Post!")
+
+class NewsForm(NewsFormBase):
+    time = None
 
 class UploadForm(FormBase):
 
