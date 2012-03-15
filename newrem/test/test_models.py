@@ -1,6 +1,6 @@
 import unittest
 
-from newrem.models import (Board, Post, Universe)
+from newrem.models import (Board, Newspost, Post, Universe)
 
 class TestPostModel(unittest.TestCase):
 
@@ -22,6 +22,14 @@ class TestUniverseModel(unittest.TestCase):
 
     def setUp(self):
         self.m = Universe("Testing")
+
+    def test_trivial(self):
+        pass
+
+class TestNewspostModel(unittest.TestCase):
+
+    def setUp(self):
+        self.m = Newspost("Title", u"Content")
 
     def test_trivial(self):
         pass
