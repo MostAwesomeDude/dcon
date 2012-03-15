@@ -262,7 +262,8 @@ class Portrait(db.Model):
 
     def fp(self):
         fp = current_app.config["DCON_UPLOAD_PATH"]
-        path = fp.child("portraits").child(self.universe.slug)
+        # XXX should add in self.universe.slug, when that work is completed
+        path = fp.child("portraits")
         return path.child(self.portrait)
 
     def rename(self, name):
