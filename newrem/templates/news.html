@@ -2,5 +2,14 @@
 {% import "macros.html" as macros %}
 
 {% block content %}
+    <ul>
+        {% for post in posts %}
+            <li>
+                <a href="{{ url_for("admin.newsdetail", n=post) }}">
+                    {{ post.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
     {{ macros.render_form(form, url_for("admin.news")) }}
 {% endblock %}

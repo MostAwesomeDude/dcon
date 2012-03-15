@@ -26,6 +26,8 @@ app.url_map.converters["board"] = make_model_converter(app, Board,
     "abbreviation")
 app.url_map.converters["character"] = make_model_converter(app, Character,
     "slug")
+app.url_map.converters["newspost"] = make_model_converter(app, Newspost,
+    "title")
 app.url_map.converters["universe"] = make_model_converter(app, Universe,
     "slug")
 

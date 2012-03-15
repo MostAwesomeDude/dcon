@@ -124,6 +124,9 @@ class NewsFormBase(
 class NewsForm(NewsFormBase):
     time = None
 
+class EditNewsForm(NewsFormBase):
+    submit = SubmitField("Edit!")
+
 class UploadForm(FormBase):
 
     file = FileField("Select a file to upload",

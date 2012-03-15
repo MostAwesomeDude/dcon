@@ -5,7 +5,7 @@ from flask import (Blueprint, flash, redirect, render_template, request,
 
 from newrem.files import save_file
 from newrem.forms import (CreateCharacterForm, DeleteCharacterForm,
-    ModifyCharacterForm, NewsForm, CreatePortraitForm,
+    ModifyCharacterForm, NewsForm, EditNewsForm, CreatePortraitForm,
     ModifyPortraitForm, CreateUniverseForm, ModifyUniverseForm,
     DeleteUniverseForm, UploadForm)
 from newrem.models import (db, Board, Character, Comic, Newspost, Portrait,
@@ -248,9 +248,33 @@ def news():
         post.portrait = form.portrait.data
         db.session.add(post)
         db.session.commit()
+        flash("Successfully posted the news!")
         return redirect(url_for("index"))
 
-    return render_template("news.html", form=form)
+    posts = Newspost.query.order_by(Newspost.time).all()
+    return render_template("news.html", form=form, posts=posts)
+
+@admin.route("/news/<newspost:n>", methods=("GET", "POST"))
+def newsdetail(n):
+    db.session.add(n)
+
+    form = EditNewsForm()
+
+    if form.validate_on_submit():
+        n.time = form.time.data
+        n.title = form.title.data
+        n.content = form.content.data
+        n.portrait = form.portrait.data
+        db.session.add(n)
+        db.session.commit()
+        flash("Successfully edited the news!")
+        return redirect(url_for("index"))
+
+    form.time.data = n.time
+    form.title.data = n.title
+    form.content.data = n.content
+    form.portrait.data = n.portrait
+    return render_template("newsdetail.html", form=form, n=n)
 
 @admin.route("/<universe:u>/upload", methods=("GET", "POST"))
 def upload(u):
