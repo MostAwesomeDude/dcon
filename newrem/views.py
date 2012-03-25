@@ -259,12 +259,12 @@ def comment(u, cid):
 @app.route("/rss.xml")
 @cached
 def rss():
-    comics = Comic.query.order_by(Comic.id.desc())[:10]
-    stuff = {}
+    comics = Comic.query.order_by(Comic.time.desc())[:10]
+    stuff = []
     for comic in comics:
         url = url_for("comics", _external=True, u=comic.universe,
             cid=comic.id)
-        stuff[url] = comic
+        stuff.append((url, comic))
 
     link = url_for("index", _external=True)
 
@@ -273,12 +273,12 @@ def rss():
 @app.route("/<universe:u>/rss.xml")
 @cached
 def universe_rss(u):
-    q = Comic.query.filter(Comic.universe == u).order_by(Comic.id.desc())
+    q = Comic.query.filter(Comic.universe == u).order_by(Comic.time.desc())
     comics = q[:10]
-    stuff = {}
+    stuff = []
     for comic in comics:
         url = url_for("comics", _external=True, u=u, cid=comic.id)
-        stuff[url] = comic
+        stuff.append((url, comic))
 
     link = url_for("universe", _external=True, u=u)
 
