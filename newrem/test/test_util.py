@@ -35,6 +35,11 @@ class TestSlugify(unittest.TestCase):
         e = "flavor-text"
         self.assertEqual(e, slugify(s))
 
+    def test_patch_notes(self):
+        s = "6/17/12 Patch Notes"
+        e = "6-17-12-patch-notes"
+        self.assertEqual(e, slugify(s))
+
 class TestSplitCamelCase(unittest.TestCase):
 
     def test_single(self):
