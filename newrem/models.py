@@ -7,8 +7,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask import current_app
 
-from flaskext.login import LoginManager, make_secure_token
-from flaskext.sqlalchemy import SQLAlchemy
+from flask.ext.login import LoginManager, make_secure_token
+from flask.ext.sqlalchemy import SQLAlchemy
 
 from newrem.util import slugify
 

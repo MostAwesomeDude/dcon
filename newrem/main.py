@@ -2,7 +2,7 @@ import os
 
 from twisted.python.filepath import FilePath
 
-from flaskext.uploads import configure_uploads, patch_request_class
+from flask.ext.uploads import configure_uploads, patch_request_class
 
 from newrem.admin import admin
 from newrem.chan import osuchan

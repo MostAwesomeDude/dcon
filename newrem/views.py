@@ -9,7 +9,7 @@ from jinja2.exceptions import TemplateNotFound
 
 from flask import (Flask, abort, flash, redirect, render_template, request,
     url_for)
-from flaskext.login import current_user
+from flask.ext.login import current_user
 
 from newrem.converters import make_model_converter
 from newrem.decorators import cached

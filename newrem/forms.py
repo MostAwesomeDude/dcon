@@ -7,8 +7,8 @@ from wtforms.ext.sqlalchemy.orm import model_form
 from wtforms.fields import BooleanField, TextAreaField
 from wtforms.validators import EqualTo, Length, Optional
 
-from flaskext.uploads import IMAGES, UploadSet
-from flaskext.wtf import (Form, FileRequired, Required, FileField,
+from flask.ext.uploads import IMAGES, UploadSet
+from flask.ext.wtf import (Form, FileRequired, Required, FileField,
     PasswordField, RecaptchaField, SubmitField, TextField, ValidationError)
 
 from newrem.models import Character, Comic, Newspost, Portrait
