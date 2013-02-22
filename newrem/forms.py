@@ -115,7 +115,7 @@ class RegisterForm(LoginForm):
     submit = SubmitField("Register!")
 
 class NewsFormBase(
-    model_form(Newspost, base_class=FormBase, exclude=("portrait_id",))):
+    model_form(Newspost, base_class=FormBase, exclude=["portrait"])):
     portrait = QuerySelectField(u"Portrait",
         query_factory=lambda: Portrait.query.order_by(Portrait.name),
         get_label="name")
