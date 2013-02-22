@@ -3,7 +3,9 @@
      # content of the button. #}
     {# Hack: Don't show HiddenField labels, and hide them with undisplayable
      # divs. #}
-    {% set hide_label = field.type in ("HiddenField", "SubmitField") %}
+    {# Hack: Ditto for CSRFs, which have their own dedicated type. #}
+    {% set hide_label =
+        field.type in ("CSRFTokenField", "HiddenField", "SubmitField") %}
     <tr>
         {% if not hide_label %}
             <td>
