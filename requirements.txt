@@ -8,3 +8,4 @@ PyMeta>=0.5
 PyRSS2Gen>=1.0
 Twisted>=10.0
 Unidecode
+python-dateutil
