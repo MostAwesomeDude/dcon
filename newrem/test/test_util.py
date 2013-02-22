@@ -17,26 +17,27 @@ class TestAbbreviate(unittest.TestCase):
 class TestSlugify(unittest.TestCase):
 
     def test_noop(self):
-        s = "noop"
-        self.assertEqual(s, slugify(s))
+        s = u"noop"
+        e = "noop"
+        self.assertEqual(e, slugify(s))
 
     def test_lower(self):
-        s = "Lower"
+        s = u"Lower"
         e = "lower"
         self.assertEqual(e, slugify(s))
 
     def test_space(self):
-        s = "spheres in space"
+        s = u"spheres in space"
         e = "spheres-in-space"
         self.assertEqual(e, slugify(s))
 
     def test_flavor_text(self):
-        s = "Flavor Text"
+        s = u"Flavor Text"
         e = "flavor-text"
         self.assertEqual(e, slugify(s))
 
     def test_patch_notes(self):
-        s = "6/17/12 Patch Notes"
+        s = u"6/17/12 Patch Notes"
         e = "6-17-12-patch-notes"
         self.assertEqual(e, slugify(s))
 

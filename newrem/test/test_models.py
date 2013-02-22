@@ -21,7 +21,7 @@ class TestBoardModel(unittest.TestCase):
 class TestUniverseModel(unittest.TestCase):
 
     def setUp(self):
-        self.m = Universe("Testing")
+        self.m = Universe(u"Testing")
 
     def test_trivial(self):
         pass

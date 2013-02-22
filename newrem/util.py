@@ -53,7 +53,7 @@ def slugify(s):
     l = []
     for word in punctuation.split(s):
         l.extend(unidecode(word).split())
-    return "-".join(word.strip().lower() for word in l)
+    return u"-".join(word.strip().lower() for word in l).encode("ascii")
 
 def split_camel_case(s):
     """
