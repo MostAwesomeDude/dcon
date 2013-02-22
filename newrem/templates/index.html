@@ -18,7 +18,7 @@
     {% endif %}
     <div class="newsfeed">
         {% for post in newsposts %}
-            {% set portrait = post.portrait.portrait %}
+            {% set portrait = "portraits/%s" % post.portrait.portrait %}
             <div class="newsentry">
                 <h3>{{ post.title }}</h3>
                 <div class="portrait">
