@@ -1,59 +1,49 @@
-from pymeta.grammar import OMeta
+from parsley import makeGrammar
 
 blog_grammar = """
+crlf = '\r' '\n' -> "<br />"
+doublecrlf = crlf crlf -> "</p><p>"
+not_crlf = ~crlf anything
+crlfs = doublecrlf | crlf
 
-crlf ::= '\r' '\n' => "<br />"
+single_star = '*' ~'*'
+double_star = '*' '*'
 
-doublecrlf ::= <crlf> <crlf> => "</p><p>"
+bold = double_star (~double_star nested_decos)+:b double_star
+    -> "<b>%s</b>" % "".join(b)
 
-not_crlf ::= ~<crlf> <anything>
+italics = single_star (~single_star nested_decos)+:i single_star
+    -> "<i>%s</i>" % "".join(i)
 
-single_star ::= '*' ~'*'
+underline = '_' (~'_' nested_decos)+:u '_' -> "<u>%s</u>" % "".join(u)
 
-double_star ::= '*' '*'
+greentext = crlfs:head '>' nested_decos+:body crlfs:tail
+         -> '%s<span class="quote">&gt;%s</span>%s' % (head, "".join(body), tail)
 
-bold ::= <double_star> (~<double_star> <nested_decos>)+:b <double_star>
-    => "<b>%s</b>" % "".join(b)
+decorations = bold | italics | underline
 
-italics ::= <single_star> (~<single_star> <nested_decos>)+:i <single_star>
-    => "<i>%s</i>" % "".join(i)
+nested_decos = decorations | not_crlf
 
-underline ::= '_' (~'_' <nested_decos>)+:u '_' => "<u>%s</u>" % "".join(u)
+entities = greentext | crlfs | decorations
 
-crlfs ::= <doublecrlf> | <crlf>
-
-greentext ::= <crlfs>:head '>' <nested_decos>+:body <crlfs>:tail
-            => '%s<span class="quote">&gt;%s</span>%s' % (head, "".join(body), tail)
-
-decorations ::= <bold> | <italics> | <underline>
-
-nested_decos ::= <decorations> | <not_crlf>
-
-entities ::= <greentext> | <crlfs> | <decorations>
-
-paragraphs ::= (<entities> | <anything>)*:l => "<p>%s</p>" % "".join(l)
-
+paragraphs = (entities | anything)*:l -> "<p>%s</p>" % "".join(l)
 """
 
 html_grammar = """
+less_than = '<' -> "&lt;"
 
-less_than ::= '<' => "&lt;"
+greater_than = '>' -> "&gt;"
 
-greater_than ::= '>' => "&gt;"
+ampersand = '&' -> "&amp;"
 
-ampersand ::= '&' => "&amp;"
+apostrophe = '\\'' -> "&apos;"
 
-apostrophe ::= '\'' => "&apos;"
+quote = '"' -> "&quot;"
 
-quote ::= '"' => "&quot;"
+safe_entities = less_than | greater_than | ampersand | apostrophe | quote
 
-safe_entities ::= <less_than> | <greater_than> | <ampersand> | <apostrophe>
-                | <quote>
-
-safe_paragraphs ::= (<safe_entities> | <entities> | <anything>)*:l
-    => "<p>%s</p>" % "".join(l)
-
+safe_paragraphs = (safe_entities | entities | anything)*:l
+               -> "<p>%s</p>" % "".join(l)
 """
 
-class BlogGrammar(OMeta.makeGrammar(blog_grammar + html_grammar, globals())):
-    pass
+BlogGrammar = makeGrammar(blog_grammar + html_grammar, {})

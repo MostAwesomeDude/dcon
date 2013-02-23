@@ -37,7 +37,7 @@ def blogify(s):
     Run a string through a grammar to prettify it somewhat.
     """
 
-    return BlogGrammar(s).apply("paragraphs")[0]
+    return BlogGrammar(s).paragraphs()
 
 @app.template_filter()
 def eblogify(s):
@@ -45,7 +45,7 @@ def eblogify(s):
     Like ``blogify``, but also apply HTML escapes. For untrusted input.
     """
 
-    return BlogGrammar(s).apply("safe_paragraphs")[0]
+    return BlogGrammar(s).safe_paragraphs()
 
 def get_comic_query(universe):
     """

@@ -4,7 +4,7 @@ Flask-Uploads
 Flask-WTF
 Flask>=0.7
 PIL
-PyMeta>=0.5
+Parsley
 PyRSS2Gen>=1.0
 Twisted>=10.0
 Unidecode
