@@ -47,7 +47,7 @@ class TestBlogGrammar(TestCase):
             "<u>a<i>sd</i>f</u>")
 
     def test_quote(self):
-        self.assertEqual(BlogGrammar("\r\n>mfw\r\n").apply("quote")[0],
+        self.assertEqual(BlogGrammar("\r\n>mfw\r\n").apply("greentext")[0],
             '<br /><span class="quote">&gt;mfw</span><br />')
 
     def test_paragraphs_empty(self):
@@ -86,6 +86,11 @@ class TestBlogGrammarSafety(TestCase):
         text = "<br />"
         self.assertEqual(BlogGrammar(text).apply("safe_paragraphs")[0],
             "<p>&lt;br /&gt;</p>")
+
+    def test_quotes(self):
+        text = "\"\""
+        self.assertEqual(BlogGrammar(text).apply("safe_paragraphs")[0],
+            "<p>&quot;&quot;</p>")
 
     def test_reddit_xss_sword(self):
         text = """;!--"<XSS>=&{()}"""
