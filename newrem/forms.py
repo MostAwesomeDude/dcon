@@ -60,13 +60,26 @@ class FormBase(Form):
 
         return " ".join(pieces)
 
-class CreateUniverseForm(FormBase):
-    name = TextField(u"New name", validators=(Required(),))
-    submit = SubmitField("Create!")
+def makeCU(form):
+    """
+    Make create and update forms for a given form base.
 
-class ModifyUniverseForm(FormBase):
+    Works by attaching submission buttons with the appropriate labels to the
+    forms.
+    """
+
+    class Create(form):
+        submit = SubmitField("Create!")
+
+    class Modify(form):
+        submit = SubmitField("Modify!")
+
+    return Create, Modify
+
+class UniverseBase(FormBase):
     name = TextField(u"New name", validators=(Required(),))
-    submit = SubmitField("Modify!")
+
+CreateUniverseForm, ModifyUniverseForm = makeCU(UniverseBase)
 
 class DeleteUniverseForm(FormBase):
     verify = BooleanField(u"""Really delete this universe? Deletion will
