@@ -89,17 +89,13 @@ class DeleteUniverseForm(FormBase):
         still sure, check this box.""")
     submit = SubmitField("Delete!")
 
-class CreateCharacterForm(FormBase):
+class CharacterBase(FormBase):
     name = TextField(u"New name", validators=(Required(),))
     description = TextAreaField("Description")
     portrait = portrait
     submit = SubmitField("Create!")
 
-class ModifyCharacterForm(FormBase):
-    name = TextField(u"New name")
-    description = TextAreaField("Description")
-    portrait = portrait
-    submit = SubmitField("Modify!")
+CreateCharacterForm, ModifyCharacterForm = makeCU(CharacterBase)
 
 class DeleteCharacterForm(FormBase):
     submit = SubmitField("Delete!")
