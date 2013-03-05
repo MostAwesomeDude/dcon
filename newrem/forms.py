@@ -145,7 +145,7 @@ class UploadForm(FormBase):
     description = TextAreaField("Alternate Text")
     comment = TextAreaField("Commentary")
     index = QuerySelectField(u"Which comic should come before this one?",
-        query_factory=lambda: Comic.query.order_by(Comic.position),
+        query_factory=None,
         get_label=lambda comic:
             u"%d: %s, %d" % (comic.position, comic.title, comic.id),
         validators=(Optional(),))
