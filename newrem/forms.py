@@ -153,7 +153,7 @@ class UploadForm(FormBase):
     characters = QuerySelectMultipleField(u"Characters",
         query_factory=lambda: Character.query.order_by(Character.name),
         get_label="name")
-    time = DateTimeField("Activation time", default=datetime.now())
+    time = DateTimeField("Activation time", default=datetime.now)
     submit = SubmitField("Upload!")
 
     def __init__(self, universe, *args, **kwargs):
