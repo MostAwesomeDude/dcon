@@ -1,0 +1,13 @@
+{% extends "base-admin.html" %}
+{% import "macros.html" as macros %}
+
+{% block content %}
+    <ul>
+        {% for comic in comics %}
+        <li> {# <a href="{{ url_for("admin.character", u=u, c=character) }}">
+            #}
+                {{ comic.name }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

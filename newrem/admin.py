@@ -276,8 +276,14 @@ def newsdetail(n):
     form.portrait.data = n.portrait
     return render_template("newsdetail.html", form=form, n=n)
 
-@admin.route("/<universe:u>/upload", methods=("GET", "POST"))
-def upload(u):
+@admin.route("/<universe:u>/comics", methods=("GET", "POST"))
+def comics(u):
+    q = Comic.query.filter_by(universe=u)
+    comics = q.order_by(Comic.position)
+    return render_template("admin-comics.html", u=u, comics=comics)
+
+@admin.route("/<universe:u>/comics/create", methods=("GET", "POST"))
+def comics_create(u):
     form = CreateComicForm(u)
 
     if form.validate_on_submit():
