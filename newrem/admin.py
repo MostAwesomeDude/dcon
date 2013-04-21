@@ -7,7 +7,7 @@ from newrem.files import save_file
 from newrem.forms import (CreateCharacterForm, DeleteCharacterForm,
     ModifyCharacterForm, NewsForm, EditNewsForm, CreatePortraitForm,
     ModifyPortraitForm, CreateUniverseForm, ModifyUniverseForm,
-    DeleteUniverseForm, UploadForm)
+    DeleteUniverseForm, CreateComicForm, ModifyComicForm)
 from newrem.models import (db, Board, Character, Comic, Newspost, Portrait,
     Thread, Universe)
 from newrem.security import Authenticator
@@ -278,7 +278,7 @@ def newsdetail(n):
 
 @admin.route("/<universe:u>/upload", methods=("GET", "POST"))
 def upload(u):
-    form = UploadForm(u)
+    form = CreateComicForm(u)
 
     if form.validate_on_submit():
         db.session.add(u)

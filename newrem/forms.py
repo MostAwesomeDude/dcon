@@ -136,8 +136,7 @@ class NewsForm(NewsFormBase):
 class EditNewsForm(NewsFormBase):
     submit = SubmitField("Edit!")
 
-class UploadForm(FormBase):
-
+class ComicFormBase(FormBase):
     file = FileField("Select a file to upload",
         validators=(FileRequired("Must upload a comic!"),
             BetterFileAllowed(images, "Images only!")))
@@ -154,14 +153,15 @@ class UploadForm(FormBase):
         query_factory=lambda: Character.query.order_by(Character.name),
         get_label="name")
     time = DateTimeField("Activation time", default=datetime.now)
-    submit = SubmitField("Upload!")
 
     def __init__(self, universe, *args, **kwargs):
-        super(UploadForm, self).__init__(*args, **kwargs)
+        super(ComicFormBase, self).__init__(*args, **kwargs)
         def qf():
             q = Comic.query.filter_by(universe=universe)
             return q.order_by(Comic.position)
         self.index.query_factory = qf
+
+CreateComicForm, ModifyComicForm = makeCU(ComicFormBase)
 
 class CommentForm(FormBase):
     anonymous = BooleanField("Post anonymously?")
