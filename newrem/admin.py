@@ -1,7 +1,9 @@
 from werkzeug import secure_filename
 
-from flask import (Blueprint, flash, redirect, render_template, request,
-    url_for)
+from flask import (Blueprint, abort, flash, redirect, render_template,
+                   request, url_for)
+
+from sqlalchemy.orm.exc import NoResultFound
 
 from newrem.files import save_file
 from newrem.forms import (CreateCharacterForm, DeleteCharacterForm,
@@ -315,3 +317,54 @@ def comics_create(u):
         return redirect(url_for("comics", u=u, cid=comic.id))
 
     return render_template("upload.html", form=form, u=u)
+
+@admin.route("/<universe:u>/comics/<int:cid>/modify", methods=("GET", "POST"))
+def comics_modify(u, cid):
+    try:
+        comic = Comic.query.filter_by(id=cid).one()
+    except NoResultFound:
+        abort(404)
+
+    form = ModifyComicForm(u)
+
+    if form.validate_on_submit():
+        db.session.add(u)
+
+        # Attempt to set the new filename, and then verify it.
+        if form.file:
+            comic.filename = secure_filename(form.file.file.filename)
+
+        try:
+            comic.verify_fp()
+        except Exception, e:
+            flash("Couldn't alter comic: %s" % ", ".join(e.args))
+            return render_template("upload-modify.html", form=form, u=u,
+                    cid=cid)
+
+        comic.characters = form.characters.data
+        comic.title = form.title.data
+        comic.description = form.description.data
+        comic.comment = form.comment.data
+
+        if form.time.data:
+            comic.time = form.time.data
+
+        # XXX comic.insert(form.index.data, form.after.data)
+
+        db.session.add(comic)
+        db.session.commit()
+
+        # Only write a new image down if requested.
+        if form.file:
+            save_file(comic.fp(), form.file.file)
+
+        return redirect(url_for("comics", u=u, cid=comic.id))
+
+    # Populate the form.
+    form.characters.data = comic.characters
+    form.title.data = comic.title
+    form.description.data = comic.description
+    form.comment.data = comic.comment
+    form.time.data = comic.time
+
+    return render_template("upload-modify.html", form=form, u=u, c=comic)

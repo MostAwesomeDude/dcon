@@ -4,10 +4,11 @@
 {% block content %}
     <ul>
         {% for comic in comics %}
-        <li> {# <a href="{{ url_for("admin.character", u=u, c=character) }}">
-            #}
-                {{ comic.name }}
-            </li>
+        <li>
+            <a href="{{ url_for("admin.comics_modify", u=u, cid=comic.id) }}">
+                {{ comic.id }}: {{ comic.title }} ({{ comic.filename }})
+            </a>
+        </li>
         {% endfor %}
     </ul>
 {% endblock %}
