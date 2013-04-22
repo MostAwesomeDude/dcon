@@ -191,8 +191,7 @@ class Comic(db.Model):
 
         # Check at comic creation. Flat-out refuse to create this comic if
         # the space for it isn't there.
-        if self.fp().exists():
-            raise Exception("File already exists!")
+        self.verify_fp()
 
     def __repr__(self):
         return "<Comic(%r) in %r>" % (self.filename, self.universe)
@@ -201,6 +200,14 @@ class Comic(db.Model):
         fp = current_app.config["DCON_UPLOAD_PATH"]
         path = fp.child("comics").child(self.universe.slug)
         return path.child(self.filename)
+
+    def verify_fp(self):
+        """
+        Assert that this comic will not destroy any pre-existing comic.
+        """
+
+        if self.fp().exists():
+            raise Exception("File already exists!")
 
     def url(self):
         return os.path.join("comics", self.universe.slug, self.filename)
