@@ -138,8 +138,7 @@ class EditNewsForm(NewsFormBase):
 
 class ComicFormBase(FormBase):
     file = FileField("Select a file to upload",
-        validators=(FileRequired("Must upload a comic!"),
-            BetterFileAllowed(images, "Images only!")))
+        validators=(BetterFileAllowed(images, "Images only!"),))
     title = TextField("Title", validators=(Required(), Length(max=80)))
     description = TextAreaField("Alternate Text")
     comment = TextAreaField("Commentary")
