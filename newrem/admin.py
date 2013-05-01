@@ -291,6 +291,20 @@ def comics_create(u):
     form.file.validators += (FileRequired("Must upload a comic!"),)
 
     if form.validate_on_submit():
+        # Hold it! We need to check that the insert position is correct by
+        # looking up the comic that we're gonna use for insert().
+        position = form.index.data
+        try:
+            if position == -1:
+                reference = Comic.query.filter_by(position=0).one()
+                before = True
+            else:
+                reference = Comic.query.filter_by(id=position).one()
+                before = False
+        except Exception, e:
+            flash("Couldn't position comic: %s" % ", ".join(e.args))
+            return render_template("upload.html", form=form, u=u)
+
         db.session.add(u)
         filename = secure_filename(form.file.file.filename)
 
@@ -309,7 +323,7 @@ def comics_create(u):
         if form.time.data:
             comic.time = form.time.data
 
-        comic.insert(form.index.data, form.after.data)
+        comic.insert(reference, before)
 
         db.session.add(comic)
         db.session.commit()
@@ -350,7 +364,23 @@ def comics_modify(u, cid):
         if form.time.data:
             comic.time = form.time.data
 
-        # XXX comic.insert(form.index.data, form.after.data)
+        # Hold it! We need to check that the insert position is correct by
+        # looking up the comic that we're gonna use for insert().
+        index = form.index.data
+        print "Index %d" % index
+        try:
+            if index == -1:
+                reference = Comic.query.order_by(Comic.position).first()
+                before = True
+            else:
+                reference = Comic.query.filter_by(id=index).one()
+                before = False
+        except Exception, e:
+            flash("Couldn't position comic: %s" % ", ".join(e.args))
+            return render_template("upload.html", form=form, u=u)
+
+        if reference.id != comic.id:
+            comic.insert(reference, before)
 
         db.session.add(comic)
         db.session.commit()
@@ -367,5 +397,6 @@ def comics_modify(u, cid):
     form.description.data = comic.description
     form.comment.data = comic.comment
     form.time.data = comic.time
+    form.index.data = comic.id
 
     return render_template("upload-modify.html", form=form, u=u, cid=cid)

@@ -162,12 +162,8 @@ class ComicFormBase(FormBase):
     title = TextField("Title", validators=(Required(), Length(max=80)))
     description = TextAreaField("Alternate Text")
     comment = TextAreaField("Commentary")
-    index = QuerySelectField(u"Which comic should come before this one?",
-        query_factory=None,
-        get_label=lambda comic:
-            u"%d: %s, %d" % (comic.position, comic.title, comic.id),
-        validators=(Optional(),))
-    after = BooleanField("(After, not before)")
+    index = SelectField(u"Where should this comic be placed?",
+                        coerce=int)
     characters = QuerySelectMultipleField(u"Characters",
         query_factory=lambda: Character.query.order_by(Character.name),
         get_label="name")
@@ -175,10 +171,10 @@ class ComicFormBase(FormBase):
 
     def __init__(self, universe, *args, **kwargs):
         super(ComicFormBase, self).__init__(*args, **kwargs)
-        def qf():
-            q = Comic.query.filter_by(universe=universe)
-            return q.order_by(Comic.position)
-        self.index.query_factory = qf
+
+        q = Comic.query.filter_by(universe=universe)
+        comics = q.order_by(Comic.position).all()
+        self.index.choices = select_list_for_comics(comics)
 
 CreateComicForm, ModifyComicForm = makeCU(ComicFormBase)
 
