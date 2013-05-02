@@ -285,6 +285,19 @@ def comics(u):
     comics = q.order_by(Comic.position)
     return render_template("admin-comics.html", u=u, comics=comics)
 
+def find_reference(index):
+    """
+    Look up the insertion comic and boolean for an index.
+    """
+
+    if index == -1:
+        reference = Comic.query.order_by(Comic.position).first()
+        before = True
+    else:
+        reference = Comic.query.filter_by(id=index).one()
+        before = False
+    return reference, before
+
 @admin.route("/<universe:u>/comics/create", methods=("GET", "POST"))
 def comics_create(u):
     form = CreateComicForm(u)
@@ -295,12 +308,7 @@ def comics_create(u):
         # looking up the comic that we're gonna use for insert().
         position = form.index.data
         try:
-            if position == -1:
-                reference = Comic.query.filter_by(position=0).one()
-                before = True
-            else:
-                reference = Comic.query.filter_by(id=position).one()
-                before = False
+            reference, before = find_reference(form.index.data)
         except Exception, e:
             flash("Couldn't position comic: %s" % ", ".join(e.args))
             return render_template("upload.html", form=form, u=u)
@@ -366,15 +374,8 @@ def comics_modify(u, cid):
 
         # Hold it! We need to check that the insert position is correct by
         # looking up the comic that we're gonna use for insert().
-        index = form.index.data
-        print "Index %d" % index
         try:
-            if index == -1:
-                reference = Comic.query.order_by(Comic.position).first()
-                before = True
-            else:
-                reference = Comic.query.filter_by(id=index).one()
-                before = False
+            reference, before = find_reference(form.index.data)
         except Exception, e:
             flash("Couldn't position comic: %s" % ", ".join(e.args))
             return render_template("upload.html", form=form, u=u)
