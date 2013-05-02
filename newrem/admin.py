@@ -285,16 +285,17 @@ def comics(u):
     comics = q.order_by(Comic.position)
     return render_template("admin-comics.html", u=u, comics=comics)
 
-def find_reference(index):
+def find_reference(universe, index):
     """
     Look up the insertion comic and boolean for an index.
     """
 
     if index == -1:
-        reference = Comic.query.order_by(Comic.position).first()
+        q = Comic.query.filter_by(universe=universe).order_by(Comic.position)
+        reference = q.first()
         before = True
     else:
-        reference = Comic.query.filter_by(id=index).one()
+        reference = Comic.query.filter_by(universe=universe, id=index).one()
         before = False
     return reference, before
 
@@ -306,9 +307,8 @@ def comics_create(u):
     if form.validate_on_submit():
         # Hold it! We need to check that the insert position is correct by
         # looking up the comic that we're gonna use for insert().
-        position = form.index.data
         try:
-            reference, before = find_reference(form.index.data)
+            reference, before = find_reference(u, form.index.data)
         except Exception, e:
             flash("Couldn't position comic: %s" % ", ".join(e.args))
             return render_template("upload.html", form=form, u=u)
@@ -375,7 +375,7 @@ def comics_modify(u, cid):
         # Hold it! We need to check that the insert position is correct by
         # looking up the comic that we're gonna use for insert().
         try:
-            reference, before = find_reference(form.index.data)
+            reference, before = find_reference(u, form.index.data)
         except Exception, e:
             flash("Couldn't position comic: %s" % ", ".join(e.args))
             return render_template("upload.html", form=form, u=u)
