@@ -58,7 +58,7 @@
                 {{ post.author }} <time>{{ post.timestamp }}</time> No. {{ post.id }} <br />
             </header>
             <section>
-                {% if post.file %}
+                {% if post.filename %}
                     <img src="{{ post.url() }}" />
                 {% endif %}
                 {{ post.comment|eblogify|safe }}
