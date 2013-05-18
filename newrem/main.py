@@ -7,7 +7,7 @@ from flask.ext.uploads import configure_uploads, patch_request_class
 from newrem.admin import admin
 from newrem.chan import osuchan
 from newrem.comics import comics
-from newrem.forms import images, pngs
+from newrem.forms import images
 from newrem.models import db, lm
 from newrem.users import users
 from newrem.views import app
@@ -33,7 +33,7 @@ app.config["SQLALCHEMY_ECHO"] = True
 app.config["SECRET_KEY"] = "just a test!"
 app.config["UPLOADS_DEFAULT_DEST"] = app.config["DCON_UPLOAD_PATH"].path
 
-configure_uploads(app, (images, pngs))
+configure_uploads(app, (images,))
 patch_request_class(app)
 
 db.init_app(app)
