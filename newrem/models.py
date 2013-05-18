@@ -21,6 +21,18 @@ casts = db.Table("casts", db.metadata,
 )
 
 
+class FilenameMixin(object):
+    """
+    A mixin to provide some file access based on segments.
+    """
+
+    def fp(self):
+        return extend_fp(fp_root(current_app), self.segments())
+
+    def url(self):
+        return extend_url(url_root(current_app), self.segments())
+
+
 class Wordfilter(db.Model):
     __tablename__ = "badwords"
 
@@ -117,7 +129,7 @@ class Universe(db.Model):
         self.slug = slugify(title)
 
 
-class Character(db.Model):
+class Character(db.Model, FilenameMixin):
     """
     A character.
     """
@@ -145,12 +157,6 @@ class Character(db.Model):
     def segments(self):
         return ["characters", self.universe.slug, self.portrait]
 
-    def fp(self):
-        return extend_fp(fp_root(current_app), self.segments())
-
-    def url(self):
-        return extend_url(url_root(current_app), self.segments())
-
     def rename(self, name):
         self.name = name
         fp = self.fp()
@@ -160,7 +166,7 @@ class Character(db.Model):
             fp.moveTo(self.fp())
 
 
-class Comic(db.Model):
+class Comic(db.Model, FilenameMixin):
     """
     A comic.
     """
@@ -209,12 +215,6 @@ class Comic(db.Model):
     def segments(self):
         return ["comics", self.universe.slug, self.filename]
 
-    def fp(self):
-        return extend_fp(fp_root(current_app), self.segments())
-
-    def url(self):
-        return extend_url(url_root(current_app), self.segments())
-
     def verify_fp(self):
         """
         Assert that this comic will not destroy any pre-existing comic.
@@ -262,7 +262,7 @@ class Comic(db.Model):
         db.session.add(self)
 
 
-class Portrait(db.Model):
+class Portrait(db.Model, FilenameMixin):
 
     __tablename__ = "portraits"
 
@@ -283,12 +283,6 @@ class Portrait(db.Model):
         # XXX When Portraits are Universe-sensitive, the Universe slug should
         # be part of the segments here.
         return ["portraits", self.portrait]
-
-    def fp(self):
-        return extend_fp(fp_root(current_app), self.segments())
-
-    def url(self):
-        return extend_url(url_root(current_app), self.segments())
 
     def rename(self, name):
         self.name = name
