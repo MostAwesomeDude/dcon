@@ -18,11 +18,10 @@
     {% endif %}
     <div class="newsfeed">
         {% for post in newsposts %}
-            {% set portrait = "portraits/%s" % post.portrait.portrait %}
             <div class="newsentry">
                 <h3>{{ post.title }}</h3>
                 <div class="portrait">
-                    <img src="{{ url_for("static", filename=portrait) }}" />
+                    <img src="{{ post.portrait.url() }}" />
                 </div>
                 {{ post.content|blogify|safe|urlize }}
             </div>

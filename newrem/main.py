@@ -20,6 +20,9 @@ wd = FilePath(wd)
 
 app.debug = True
 
+# This default should be sufficient to limp along for starters.
+app.config["DCON_STATIC_URL"] = "/static/"
+
 app.config["DCON_PATH"] = wd
 app.config["DCON_PASSWORD_FILE"] = wd.child("passwords.dcon")
 app.config["DCON_UPLOAD_PATH"] = wd.child("uploads")

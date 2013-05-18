@@ -71,8 +71,7 @@
         {% endif %}
     </div>
     <div class="comic">
-        <img src="{{ url_for("static", filename=comic.url()) }}"
-            title="{{ comic.description }}" />
+        <img src="{{ comic.url() }}" title="{{ comic.description }}" />
         <div class="information">
             <h1>{{ comic.title }}</h1>
             {% if comic.characters %}

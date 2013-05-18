@@ -3,7 +3,7 @@
 
 {% block content %}
     <h3>{{ c.name }}</h3>
-    <img src="{{ url_for("static", filename=c.url()) }}" />
+    <img src="{{ c.url() }}" />
     {{ macros.render_form(mform,
         url_for("admin.characters_modify", u=u, c=c)) }}
     {{ macros.render_form(dform,
