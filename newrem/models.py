@@ -76,7 +76,7 @@ class Thread(db.Model):
         self.author = author
 
 
-class Post(db.Model):
+class Post(db.Model, FilenameMixin):
     __tablename__ = "post"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -90,22 +90,16 @@ class Post(db.Model):
     thread = db.relationship(Thread, backref="posts", single_parent=True,
                              cascade="all, delete, delete-orphan")
 
-    def __init__(self, author, comment, email, file):
+    def __init__(self, author, comment, email, filename):
         self.comment = comment
         self.author = author
         self.email = email
-        self.file = file
+        self.filename = filename
 
         self.timestamp = datetime.now()
 
-
-class File(db.Model):
-    __tablename__ = "file"
-
-    postid = db.Column(db.Integer, db.ForeignKey(Post.id))
-    filename = db.Column(db.String(50), primary_key=True)
-
-    post = db.relationship(Post, backref="file", uselist=False)
+    def segments(self):
+        return ["comments", self.filename]
 
 
 class Universe(db.Model):
