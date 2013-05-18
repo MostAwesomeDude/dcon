@@ -1,5 +1,4 @@
 from datetime import datetime
-import os
 
 from PIL import Image
 
@@ -10,6 +9,7 @@ from flask import current_app
 from flask.ext.login import LoginManager, make_secure_token
 from flask.ext.sqlalchemy import SQLAlchemy
 
+from newrem.files import extend_fp, extend_url, fp_root, url_root
 from newrem.util import slugify
 
 db = SQLAlchemy()
@@ -134,13 +134,14 @@ class Character(db.Model):
     def portrait(self):
         return "%s.png" % self.slug
 
+    def segments(self):
+        return ["characters", self.universe.slug, self.portrait]
+
     def fp(self):
-        fp = current_app.config["DCON_UPLOAD_PATH"]
-        path = fp.child("characters").child(self.universe.slug)
-        return path.child(self.portrait)
+        return extend_fp(fp_root(current_app), self.segments())
 
     def url(self):
-        return os.path.join("characters", self.universe.slug, self.portrait)
+        return extend_url(url_root(current_app), self.segments())
 
     def rename(self, name):
         self.name = name
@@ -196,10 +197,14 @@ class Comic(db.Model):
     def __repr__(self):
         return "<Comic(%r) in %r>" % (self.filename, self.universe)
 
+    def segments(self):
+        return ["comics", self.universe.slug, self.filename]
+
     def fp(self):
-        fp = current_app.config["DCON_UPLOAD_PATH"]
-        path = fp.child("comics").child(self.universe.slug)
-        return path.child(self.filename)
+        return extend_fp(fp_root(current_app), self.segments())
+
+    def url(self):
+        return extend_url(url_root(current_app), self.segments())
 
     def verify_fp(self):
         """
@@ -208,9 +213,6 @@ class Comic(db.Model):
 
         if self.fp().exists():
             raise Exception("File already exists!")
-
-    def url(self):
-        return os.path.join("comics", self.universe.slug, self.filename)
 
     def insert(self, prior, after=False):
         """
@@ -267,11 +269,16 @@ class Portrait(db.Model):
     def portrait(self):
         return "%s.png" % self.slug
 
+    def segments(self):
+        # XXX When Portraits are Universe-sensitive, the Universe slug should
+        # be part of the segments here.
+        return ["portraits", self.portrait]
+
     def fp(self):
-        fp = current_app.config["DCON_UPLOAD_PATH"]
-        # XXX should add in self.universe.slug, when that work is completed
-        path = fp.child("portraits")
-        return path.child(self.portrait)
+        return extend_fp(fp_root(current_app), self.segments())
+
+    def url(self):
+        return extend_url(url_root(current_app), self.segments())
 
     def rename(self, name):
         self.name = name
