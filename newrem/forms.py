@@ -33,10 +33,9 @@ class BetterFileAllowed(object):
             raise ValidationError(self.message)
 
 images = UploadSet("images", IMAGES)
-pngs = UploadSet("pngs", ("png",))
 
 portrait = FileField("Select a portrait",
-    validators=(BetterFileAllowed(pngs, "PNGs only!"),))
+    validators=(BetterFileAllowed(images, "Images only!"),))
 
 class FormBase(Form):
     """
