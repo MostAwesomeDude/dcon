@@ -20,16 +20,19 @@ casts = db.Table("casts", db.metadata,
     db.Column("comic_id", db.Integer, db.ForeignKey("comics.id"))
 )
 
+
 class Wordfilter(db.Model):
     __tablename__ = "badwords"
 
     name = db.Column(db.Unicode(30), primary_key=True)
     replacement = db.Column(db.Unicode(30))
 
+
 class Category(db.Model):
     __tablename__ = "boardcategory"
 
     title = db.Column(db.Unicode(30), primary_key=True)
+
 
 class Board(db.Model):
     __tablename__ = "board"
@@ -43,6 +46,7 @@ class Board(db.Model):
     def __init__(self, abbreviation, name):
         self.abbreviation = abbreviation
         self.name = name
+
 
 class Thread(db.Model):
     __tablename__ = "thread"
@@ -59,6 +63,7 @@ class Thread(db.Model):
         self.subject = subject
         self.author = author
 
+
 class Post(db.Model):
     __tablename__ = "post"
 
@@ -66,12 +71,12 @@ class Post(db.Model):
     author = db.Column(db.Unicode(30), nullable=False)
     threadid = db.Column(db.Integer, db.ForeignKey(Thread.id), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
-    comment = db.Column(db.UnicodeText(1024*1024))
+    comment = db.Column(db.UnicodeText(1024 * 1024))
     email = db.Column(db.String(30))
     filename = db.Column(db.String(50))
 
     thread = db.relationship(Thread, backref="posts", single_parent=True,
-        cascade="all, delete, delete-orphan")
+                             cascade="all, delete, delete-orphan")
 
     def __init__(self, author, comment, email, file):
         self.comment = comment
@@ -81,6 +86,7 @@ class Post(db.Model):
 
         self.timestamp = datetime.now()
 
+
 class File(db.Model):
     __tablename__ = "file"
 
@@ -88,6 +94,7 @@ class File(db.Model):
     filename = db.Column(db.String(50), primary_key=True)
 
     post = db.relationship(Post, backref="file", uselist=False)
+
 
 class Universe(db.Model):
 
@@ -109,6 +116,7 @@ class Universe(db.Model):
         self.title = title
         self.slug = slugify(title)
 
+
 class Character(db.Model):
     """
     A character.
@@ -118,9 +126,9 @@ class Character(db.Model):
 
     slug = db.Column(db.String(45), primary_key=True)
     name = db.Column(db.Unicode(40))
-    description = db.Column(db.UnicodeText(1024*1024))
+    description = db.Column(db.UnicodeText(1024 * 1024))
     universe_fk = db.Column(db.String(85), db.ForeignKey(Universe.slug),
-        nullable=False)
+                            nullable=False)
     universe = db.relationship(Universe, backref="characters")
 
     def __init__(self, universe, name):
@@ -151,6 +159,7 @@ class Character(db.Model):
         if fp.exists():
             fp.moveTo(self.fp())
 
+
 class Comic(db.Model):
     """
     A comic.
@@ -169,14 +178,14 @@ class Comic(db.Model):
     # Title of the comic.
     title = db.Column(db.Unicode(80), nullable=False)
     # Description/alt text.
-    description = db.Column(db.UnicodeText(1024*1024))
+    description = db.Column(db.UnicodeText(1024 * 1024))
     # Commentary.
-    comment = db.Column(db.UnicodeText(1024*1024))
+    comment = db.Column(db.UnicodeText(1024 * 1024))
     # The discussion thread.
     threadid = db.Column(db.Integer, db.ForeignKey(Thread.id))
     # The universe in which this comic occurs.
     universe_fk = db.Column(db.String(85), db.ForeignKey(Universe.slug),
-        nullable=False)
+                            nullable=False)
 
     # List of characters in this comic.
     characters = db.relationship(Character, secondary=casts, backref="comics")
@@ -252,6 +261,7 @@ class Comic(db.Model):
         self.position = position
         db.session.add(self)
 
+
 class Portrait(db.Model):
 
     __tablename__ = "portraits"
@@ -293,17 +303,18 @@ class Portrait(db.Model):
         image.thumbnail((250, 250), Image.ANTIALIAS)
         image.save(self.fp().path)
 
+
 class Newspost(db.Model):
 
     __tablename__ = "newsposts"
 
     time = db.Column(db.DateTime, primary_key=True)
     title = db.Column(db.Unicode(80), nullable=False)
-    content = db.Column(db.UnicodeText(1024*1024))
+    content = db.Column(db.UnicodeText(1024 * 1024))
 
     # Reference to the attached portrait.
     portrait_id = db.Column(db.String(45), db.ForeignKey(Portrait.slug),
-        nullable=False)
+                            nullable=False)
     portrait = db.relationship(Portrait, backref="newsposts")
 
     def __init__(self, title, content=u""):
@@ -311,12 +322,13 @@ class Newspost(db.Model):
         self.title = title
         self.content = content
 
+
 class User(db.Model):
 
     __tablename__ = "users"
 
     username = db.Column(db.Unicode(30), primary_key=True, unique=True,
-        nullable=False)
+                         nullable=False)
     password = db.Column(db.String(60))
     logged_in = db.Column(db.Boolean, default=False)
 
@@ -354,6 +366,7 @@ class User(db.Model):
 
     def get_auth_token(self):
         return make_secure_token(self.username, self.password)
+
 
 @lm.user_loader
 def user_loader(username):
