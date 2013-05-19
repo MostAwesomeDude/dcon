@@ -25,7 +25,7 @@ class TestNewspostConverter(TestCase):
         dt = datetime(2012, 12, 21)
         news = Newspost("Test")
         news.time = dt
-        expected = "1356076800"
+        expected = "1356048000"
         self.assertEqual(self.converter.to_url(news), expected)
 
     def test_apocalypse_to_python(self):
@@ -35,7 +35,7 @@ class TestNewspostConverter(TestCase):
         # Hax: PID is needed by DB.
         news.portrait_id = 0
 
-        fragment = "1356076800"
+        fragment = "1356048000"
 
         with self.app.test_request_context():
             db.session.add(news)

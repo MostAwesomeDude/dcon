@@ -1,7 +1,7 @@
 from __future__ import with_statement
 
 from datetime import datetime
-from time import mktime
+from calendar import timegm
 
 from werkzeug.routing import BaseConverter, ValidationError
 
@@ -9,11 +9,11 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.types import DateTime
 
 freezers = {
-    DateTime: lambda dt: str(int(mktime(dt.timetuple()))),
+    DateTime: lambda dt: str(int(timegm(dt.utctimetuple()))),
 }
 
 thawers = {
-    DateTime: lambda s: datetime.fromtimestamp(float(s)),
+    DateTime: lambda s: datetime.utcfromtimestamp(float(s)),
 }
 
 class ModelConverter(BaseConverter):
