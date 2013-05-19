@@ -13,6 +13,7 @@ from flask.ext.login import current_user
 
 from newrem.converters import make_model_converter
 from newrem.decorators import cached
+from newrem.files import save_file
 from newrem.forms import CommentForm
 from newrem.grammars import BlogGrammar
 from newrem.models import (db, Board, Character, Comic, Newspost, Post,
@@ -242,14 +243,13 @@ def comment(u, cid):
         else:
             name = current_user.username
 
-        post = Post(name, form.comment.data, "", [None])
+        post = Post(name, form.comment.data, "", None)
         post.thread = comic.thread
 
         image = form.datafile.file
         if image:
-            post.file = os.path.join("comments", chan_filename(image))
-            filename = os.path.abspath(os.path.join("uploads", post.file))
-            image.save(filename)
+            post.filename = chan_filename(image)
+            save_file(post.fp(), image)
 
         db.session.add(post)
         db.session.commit()
