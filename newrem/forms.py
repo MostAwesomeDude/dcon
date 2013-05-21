@@ -136,7 +136,7 @@ class EditNewsForm(NewsFormBase):
     submit = SubmitField("Edit!")
 
 def label_for_comic(comic):
-    return u"%s (%d)" % (comic.title, comic.position)
+    return u'"%s" (%d)' % (comic.title, comic.position)
 
 def select_option_for_comics(first, second):
     first_label = label_for_comic(first)
