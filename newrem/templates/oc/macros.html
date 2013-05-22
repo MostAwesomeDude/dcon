@@ -1,32 +1,4 @@
-{% macro render_field(field) %}
-    {# Hack: Don't show SubmitField labels, since they merely repeat the
-     # content of the button. #}
-    {# Hack: Don't show HiddenField labels, and hide them with undisplayable
-     # divs. #}
-    {% set hide_label = field.type in ("HiddenField", "SubmitField") %}
-    <tr>
-        {% if not hide_label %}
-            <td>
-                {{ field.label }}
-            </td>
-        {% endif %}
-        <td {% if hide_label %}colspan="2"{% endif %} >
-            {# Hack: Textareas should have extra params for display. #}
-            {% if field.type == "TextAreaField" %}
-                {{ field(wrap="soft", rows="4", cols="48")|safe }}
-            {% else %}
-                {{ field()|safe }}
-            {% endif %}
-            {% if field.errors %}
-                <ul class="errors">
-                {% for error in field.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-        </td>
-    </tr>
-{% endmacro %}
+{% import "macros.html" as macros %}
 
 {% macro render_form(form, url, board) %}
     <section id="compose">
@@ -35,7 +7,7 @@
             <table>
                 <input type="hidden" name="board" value="{{ board }}" />
                 {% for field in form %}
-                    {{ render_field(field) }}
+                    {{ macros.render_field(field) }}
                 {% endfor %}
             </table>
         </form>
