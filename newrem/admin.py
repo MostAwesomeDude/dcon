@@ -157,9 +157,10 @@ def characters_modify(u, c):
 
     if form.validate_on_submit():
         # Which modifications do we want to make?
+        db.session.add(c)
+
         if form.name.data and form.name.data != c.name:
             c.rename(form.name.data)
-            db.session.add(c)
             flash("Successfully renamed character %s!" % c.name)
 
         if form.portrait.file:
@@ -174,7 +175,6 @@ def characters_modify(u, c):
                 c.description = form.description.data
             else:
                 c.description = None
-            db.session.add(c)
             flash("Successfully changed description for character %s!" %
                 c.name)
 
