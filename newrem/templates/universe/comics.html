@@ -10,12 +10,6 @@
         href="{{ url_for("static", filename="oc.css") }}" />
 {% endblock %}
 
-{% block header %}
-    {{ super() }}
-    <div class="links"></div>
-    <div class="login"></div>
-{% endblock %}
-
 {% block content %}
     {{ macros.render_comic(u, comic, comics) }}
     {% if chrono[0] %}
