@@ -1,4 +1,5 @@
 from datetime import datetime
+from functools import partial
 
 from PIL import Image
 
@@ -15,9 +16,14 @@ from newrem.util import slugify
 db = SQLAlchemy()
 lm = LoginManager()
 
+# ON UPDATE CASCADE.
+FK = partial(db.ForeignKey, onupdate="cascade")
+# Oh, wait, that doesn't work on SQLite or MySQL. Plan B!
+relationship = partial(db.relationship, passive_updates=False)
+
 casts = db.Table("casts", db.metadata,
-    db.Column("character_id", db.String(45), db.ForeignKey("characters.slug")),
-    db.Column("comic_id", db.Integer, db.ForeignKey("comics.id"))
+    db.Column("character_id", db.String(45), FK("characters.slug")),
+    db.Column("comic_id", db.Integer, FK("comics.id"))
 )
 
 
@@ -51,9 +57,9 @@ class Board(db.Model):
 
     name = db.Column(db.Unicode(30))
     abbreviation = db.Column(db.String(5), primary_key=True)
-    category_fk = db.Column(db.Unicode(30), db.ForeignKey(Category.title))
+    category_fk = db.Column(db.Unicode(30), FK(Category.title))
 
-    category = db.relationship(Category, backref="boards")
+    category = relationship(Category, backref="boards")
 
     def __init__(self, abbreviation, name):
         self.abbreviation = abbreviation
@@ -66,9 +72,9 @@ class Thread(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subject = db.Column(db.Unicode(50))
     author = db.Column(db.Unicode(30))
-    board_fk = db.Column(db.String(5), db.ForeignKey(Board.abbreviation))
+    board_fk = db.Column(db.String(5), FK(Board.abbreviation))
 
-    board = db.relationship(Board, backref="threads")
+    board = relationship(Board, backref="threads")
 
     def __init__(self, board, subject, author):
         self.board = board
@@ -81,14 +87,14 @@ class Post(db.Model, FilenameMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.Unicode(30), nullable=False)
-    threadid = db.Column(db.Integer, db.ForeignKey(Thread.id), nullable=False)
+    threadid = db.Column(db.Integer, FK(Thread.id), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
     comment = db.Column(db.UnicodeText(1024 * 1024))
     email = db.Column(db.String(30))
     filename = db.Column(db.String(50))
 
-    thread = db.relationship(Thread, backref="posts", single_parent=True,
-                             cascade="all, delete, delete-orphan")
+    thread = relationship(Thread, backref="posts", single_parent=True,
+                          cascade="all, delete, delete-orphan")
 
     def __init__(self, author, comment, email, filename):
         self.comment = comment
@@ -108,9 +114,9 @@ class Universe(db.Model):
 
     slug = db.Column(db.String(85), primary_key=True)
     title = db.Column(db.Unicode(80), nullable=False)
-    board_fk = db.Column(db.String(5), db.ForeignKey(Board.abbreviation))
+    board_fk = db.Column(db.String(5), FK(Board.abbreviation))
 
-    board = db.relationship(Board, backref="universe", uselist=False)
+    board = relationship(Board, backref="universe", uselist=False)
 
     def __init__(self, title):
         self.rename(title)
@@ -133,9 +139,8 @@ class Character(db.Model, FilenameMixin):
     slug = db.Column(db.String(45), primary_key=True)
     name = db.Column(db.Unicode(40))
     description = db.Column(db.UnicodeText(1024 * 1024))
-    universe_fk = db.Column(db.String(85), db.ForeignKey(Universe.slug),
-                            nullable=False)
-    universe = db.relationship(Universe, backref="characters")
+    universe_fk = db.Column(db.String(85), FK(Universe.slug), nullable=False)
+    universe = relationship(Universe, backref="characters")
 
     def __init__(self, universe, name):
         self.universe = universe
@@ -182,17 +187,16 @@ class Comic(db.Model, FilenameMixin):
     # Commentary.
     comment = db.Column(db.UnicodeText(1024 * 1024))
     # The discussion thread.
-    threadid = db.Column(db.Integer, db.ForeignKey(Thread.id))
+    threadid = db.Column(db.Integer, FK(Thread.id))
     # The universe in which this comic occurs.
-    universe_fk = db.Column(db.String(85), db.ForeignKey(Universe.slug),
-                            nullable=False)
+    universe_fk = db.Column(db.String(85), FK(Universe.slug), nullable=False)
 
     # List of characters in this comic.
-    characters = db.relationship(Character, secondary=casts, backref="comics")
+    characters = relationship(Character, secondary=casts, backref="comics")
     # The thread which discusses this comic.
-    thread = db.relationship(Thread, backref="comic", uselist=False)
+    thread = relationship(Thread, backref="comic", uselist=False)
     # The universe which owns this comic.
-    universe = db.relationship(Universe, backref="comics")
+    universe = relationship(Universe, backref="comics")
 
     def __init__(self, universe, filename):
         self.universe = universe
@@ -301,9 +305,8 @@ class Newspost(db.Model):
     content = db.Column(db.UnicodeText(1024 * 1024))
 
     # Reference to the attached portrait.
-    portrait_id = db.Column(db.String(45), db.ForeignKey(Portrait.slug),
-                            nullable=False)
-    portrait = db.relationship(Portrait, backref="newsposts")
+    portrait_id = db.Column(db.String(45), FK(Portrait.slug), nullable=False)
+    portrait = relationship(Portrait, backref="newsposts")
 
     def __init__(self, title, content=u""):
         self.time = datetime.utcnow()
