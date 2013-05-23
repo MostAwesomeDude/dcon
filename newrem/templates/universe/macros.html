@@ -1,0 +1,15 @@
+{% macro render_cast(cast) %}
+    {% for character in cast %}
+        <div class="cast {{ loop.cycle("cast-odd", "cast-even") }}">
+            <img src="{{ character.url() }}" />
+            <h2>{{ character.name }}</h2>
+            <p>
+                {% if character.description %}
+                    {{ character.description }}
+                {% else %}
+                    &lt;No data on record&gt;
+                {% endif %}
+            </p>
+        </div>
+    {% endfor %}
+{% endmacro %}
