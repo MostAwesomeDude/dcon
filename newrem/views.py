@@ -93,26 +93,6 @@ def index():
     return render_template("index.html", universes=universes,
         newsposts=newsposts)
 
-@app.route("/<universe:u>/")
-def universe(u):
-    comic = get_comic_query(u).order_by(Comic.id.desc()).first()
-
-    if comic is None:
-        abort(404)
-
-    comics = get_neighbors_for(u, comic)
-
-    context = {
-        "u": u,
-        "comic": comic,
-        "comics": comics,
-    }
-
-    try:
-        return render_template("universe/%s/index.html" % u.slug, **context)
-    except TemplateNotFound:
-        return render_template("universe/index.html", **context)
-
 @app.route("/<universe:u>/cast")
 def cast(u):
     # Re-add the universe to the session so that we can query it.
@@ -129,6 +109,7 @@ def cast(u):
     except TemplateNotFound:
         return render_template("universe/cast.html", **context)
 
+@app.route("/<universe:u>/")
 @app.route("/<universe:u>/comics/recent")
 def recent(u):
     char = request.args.get("char", None)
@@ -142,19 +123,19 @@ def recent(u):
             if not chars:
                 flash("No characters have been introduced yet. Patience, "
                     "grasshopper.")
-                return redirect(url_for("universe", u=u))
+                return redirect(url_for("recent", u=u))
             char = choice(chars)
         else:
             char = Character.query.filter_by(universe=u, slug=char).first()
             if not char:
                 flash("That character doesn't exist. I'm sorry, but we don't "
                     "have fanfiction-based characters in the story.")
-                return redirect(url_for("universe", u=u))
+                return redirect(url_for("recent", u=u))
             elif not char.comics:
                 flash("That character has not made an appearance yet. We "
                     "know how popular they are, though, so be prepared for "
                     "their debut!")
-                return redirect(url_for("universe", u=u))
+                return redirect(url_for("recent", u=u))
 
     q = get_comic_query(u)
     if char:
@@ -280,7 +261,7 @@ def universe_rss(u):
         url = url_for("comics", _external=True, u=u, cid=comic.id)
         stuff.append((url, comic))
 
-    link = url_for("universe", _external=True, u=u)
+    link = url_for("recent", _external=True, u=u)
 
     return make_rss2(link, u.title, stuff)
 
