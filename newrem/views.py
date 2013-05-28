@@ -7,13 +7,15 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from jinja2.exceptions import TemplateNotFound
 
+from twisted.python.filepath import FilePath
+
 from flask import (Flask, abort, flash, redirect, render_template, request,
     url_for)
 from flask.ext.login import current_user
 
 from newrem.converters import make_model_converter
 from newrem.decorators import cached
-from newrem.files import save_file
+from newrem.files import extend_fp, save_file
 from newrem.forms import CommentForm
 from newrem.grammars import BlogGrammar
 from newrem.models import (db, Board, Character, Comic, Newspost, Post,
@@ -93,21 +95,37 @@ def index():
     return render_template("index.html", universes=universes,
         newsposts=newsposts)
 
+
+def universe_context(app, u):
+    root = FilePath(app.root_path)
+    segments = ["static", u.slug, "images", "banners"]
+    fp = extend_fp(root, segments)
+    banners = [p.basename() for p in fp.children()]
+    segments.append(choice(banners))
+    banner = "/".join(segments[1:])
+
+    return {
+        "banner": banner,
+    }
+
+
 @app.route("/<universe:u>/cast")
 def cast(u):
     # Re-add the universe to the session so that we can query it.
     db.session.add(u)
     characters = sorted(u.characters, key=attrgetter("name"))
 
-    context = {
+    context = universe_context(app, u)
+    context.update({
         "u": u,
         "characters": characters,
-    }
+    })
 
     try:
         return render_template("universe/%s/cast.html" % u.slug, **context)
     except TemplateNotFound:
         return render_template("universe/cast.html", **context)
+
 
 @app.route("/<universe:u>/")
 @app.route("/<universe:u>/comics/recent")
@@ -156,6 +174,7 @@ def recent(u):
     else:
         return redirect(url_for("comics", u=u, cid=comic.id))
 
+
 @app.route("/<universe:u>/comics/<int:cid>")
 def comics(u, cid):
     try:
@@ -192,19 +211,21 @@ def comics(u, cid):
 
         cdict[character.slug] = character, previous, next
 
-    context = {
+    context = universe_context(app, u)
+    context.update({
         "u": u,
         "comic": comic,
         "comics": comics,
         "chrono": chrono,
         "characters": cdict,
         "ocform": CommentForm(),
-    }
+    })
 
     try:
         return render_template("universe/%s/comics.html" % u.slug, **context)
     except TemplateNotFound:
         return render_template("universe/comics.html", **context)
+
 
 @app.route("/<universe:u>/comics/<int:cid>/comment", methods=("POST",))
 def comment(u, cid):
