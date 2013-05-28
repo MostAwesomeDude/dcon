@@ -105,6 +105,7 @@ def universe_context(app, u):
     banner = "/".join(segments[1:])
 
     return {
+        "u": u,
         "banner": banner,
     }
 
@@ -117,7 +118,6 @@ def cast(u):
 
     context = universe_context(app, u)
     context.update({
-        "u": u,
         "characters": characters,
     })
 
@@ -213,7 +213,6 @@ def comics(u, cid):
 
     context = universe_context(app, u)
     context.update({
-        "u": u,
         "comic": comic,
         "comics": comics,
         "chrono": chrono,
