@@ -13,7 +13,6 @@
     </a>
     <div class="banner"
         style="background-image: url({{ url_for("static", filename=banner) }})">
-        <!--
         <a href="{{ url_for("recent", u=u, char="shine-m-orunitia") }}" class="button1"></a>
         <a href="{{ url_for("recent", u=u, char="shaedo-orunitia") }}" class="button2"></a>
         <a href="{{ url_for("recent", u=u, char="alex-t-spiegal") }}" class="button3"></a>
@@ -21,7 +20,6 @@
         <a href="{{ url_for("recent", u=u, char="mika-mala") }}" class="button5"></a>
         <a href="{{ url_for("recent", u=u, char="cid") }}" class="button6"></a>
         <a href="{{ url_for("recent", u=u, char="anything-goes") }}" class="button7"></a>
-        -->
     </div>
     <a href="{{ url_for("users.login", next=request.path) }}" class="right">
     </a>
