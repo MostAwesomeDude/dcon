@@ -274,7 +274,7 @@ def rss():
 @app.route("/<universe:u>/rss.xml")
 @cached
 def universe_rss(u):
-    q = Comic.query.filter(Comic.universe == u).order_by(Comic.time.desc())
+    q = get_comic_query(u).order_by(Comic.time.desc())
     comics = q[:10]
     stuff = []
     for comic in comics:
