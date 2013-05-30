@@ -338,7 +338,7 @@ def comics_create(u):
 
         save_file(comic.fp(), form.file.file)
 
-        return redirect(url_for("comics", u=u, cid=comic.id))
+        return redirect(url_for("comics_modify", u=u, cid=comic.id))
 
     return render_template("upload.html", form=form, u=u)
 
