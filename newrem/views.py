@@ -100,9 +100,14 @@ def universe_context(app, u):
     root = FilePath(app.root_path)
     segments = ["static", u.slug, "images", "banners"]
     fp = extend_fp(root, segments)
-    banners = [p.basename() for p in fp.children()]
-    segments.append(choice(banners))
-    banner = "/".join(segments[1:])
+
+    # Get a banner, if one exists.
+    if fp.exists():
+        banners = [p.basename() for p in fp.children()]
+        segments.append(choice(banners))
+        banner = "/".join(segments[1:])
+    else:
+        banner = None
 
     return {
         "u": u,
