@@ -30,9 +30,6 @@ p {
 }
 
 .header {
-    width: 760px;
-    height: 100px;
-    text-align: center;
     .left {
         position: relative;
         left: 0px;
@@ -42,16 +39,6 @@ p {
         display: block;
         float: left;
         background-image: url(images/logo.png);
-    }
-    .banner {
-        position: relative;
-        left: 0px;
-        top: 0px;
-        height: 100px;
-        width: 560px;
-        display: block;
-        float: left;
-        background-image: url(images/banner.png);
     }
     .right {
         position: relative;

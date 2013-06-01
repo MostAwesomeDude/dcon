@@ -2,7 +2,7 @@
   border-radius: 25px;
   -moz-border-radius: 25px;
   -webkit-border-radius: 25px;
-  border-color: #4169e1;
+  border-color: royalblue;
   border-style: solid;
   border-width: 2px;
   background-color: #cfdafc;
@@ -50,3 +50,16 @@
 .form {
   margin: 1em;
   border: 1px black solid; }
+
+.header {
+  width: 760px;
+  height: 100px;
+  text-align: center; }
+  .header .banner {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    height: 100px;
+    width: 560px;
+    display: block;
+    float: left; }

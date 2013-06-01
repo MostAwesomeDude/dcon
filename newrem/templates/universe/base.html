@@ -13,3 +13,11 @@
         <link rel="next" href="{{ url_for("comics", cid=after.id) }}">
     {% endif %}
 {% endblock %}
+
+{% block header %}
+    {% if banner %}
+        <div class="banner"
+             style="background-image: url({{ url_for("static", filename=banner) }})">
+        </div>
+    {% endif %}
+{% endblock %}

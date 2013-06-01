@@ -16,37 +16,24 @@ p {
   text-indent: 2em;
   text-align: justify; }
 
-.header {
-  width: 760px;
+.header .left {
+  position: relative;
+  left: 0px;
+  top: 0px;
   height: 100px;
-  text-align: center; }
-  .header .left {
-    position: relative;
-    left: 0px;
-    top: 0px;
-    height: 100px;
-    width: 100px;
-    display: block;
-    float: left;
-    background-image: url(images/logo.png); }
-  .header .banner {
-    position: relative;
-    left: 0px;
-    top: 0px;
-    height: 100px;
-    width: 560px;
-    display: block;
-    float: left;
-    background-image: url(images/banner.png); }
-  .header .right {
-    position: relative;
-    left: 0px;
-    top: 0px;
-    height: 100px;
-    width: 100px;
-    display: block;
-    float: left;
-    background-image: url(images/login.png); }
+  width: 100px;
+  display: block;
+  float: left;
+  background-image: url(images/logo.png); }
+.header .right {
+  position: relative;
+  left: 0px;
+  top: 0px;
+  height: 100px;
+  width: 100px;
+  display: block;
+  float: left;
+  background-image: url(images/login.png); }
 
 .button1 {
   display: block;

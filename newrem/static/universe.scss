@@ -58,3 +58,18 @@ $springgreen: hsl(150, 100%, 50%);
     margin: 1em;
     border: 1px black solid;
 }
+
+.header {
+    width: 760px;
+    height: 100px;
+    text-align: center;
+    .banner {
+        position: relative;
+        left: 0px;
+        top: 0px;
+        height: 100px;
+        width: 560px;
+        display: block;
+        float: left;
+    }
+}
