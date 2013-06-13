@@ -99,7 +99,7 @@ def make_rss2(url, title, stuff):
     Practically, the stuff is nearly always comics, but it could be anything
     else meeting the polymorphic requirements.
 
-    `url` is a URL. `header` is a title for the feed.  `stuff` is a dictionary
+    `url` is a URL. `title` is a title for the feed.  `stuff` is a dictionary
     of URLs to objects with `title` and `time` attributes.
     """
 
@@ -109,6 +109,6 @@ def make_rss2(url, title, stuff):
             guid=Guid(url), pubDate=obj.time)
         items.append(item)
 
-    rss2 = RSS2(title="RSS", link=url, description=title,
-        lastBuildDate=datetime.utcnow(), items=items)
+    rss2 = RSS2(title=title, link=url, description=title,
+                lastBuildDate=datetime.utcnow(), items=items)
     return rss2.to_xml(encoding="utf8")
