@@ -130,9 +130,10 @@ class NewsFormBase(
     submit = SubmitField("Post!")
 
 class NewsForm(NewsFormBase):
-    time = None
+    pass
 
 class EditNewsForm(NewsFormBase):
+    time = DateTimeField("Post time", default=datetime.now)
     submit = SubmitField("Edit!")
 
 def label_for_comic(comic):
