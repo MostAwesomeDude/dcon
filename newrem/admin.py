@@ -285,6 +285,7 @@ def comics(u):
     comics = q.order_by(Comic.position)
     return render_template("admin-comics.html", u=u, comics=comics)
 
+
 def find_reference(universe, index):
     """
     Look up the insertion comic and boolean for an index.
@@ -299,6 +300,7 @@ def find_reference(universe, index):
         before = False
     return reference, before
 
+
 @admin.route("/<universe:u>/comics/create", methods=("GET", "POST"))
 def comics_create(u):
     form = CreateComicForm(u)
@@ -307,11 +309,12 @@ def comics_create(u):
     if form.validate_on_submit():
         # Hold it! We need to check that the insert position is correct by
         # looking up the comic that we're gonna use for insert().
-        try:
-            reference, before = find_reference(u, form.index.data)
-        except Exception, e:
-            flash("Couldn't position comic: %s" % ", ".join(e.args))
-            return render_template("upload.html", form=form, u=u)
+        if form.index.data != -2:
+            try:
+                reference, before = find_reference(u, form.index.data)
+            except Exception, e:
+                flash("Couldn't position comic: %s" % ", ".join(e.args))
+                return render_template("upload.html", form=form, u=u)
 
         db.session.add(u)
         filename = secure_filename(form.file.file.filename)
@@ -331,7 +334,10 @@ def comics_create(u):
         if form.time.data:
             comic.time = form.time.data
 
-        comic.insert(reference, before)
+        if form.index.data != -2:
+            comic.insert(reference, before)
+        else:
+            comic.position = 0
 
         db.session.add(comic)
         db.session.commit()
@@ -374,13 +380,14 @@ def comics_modify(u, cid):
 
         # Hold it! We need to check that the insert position is correct by
         # looking up the comic that we're gonna use for insert().
-        try:
-            reference, before = find_reference(u, form.index.data)
-        except Exception, e:
-            flash("Couldn't position comic: %s" % ", ".join(e.args))
-            return render_template("upload.html", form=form, u=u)
+        if form.index.data != -2:
+            try:
+                reference, before = find_reference(u, form.index.data)
+            except Exception, e:
+                flash("Couldn't position comic: %s" % ", ".join(e.args))
+                return render_template("upload.html", form=form, u=u)
 
-        if reference.id != comic.id:
+        if reference.id != comic.id and form.index.data != -2:
             comic.insert(reference, before)
 
         db.session.add(comic)

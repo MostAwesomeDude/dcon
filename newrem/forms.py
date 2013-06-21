@@ -154,7 +154,8 @@ def select_list_for_comics(comics):
         l.append((second.id, u"After %s" % label_for_comic(last)))
         return l
     else:
-        return []
+        return [(-2, "<No comics exist yet>")]
+
 
 class ComicFormBase(FormBase):
     file = FileField("Select a file to upload",
@@ -175,6 +176,7 @@ class ComicFormBase(FormBase):
         q = Comic.query.filter_by(universe=universe)
         comics = q.order_by(Comic.position).all()
         self.index.choices = select_list_for_comics(comics)
+
 
 CreateComicForm, ModifyComicForm = makeCU(ComicFormBase)
 
