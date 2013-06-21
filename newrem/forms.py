@@ -148,10 +148,13 @@ def select_list_for_comics(comics):
     if comics:
         first = comics[0]
         l = [(-1, u"Before %s" % label_for_comic(first))]
-        for first, second in zip(comics, comics[1::]):
-            l.append(select_option_for_comics(first, second))
-        last = comics[-1]
-        l.append((second.id, u"After %s" % label_for_comic(last)))
+        if len(comics) > 1:
+            for first, second in zip(comics, comics[1::]):
+                l.append(select_option_for_comics(first, second))
+            last = comics[-1]
+            l.append((second.id, u"After %s" % label_for_comic(last)))
+        else:
+            l.append((1, u"After %s" % label_for_comic(comics[0])))
         return l
     else:
         return [(-2, "<No comics exist yet>")]
