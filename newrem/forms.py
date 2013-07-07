@@ -168,17 +168,23 @@ class ComicFormBase(FormBase):
     comment = TextAreaField("Commentary")
     index = SelectField(u"Where should this comic be placed?",
                         coerce=int)
-    characters = QuerySelectMultipleField(u"Characters",
-        query_factory=lambda: Character.query.order_by(Character.name),
-        get_label="name")
+    characters = QuerySelectMultipleField(u"Characters", get_label="name")
     time = DateTimeField("Activation time", default=datetime.now)
 
     def __init__(self, universe, *args, **kwargs):
         super(ComicFormBase, self).__init__(*args, **kwargs)
 
+        # Set up the comics index.
         q = Comic.query.filter_by(universe=universe)
         comics = q.order_by(Comic.position).all()
         self.index.choices = select_list_for_comics(comics)
+
+        # Set up the query factory for characters.
+        def f():
+            q = Character.query.filter_by(universe=universe)
+            q = q.order_by(Character.name)
+            return q
+        self.characters.query_factory = f
 
 
 CreateComicForm, ModifyComicForm = makeCU(ComicFormBase)
