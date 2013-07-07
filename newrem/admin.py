@@ -112,7 +112,8 @@ def universe_delete(u):
 
 @admin.route("/<universe:u>/characters")
 def characters(u):
-    characters = Character.query.order_by(Character.name)
+    q = Character.query.filter_by(universe=u).order_by(Character.name)
+    characters = q.all()
     form = CreateCharacterForm()
 
     return render_template("characters.html", form=form, u=u,
