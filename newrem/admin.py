@@ -49,7 +49,7 @@ class AdminBlueprint(Blueprint):
                 "Haha, no.")
 
 admin = AdminBlueprint("admin", __name__, static_folder="static",
-    template_folder="templates")
+    template_folder="templates/admin")
 
 @admin.route("/")
 def index():
