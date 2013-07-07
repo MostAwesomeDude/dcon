@@ -4,11 +4,20 @@
 {% block title %}Admin{% endblock %}
 {% block content %}
     <ul>
-        {% for universe in universes %}
-        <li><a href="{{ url_for("admin.universe", u=universe) }}">
-                {{ universe.title }}
+        <li><a href="{{ url_for("admin.news") }}">News</a></li>
+        <li><a href="{{ url_for("admin.portraits") }}">
+            Portraits
         </a></li>
-        {% endfor %}
     </ul>
+    <div class="admin-universes">
+        <h2>Universes</h2>
+        <ul>
+            {% for universe in universes %}
+            <li><a href="{{ url_for("admin.universe", u=universe) }}">
+                    {{ universe.title }}
+            </a></li>
+            {% endfor %}
+        </ul>
+    </div>
     {{ macros.render_form(form, url_for("admin.universe_create")) }}
 {% endblock %}
