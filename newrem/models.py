@@ -17,9 +17,9 @@ db = SQLAlchemy()
 lm = LoginManager()
 
 # ON UPDATE CASCADE.
-FK = partial(db.ForeignKey, onupdate="cascade")
+FK = partial(db.ForeignKey, onupdate="cascade", ondelete="cascade")
 # Oh, wait, that doesn't work on SQLite or MySQL. Plan B!
-relationship = partial(db.relationship, passive_updates=False)
+relationship = partial(db.relationship, cascade="all", passive_updates=False)
 
 casts = db.Table("casts", db.metadata,
     db.Column("character_id", db.String(45), FK("characters.slug")),
