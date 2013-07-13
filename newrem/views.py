@@ -265,7 +265,9 @@ def comment(u, cid):
 @app.route("/rss.xml")
 @cached
 def rss():
-    comics = Comic.query.order_by(Comic.time.desc())[:10]
+    # Filter out comics that have not yet gone live.
+    q = Comic.query.filter(Comic.time < datetime.now())
+    comics = q.order_by(Comic.time.desc())[:10]
     stuff = []
     for comic in comics:
         url = url_for("comics", _external=True, u=comic.universe,
