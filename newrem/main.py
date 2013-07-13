@@ -13,7 +13,6 @@ from newrem.models import db, lm
 from newrem.users import users
 from newrem.views import app
 
-load_config(app)
 
 @app.context_processor
 def site_config():
@@ -24,6 +23,7 @@ def site_config():
     }
 
     return {"config": d}
+
 
 wd = None
 if wd is None:
@@ -41,10 +41,10 @@ app.config["DCON_PASSWORD_FILE"] = wd.child("passwords.dcon")
 app.config["DCON_UPLOAD_PATH"] = wd.child("uploads")
 app.config["SECRET_KEY"] = wd.child("secret.key").open("rb").read()
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///%s/temp.db" % wd.path
-app.config["SQLALCHEMY_ECHO"] = True
 app.config["SECRET_KEY"] = "just a test!"
 app.config["UPLOADS_DEFAULT_DEST"] = app.config["DCON_UPLOAD_PATH"].path
+
+load_config(app)
 
 configure_uploads(app, (images,))
 patch_request_class(app)

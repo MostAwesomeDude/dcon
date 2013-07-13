@@ -7,6 +7,8 @@ def load_config(app):
     cp.readfp(handle)
     handle.close()
     app.config["DCON_CONFIG"] = cp
+    app.config["SQLALCHEMY_DATABASE_URI"] = cp.get("dcon", "database")
+    app.config["SQLALCHEMY_ECHO"] = app.debug
 
 
 def write_config(app):

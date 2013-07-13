@@ -1,3 +1,5 @@
 [dcon]
 
 site_title = My Awesome DCoN Instance
+
+database = sqlite:///temp.db
