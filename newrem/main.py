@@ -15,6 +15,16 @@ from newrem.views import app
 
 load_config(app)
 
+@app.context_processor
+def site_config():
+    cp = app.config["DCON_CONFIG"]
+
+    d = {
+        "site_title": cp.get("dcon", "site_title"),
+    }
+
+    return {"config": d}
+
 wd = None
 if wd is None:
     wd = os.getcwd()
