@@ -7,10 +7,13 @@ from flask.ext.uploads import configure_uploads, patch_request_class
 from newrem.admin import admin
 from newrem.chan import osuchan
 from newrem.comics import comics
+from newrem.config import load_config
 from newrem.forms import images
 from newrem.models import db, lm
 from newrem.users import users
 from newrem.views import app
+
+load_config(app)
 
 wd = None
 if wd is None:
