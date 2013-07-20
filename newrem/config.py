@@ -6,9 +6,13 @@ def load_config(app):
     handle = app.open_resource("../dcon.ini")
     cp.readfp(handle)
     handle.close()
+
     app.config["DCON_CONFIG"] = cp
     app.config["SQLALCHEMY_DATABASE_URI"] = cp.get("dcon", "database")
     app.config["SQLALCHEMY_ECHO"] = app.debug
+
+    app.config["RECAPTCHA_PUBLIC_KEY"] = cp.get("dcon", "recaptcha_public")
+    app.config["RECAPTCHA_PRIVATE_KEY"] = cp.get("dcon", "recaptcha_private")
 
 
 def write_config(app):
