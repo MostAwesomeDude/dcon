@@ -2,5 +2,6 @@
 {% extends "base-admin.html" %}
 
 {% block content %}
-    {{ macros.render_form(form, url_for("admin.comics_modify", u=u, cid=cid)) }}
+    <img src="{{ comic.url() }}" title="{{ comic.description }}" />
+    {{ macros.render_form(form, url_for("admin.comics_modify", u=u, cid=comic.id)) }}
 {% endblock %}

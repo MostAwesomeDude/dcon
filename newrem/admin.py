@@ -369,7 +369,7 @@ def comics_modify(u, cid):
             except Exception, e:
                 flash("Couldn't alter comic: %s" % ", ".join(e.args))
                 return render_template("upload-modify.html", form=form, u=u,
-                        cid=cid)
+                                       comic=comic)
 
         comic.characters = form.characters.data
         comic.title = form.title.data
@@ -386,7 +386,8 @@ def comics_modify(u, cid):
                 reference, before = find_reference(u, form.index.data)
             except Exception, e:
                 flash("Couldn't position comic: %s" % ", ".join(e.args))
-                return render_template("upload.html", form=form, u=u)
+                return render_template("upload-modify.html", form=form, u=u,
+                                       comic=comic)
 
         if reference.id != comic.id and form.index.data != -2:
             comic.insert(reference, before)
@@ -398,7 +399,8 @@ def comics_modify(u, cid):
         if form.file.file:
             save_file(comic.fp(), form.file.file)
 
-        return redirect(url_for("comics", u=u, cid=comic.id))
+        return render_template("upload-modify.html", form=form, u=u,
+                               comic=comic)
 
     # Populate the form.
     form.characters.data = comic.characters
@@ -408,4 +410,4 @@ def comics_modify(u, cid):
     form.time.data = comic.time
     form.index.data = comic.id
 
-    return render_template("upload-modify.html", form=form, u=u, cid=cid)
+    return render_template("upload-modify.html", form=form, u=u, comic=comic)
