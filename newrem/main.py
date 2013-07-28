@@ -25,6 +25,11 @@ def site_config():
     return {"config": d}
 
 
+@app.template_filter()
+def ten_or_fewer(i):
+    return min(len(list(i)), 10)
+
+
 wd = None
 if wd is None:
     wd = os.getcwd()

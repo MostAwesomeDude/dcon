@@ -16,6 +16,11 @@
             {# Hack: Textareas should have extra params for display. #}
             {% if field.type == "TextAreaField" %}
                 {{ field(wrap="soft", rows="4", cols="48")|safe }}
+            {# Hack: Multiple-selection fields should scale up to a size of
+               ten. #}
+            {% elif field.type == "QuerySelectMultipleField" %}
+                {% set size = field.iter_choices()|ten_or_fewer %}
+                {{ field(size=size)|safe }}
             {% else %}
                 {{ field()|safe }}
             {% endif %}
