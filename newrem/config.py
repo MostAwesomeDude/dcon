@@ -1,4 +1,5 @@
 from ConfigParser import SafeConfigParser
+import os.path
 
 
 def load_config(app):
@@ -13,6 +14,11 @@ def load_config(app):
 
     app.config["RECAPTCHA_PUBLIC_KEY"] = cp.get("dcon", "recaptcha_public")
     app.config["RECAPTCHA_PRIVATE_KEY"] = cp.get("dcon", "recaptcha_private")
+
+    assets = cp.get("dcon", "assets", "")
+    if assets:
+        app.static_paths = [os.path.join(assets, "static")]
+        app.template_paths = [os.path.join(assets, "template")]
 
 
 def write_config(app):

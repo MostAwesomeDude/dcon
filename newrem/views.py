@@ -9,10 +9,10 @@ from jinja2.exceptions import TemplateNotFound
 
 from twisted.python.filepath import FilePath
 
-from flask import (Flask, abort, flash, redirect, render_template, request,
-    url_for)
+from flask import abort, flash, redirect, render_template, request, url_for
 from flask.ext.login import current_user
 
+from newrem.app import DCoN
 from newrem.converters import make_model_converter
 from newrem.decorators import cached
 from newrem.files import extend_fp, save_file
@@ -22,7 +22,7 @@ from newrem.models import (db, Board, Character, Comic, Newspost, Post,
     Universe)
 from newrem.util import chan_filename, make_rss2
 
-app = Flask(__name__)
+app = DCoN(__name__)
 
 # Register converters.
 app.url_map.converters["board"] = make_model_converter(app, Board,
