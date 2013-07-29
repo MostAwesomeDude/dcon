@@ -100,7 +100,7 @@ def universe_context(app, u):
     banners = []
 
     for path in app.static_paths:
-        root = FilePath(app.root_path)
+        root = FilePath(path)
         segments = [u.slug, "images", "banners"]
         fp = extend_fp(root, segments)
 
@@ -110,7 +110,7 @@ def universe_context(app, u):
 
     if banners:
         segments.append(choice(banners))
-        banner = "/".join(segments[1:])
+        banner = "/".join(segments)
     else:
         banner = None
 
