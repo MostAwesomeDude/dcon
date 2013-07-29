@@ -7,15 +7,13 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from jinja2.exceptions import TemplateNotFound
 
-from twisted.python.filepath import FilePath
-
 from flask import abort, flash, redirect, render_template, request, url_for
 from flask.ext.login import current_user
 
 from newrem.app import DCoN
 from newrem.converters import make_model_converter
 from newrem.decorators import cached
-from newrem.files import extend_fp, save_file
+from newrem.files import assets_in_paths, save_file
 from newrem.forms import CommentForm
 from newrem.grammars import BlogGrammar
 from newrem.models import (db, Board, Character, Comic, Newspost, Post,
@@ -97,16 +95,8 @@ def index():
 
 
 def universe_context(app, u):
-    banners = []
-
-    for path in app.static_paths:
-        root = FilePath(path)
-        segments = [u.slug, "images", "banners"]
-        fp = extend_fp(root, segments)
-
-        # Get some banners, if they exist.
-        if fp.exists():
-            banners.extend([p.basename() for p in fp.children()])
+    segments = [u.slug, "images", "banners"]
+    banners = assets_in_paths(app, segments)
 
     if banners:
         segments.append(choice(banners))
@@ -299,8 +289,9 @@ def universe_rss(u):
 
 @app.errorhandler(404)
 def not_found(error):
-    directory = os.path.join(app.root_path, "static/404")
-    filename = choice(os.listdir(directory))
+    segments = ["404"]
+    images = assets_in_paths(app, segments)
+    filename = choice(images)
     image = os.path.join("404", filename)
     return render_template("404.html", image=image)
 
