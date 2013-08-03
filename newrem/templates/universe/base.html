@@ -10,7 +10,7 @@
     {% if after %}
         <!-- For Serialist and other indexers, as well as for readers and
              prefetchers, mark the next page in the sequence. -->
-        <link rel="next" href="{{ url_for("comics", cid=after.id) }}">
+        <link rel="next" href="{{ url_for_comics(after) }}">
     {% endif %}
 {% endblock %}
 

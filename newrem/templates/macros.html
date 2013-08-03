@@ -51,25 +51,25 @@
 {% macro render_comic(u, comic, comics) %}
     <div class="navigation">
         {% if comics["upload"][0] %}
-            <a href="{{ url_for("comics", u=u, cid=comics["upload"][0].id) }}">
+            <a href="{{ url_for_comic(comics["upload"][0]) }}">
                 <img src="{{ url_for("static", filename="first.png") }}"
                     title="First">
             </a>
         {% endif %}
         {% if comics["upload"][1] %}
-            <a href="{{ url_for("comics", u=u, cid=comics["upload"][1].id) }}">
+            <a href="{{ url_for_comic(comics["upload"][1]) }}">
                 <img src="{{ url_for("static", filename="previous.png") }}"
                     title="Previous">
             </a>
         {% endif %}
         {% if comics["upload"][2] %}
-            <a href="{{ url_for("comics", u=u, cid=comics["upload"][2].id) }}">
+            <a href="{{ url_for_comic(comics["upload"][2]) }}">
                 <img src="{{ url_for("static", filename="next.png") }}"
                     title="Next">
             </a>
         {% endif %}
         {% if comics["upload"][3] %}
-            <a href="{{ url_for("comics", u=u, cid=comics["upload"][3].id) }}">
+            <a href="{{ url_for_comic(comics["upload"][3]) }}">
                 <img src="{{ url_for("static", filename="last.png") }}"
                     title="Last">
             </a>
@@ -103,25 +103,21 @@
 {% macro render_nav(u, chrono, characters) %}
     <div class="navigation">
         {% if chrono[0] %}
-            <a href="{{ url_for("comics", u=u, cid=chrono[0].id) }}">
-                Chrono Previous
-            </a>
+            <a href="{{ url_for_comic(chrono[0]) }}">Chrono Previous</a>
         {% endif %}
         {% if chrono[1] %}
-            <a href="{{ url_for("comics", u=u, cid=chrono[1].id) }}">
-                Chrono Next
-            </a>
+            <a href="{{ url_for_comic(chrono[1]) }}">Chrono Next</a>
         {% endif %}
     </div>
     {% for character, t in characters.items() %}
         <div class="navigation">
             {% if t[1] %}
-                <a href="{{ url_for("comics", u=u, cid=t[1].id) }}">
+                <a href="{{ url_for_comic(t[1]) }}">
                     {{ t[0].name }} Previous
                 </a>
             {% endif %}
             {% if t[2] %}
-                <a href="{{ url_for("comics", u=u, cid=t[2].id) }}">
+                <a href="{{ url_for_comic(t[2]) }}">
                     {{ t[0].name }} Next
                 </a>
             {% endif %}

@@ -8,6 +8,7 @@ from newrem.admin import admin
 from newrem.chan import osuchan
 from newrem.comics import comics
 from newrem.config import load_config
+from newrem.filters import load_filters
 from newrem.forms import images
 from newrem.models import db, lm
 from newrem.users import users
@@ -25,9 +26,7 @@ def site_config():
     return {"config": d}
 
 
-@app.template_filter()
-def ten_or_fewer(i):
-    return min(len(list(i)), 10)
+load_filters(app)
 
 
 wd = None
