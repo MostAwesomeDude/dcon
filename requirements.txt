@@ -2,7 +2,7 @@ Flask-Login
 Flask-SQLAlchemy
 Flask-Uploads
 Flask-WTF
-Flask>=0.7
+Flask>=0.10
 PIL
 Parsley
 PyRSS2Gen>=1.0
