@@ -14,6 +14,7 @@ from newrem.app import DCoN
 from newrem.converters import make_model_converter
 from newrem.decorators import cached
 from newrem.files import assets_in_paths, save_file
+from newrem.filters import url_for_comic
 from newrem.forms import CommentForm
 from newrem.grammars import BlogGrammar
 from newrem.models import (db, Board, Character, Comic, Newspost, Post,
@@ -170,13 +171,15 @@ def recent(u):
         return redirect(url_for("index"))
 
     if char:
-        return redirect(url_for("comics", u=u, cid=comic.id, char=char.slug))
+        return redirect(url_for_comic(comic, char=char.slug))
     else:
-        return redirect(url_for("comics", u=u, cid=comic.id))
+        return redirect(url_for_comic(comic))
 
 
+@app.route("/<universe:u>/comics/<int:cid>/<name>")
 @app.route("/<universe:u>/comics/<int:cid>")
-def comics(u, cid):
+def comics(u, cid, name=None):
+    # The name is purely decorative.
     try:
         comic = get_comic_query(u).filter_by(id=cid).one()
     except NoResultFound:
@@ -255,7 +258,7 @@ def comment(u, cid):
         db.session.add(post)
         db.session.commit()
 
-    return redirect(url_for("comics", u=u, cid=cid))
+    return redirect(url_for_comic(comic))
 
 @app.route("/rss.xml")
 @cached
@@ -265,8 +268,7 @@ def rss():
     comics = q.order_by(Comic.time.desc())[:10]
     stuff = []
     for comic in comics:
-        url = url_for("comics", _external=True, u=comic.universe,
-            cid=comic.id)
+        url = url_for_comic(comic, _external=True)
         stuff.append((url, comic))
 
     link = url_for("index", _external=True)
@@ -280,7 +282,7 @@ def universe_rss(u):
     comics = q[:10]
     stuff = []
     for comic in comics:
-        url = url_for("comics", _external=True, u=u, cid=comic.id)
+        url = url_for_comic(comic, _external=True)
         stuff.append((url, comic))
 
     link = url_for("recent", _external=True, u=u)
