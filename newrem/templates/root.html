@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <title>{{ config.site_title }} - {% block title %}Untitled Page{% endblock %}</title>
+    <title>{{ dcon.site_title }} - {% block title %}Untitled Page{% endblock %}</title>
     <link rel="icon" type="image/png"
         href="{% block favicon %}
             {{ url_for("static", filename="favicon.png") }}

@@ -3,7 +3,10 @@ import os.path
 
 
 def load_config(app):
-    cp = SafeConfigParser()
+    d = {
+        "slogan": "Slogan goes here",
+    }
+    cp = SafeConfigParser(d)
     handle = app.open_resource("../dcon.ini")
     cp.readfp(handle)
     handle.close()

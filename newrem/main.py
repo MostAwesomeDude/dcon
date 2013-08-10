@@ -21,9 +21,10 @@ def site_config():
 
     d = {
         "site_title": cp.get("dcon", "site_title"),
+        "slogan": cp.get("dcon", "slogan"),
     }
 
-    return {"config": d}
+    return {"dcon": d}
 
 
 load_filters(app)
