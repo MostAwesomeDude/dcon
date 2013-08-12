@@ -210,6 +210,18 @@ class Comic(db.Model, FilenameMixin):
     def __repr__(self):
         return "<Comic(%r) in %r>" % (self.filename, self.universe)
 
+    def __json__(self):
+        d = {
+            "comment": self.comment,
+            "description": self.description,
+            "filename": self.filename,
+            "id": self.id,
+            "position": self.position,
+            "time": self.time,
+            "title": self.title,
+        }
+        return d
+
     def segments(self):
         return ["comics", self.universe.slug, self.filename]
 
