@@ -1,3 +1,4 @@
+Flask-Holster>=0.3.4
 Flask-Login
 Flask-SQLAlchemy
 Flask-Uploads
