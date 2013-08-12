@@ -8,6 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from jinja2.exceptions import TemplateNotFound
 
 from flask import abort, flash, redirect, render_template, request, url_for
+from flask.ext.holster.main import init_holster
 from flask.ext.login import current_user
 
 from newrem.app import DCoN
@@ -22,6 +23,7 @@ from newrem.models import (db, Board, Character, Comic, Newspost, Post,
 from newrem.util import chan_filename, make_rss2
 
 app = DCoN(__name__)
+init_holster(app)
 
 # Register converters.
 app.url_map.converters["board"] = make_model_converter(app, Board,
