@@ -222,8 +222,10 @@ def comics(u, cid, name=None):
         "comics": comics,
         "chrono": chrono,
         "characters": cdict,
-        "ocform": CommentForm(),
     })
+
+    if not current_user.is_anonymous():
+        context["ocform"] = CommentForm()
 
     try:
         return render_template("universe/%s/comics.html" % u.slug, **context)
