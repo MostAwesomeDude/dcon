@@ -204,6 +204,7 @@ def comics(u, cid, name=None):
     # And reverse it for first() and such.
     before = before.order_by(Comic.position.desc())
     after = get_comic_query(u).filter(Comic.position > comic.position)
+    after = after.order_by(Comic.position)
 
     chrono = before.first(), after.first()
 
