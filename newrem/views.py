@@ -200,19 +200,19 @@ def comics(u, cid, name=None):
 
     comics = get_neighbors_for(u, comic)
 
-    previousq = get_comic_query(u).filter(Comic.position < comic.position)
-    nextq = get_comic_query(u).filter(Comic.position > comic.position)
+    before = get_comic_query(u).filter(Comic.position < comic.position)
+    # And reverse it for first() and such.
+    before = before.order_by(Comic.position.desc())
+    after = get_comic_query(u).filter(Comic.position > comic.position)
 
-    previous = previousq.order_by(Comic.position.desc()).first()
-    chrono = previous, nextq.order_by(Comic.position).first()
+    chrono = before.first(), after.first()
 
     cdict = {}
 
-    for character in list(comic.characters):
-        q = previousq.order_by(Comic.position.desc())
-        previous = q.filter(Comic.characters.any(slug=character.slug)).first()
-
-        next = nextq.filter(Comic.characters.any(slug=character.slug)).first()
+    for character in comic.characters:
+        pred = Comic.characters.any(Character.slug == character.slug)
+        previous = before.filter(pred).first()
+        next = after.filter(pred).first()
 
         cdict[character.slug] = character, previous, next
 
