@@ -117,7 +117,8 @@ def universe_context(app, u):
 def cast(u):
     # Re-add the universe to the session so that we can query it.
     db.session.add(u)
-    characters = sorted(u.characters, key=attrgetter("name"))
+    q = Character.query.filter_by(universe=u, major=True)
+    characters = sorted(q.all(), key=attrgetter("name"))
 
     context = universe_context(app, u)
     context.update({
