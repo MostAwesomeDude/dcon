@@ -90,6 +90,7 @@ class DeleteUniverseForm(FormBase):
 
 class CharacterBase(FormBase):
     name = TextField(u"New name", validators=(Required(),))
+    major = BooleanField(u"Major character", default=True)
     description = TextAreaField("Description")
     portrait = portrait
     submit = SubmitField("Create!")

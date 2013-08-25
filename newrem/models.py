@@ -138,6 +138,7 @@ class Character(db.Model, FilenameMixin):
 
     slug = db.Column(db.String(45), primary_key=True)
     name = db.Column(db.Unicode(40))
+    major = db.Column(db.Boolean)
     description = db.Column(db.UnicodeText(1024 * 1024))
     universe_fk = db.Column(db.String(85), FK(Universe.slug), nullable=False)
     universe = relationship(Universe, backref="characters")

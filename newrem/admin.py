@@ -121,8 +121,8 @@ def characters(u):
 
 @admin.route("/<universe:u>/characters/<character:c>")
 def character(u, c):
-    mform = ModifyCharacterForm(prefix="modify", name=c.name,
-        description=c.description)
+    mform = ModifyCharacterForm(prefix="modify", name=c.name, major=c.major,
+                                description=c.description)
     dform = DeleteCharacterForm(prefix="delete")
 
     # Character needs to be bound to a session.
@@ -137,6 +137,7 @@ def characters_create(u):
 
     if form.validate_on_submit():
         character = Character(u, form.name.data)
+        character.major = form.major.data
         if form.description.data:
             character.description = form.description.data
         db.session.add(character)
@@ -163,6 +164,8 @@ def characters_modify(u, c):
         if form.name.data and form.name.data != c.name:
             c.rename(form.name.data)
             flash("Successfully renamed character %s!" % c.name)
+
+        c.major = form.major.data
 
         if form.portrait.file:
             if save_file(c.fp(), form.portrait.file):
