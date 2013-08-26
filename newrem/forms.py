@@ -5,11 +5,11 @@ from wtforms.ext.sqlalchemy.fields import (QuerySelectMultipleField,
     QuerySelectField)
 from wtforms.ext.sqlalchemy.orm import model_form
 from wtforms.fields import BooleanField, SelectField, TextAreaField
-from wtforms.validators import EqualTo, Length
+from wtforms.validators import EqualTo, Length, Required
 
 from flask.ext.uploads import IMAGES, UploadSet
-from flask.ext.wtf import (Form, Required, FileField, PasswordField,
-        RecaptchaField, SubmitField, TextField, ValidationError)
+from flask.ext.wtf import (Form, FileField, PasswordField, RecaptchaField,
+                           SubmitField, TextField, ValidationError)
 
 from newrem.models import Character, Comic, Newspost, Portrait
 from newrem.util import split_camel_case
