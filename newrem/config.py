@@ -7,9 +7,8 @@ def load_config(app):
         "slogan": "Slogan goes here",
     }
     cp = SafeConfigParser(d)
-    handle = app.open_resource("../dcon.ini")
-    cp.readfp(handle)
-    handle.close()
+    with app.open_resource("../dcon.ini") as handle:
+        cp.readfp(handle)
 
     app.config["DCON_CONFIG"] = cp
     app.config["SQLALCHEMY_DATABASE_URI"] = cp.get("dcon", "database")
@@ -26,8 +25,6 @@ def load_config(app):
 
 def write_config(app):
     cp = app.config["DCON_CONFIG"]
-    # Ugh, annoying race condition here, but not much that can be done about
-    # it while using open_resource().
-    handle = app.open_resource("../dcon.ini", mode="wb")
-    cp.write(handle)
-    handle.close()
+    # open_resource() sucks. Hard. This is just a transplant.
+    with open(os.path.join(app.root_path, "../dcon.ini"), "wb") as handle:
+        cp.write(handle)

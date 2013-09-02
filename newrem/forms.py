@@ -15,6 +15,7 @@ from flask.ext.wtf import Form, RecaptchaField
 from newrem.models import Character, Comic, Newspost, Portrait
 from newrem.util import split_camel_case
 
+
 class BetterFileAllowed(object):
     """
     If a file is present, this verifies that the file is in the given upload
@@ -59,6 +60,14 @@ class FormBase(Form):
             pieces.pop()
 
         return " ".join(pieces)
+
+
+class ConfigForm(FormBase):
+    reload = SubmitField("Reload!")
+
+    def __init__(self, app):
+        super(ConfigForm, self).__init__()
+
 
 def makeCU(form):
     """

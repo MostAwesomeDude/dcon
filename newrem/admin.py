@@ -1,20 +1,24 @@
 from werkzeug import secure_filename
 
-from flask import (Blueprint, abort, flash, redirect, render_template,
-                   request, url_for)
+from flask import (Blueprint, abort, current_app, flash, redirect,
+                   render_template, request, url_for)
 from flask.ext.wtf import FileRequired
 
 from sqlalchemy.orm.exc import NoResultFound
 
+from newrem.config import load_config, write_config
 from newrem.files import save_file
-from newrem.forms import (CreateCharacterForm, DeleteCharacterForm,
-    ModifyCharacterForm, NewsForm, EditNewsForm, CreatePortraitForm,
-    ModifyPortraitForm, CreateUniverseForm, ModifyUniverseForm,
-    DeleteUniverseForm, CreateComicForm, ModifyComicForm)
+from newrem.forms import (ConfigForm, CreateCharacterForm,
+                          DeleteCharacterForm, ModifyCharacterForm, NewsForm,
+                          EditNewsForm, CreatePortraitForm,
+                          ModifyPortraitForm, CreateUniverseForm,
+                          ModifyUniverseForm, DeleteUniverseForm,
+                          CreateComicForm, ModifyComicForm)
 from newrem.models import (db, Board, Character, Comic, Newspost, Portrait,
     Thread, Universe)
 from newrem.security import Authenticator
 from newrem.util import abbreviate
+
 
 class AdminBlueprint(Blueprint):
     """
@@ -48,8 +52,10 @@ class AdminBlueprint(Blueprint):
             return self._authenticator.make_basic_challenge("Cid's Lair",
                 "Haha, no.")
 
+
 admin = AdminBlueprint("admin", __name__, static_folder="static",
     template_folder="templates/admin")
+
 
 @admin.route("/")
 def index():
@@ -57,6 +63,21 @@ def index():
     universes = Universe.query.order_by(Universe.title)
 
     return render_template("admin.html", form=form, universes=universes)
+
+
+@admin.route("/config")
+def config():
+    form = ConfigForm(current_app)
+    return render_template("config.html", form=form)
+
+
+@admin.route("/reload", methods=("POST",))
+def config_reload():
+    write_config(current_app)
+    load_config(current_app)
+    flash("Saved and reloaded site configuration!")
+    return redirect(url_for("admin.config"))
+
 
 @admin.route("/<universe:u>/")
 def universe(u):
