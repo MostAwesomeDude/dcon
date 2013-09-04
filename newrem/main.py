@@ -40,8 +40,8 @@ app.config["DCON_PASSWORD_FILE"] = wd.child("passwords.dcon")
 app.config["DCON_UPLOAD_PATH"] = wd.child("uploads")
 app.config["SECRET_KEY"] = wd.child("secret.key").open("rb").read()
 
-app.config["SECRET_KEY"] = "just a test!"
 app.config["UPLOADS_DEFAULT_DEST"] = app.config["DCON_UPLOAD_PATH"].path
+app.config["SESSION_PROTECTION"] = None
 
 load_config(app)
 
