@@ -1,5 +1,5 @@
 Flask-Holster>=0.3.4
-Flask-Login
+Flask-Login>=0.2.7
 Flask-SQLAlchemy
 Flask-Uploads
 Flask-WTF
