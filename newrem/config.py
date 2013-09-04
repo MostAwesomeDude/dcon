@@ -6,12 +6,12 @@ import yaml
 def load_config(app):
     config = {
         "slogan": "Slogan goes here",
+        "upload_time_now": False,
     }
+
     with app.open_resource("../dcon.yaml") as handle:
         d = yaml.safe_load(handle)
-        print d
         config.update(d)
-        print config
 
     app.config["DCON_CONFIG"] = config
     app.config["SQLALCHEMY_DATABASE_URI"] = config["database"]

@@ -73,9 +73,16 @@ def config():
 
 @admin.route("/reload", methods=("POST",))
 def config_reload():
-    write_config(current_app)
-    load_config(current_app)
-    flash("Saved and reloaded site configuration!")
+    form = ConfigForm(current_app)
+
+    if form.validate_on_submit():
+        config = current_app.config["DCON_CONFIG"]
+        config["upload_time_now"] = form.upload_time_now.data
+
+        write_config(current_app)
+        load_config(current_app)
+        flash("Saved and reloaded site configuration!")
+
     return redirect(url_for("admin.config"))
 
 

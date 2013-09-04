@@ -63,10 +63,15 @@ class FormBase(Form):
 
 
 class ConfigForm(FormBase):
+    upload_time_now = BooleanField("Default upload time to time of upload")
     reload = SubmitField("Reload!")
 
     def __init__(self, app):
         super(ConfigForm, self).__init__()
+
+        config = app.config["DCON_CONFIG"]
+
+        self.upload_time_now.default = config["upload_time_now"]
 
 
 def makeCU(form):
