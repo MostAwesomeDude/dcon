@@ -17,13 +17,7 @@ from newrem.views import app
 
 @app.context_processor
 def site_config():
-    cp = app.config["DCON_CONFIG"]
-
-    d = {
-        "site_title": cp.get("dcon", "site_title"),
-        "slogan": cp.get("dcon", "slogan"),
-    }
-
+    d = app.config["DCON_CONFIG"]
     return {"dcon": d}
 
 

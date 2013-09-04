@@ -1,30 +1,33 @@
-from ConfigParser import SafeConfigParser
 import os.path
+
+import yaml
 
 
 def load_config(app):
-    d = {
+    config = {
         "slogan": "Slogan goes here",
     }
-    cp = SafeConfigParser(d)
-    with app.open_resource("../dcon.ini") as handle:
-        cp.readfp(handle)
+    with app.open_resource("../dcon.yaml") as handle:
+        d = yaml.safe_load(handle)
+        print d
+        config.update(d)
+        print config
 
-    app.config["DCON_CONFIG"] = cp
-    app.config["SQLALCHEMY_DATABASE_URI"] = cp.get("dcon", "database")
+    app.config["DCON_CONFIG"] = config
+    app.config["SQLALCHEMY_DATABASE_URI"] = config["database"]
     app.config["SQLALCHEMY_ECHO"] = app.debug
 
-    app.config["RECAPTCHA_PUBLIC_KEY"] = cp.get("dcon", "recaptcha_public")
-    app.config["RECAPTCHA_PRIVATE_KEY"] = cp.get("dcon", "recaptcha_private")
+    app.config["RECAPTCHA_PUBLIC_KEY"] = config["recaptcha_public"]
+    app.config["RECAPTCHA_PRIVATE_KEY"] = config["recaptcha_private"]
 
-    assets = cp.get("dcon", "assets", "")
+    assets = config.get("assets", "")
     if assets:
         app.static_paths = [os.path.join(assets, "static")]
         app.template_paths = [os.path.join(assets, "template")]
 
 
 def write_config(app):
-    cp = app.config["DCON_CONFIG"]
+    config = app.config["DCON_CONFIG"]
     # open_resource() sucks. Hard. This is just a transplant.
-    with open(os.path.join(app.root_path, "../dcon.ini"), "wb") as handle:
-        cp.write(handle)
+    with open(os.path.join(app.root_path, "../dcon.yaml"), "wb") as handle:
+        yaml.dump(config, handle)
