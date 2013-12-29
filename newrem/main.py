@@ -1,6 +1,6 @@
 import os
 
-from twisted.python.filepath import FilePath
+from bp.filepath import FilePath
 
 from flask.ext.uploads import configure_uploads, patch_request_class
 

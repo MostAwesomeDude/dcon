@@ -8,6 +8,6 @@ PIL
 Parsley
 PyRSS2Gen>=1.0
 PyYAML
-Twisted>=10.0
 Unidecode
+betterpath
 python-dateutil

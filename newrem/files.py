@@ -1,4 +1,4 @@
-from twisted.python.filepath import FilePath
+from bp.filepath import FilePath
 
 from flask import flash
 
