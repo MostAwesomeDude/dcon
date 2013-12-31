@@ -13,12 +13,18 @@
 {% block content %}
     {{ macros.render_comic(u, comic, comics) }}
     {{ macros.render_nav(u, chrono, characters) }}
+    <div class="shareables"></div>
     <div id="discussion">
-        {% if ocform is defined %}
+        {% if not current_user.is_anonymous() %}
             {{ ocmacros.render_form(ocform, url_for("comment", u=u, cid=comic.id), "co") }}
+        {% else %}
+            To join the conversation, <a href="{{ url_for("users.register",
+                next=request.path) }}">register</a> and <a href="{{
+                url_for("users.login", next=request.path) }}">login</a>!
         {% endif %}
         {{ render_posts(comic.thread) }}
     </div>
+    <div class="money"></div>
 {% endblock %}
 
 {% macro render_posts(thread) %}

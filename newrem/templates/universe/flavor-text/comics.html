@@ -10,19 +10,6 @@
         href="{{ url_for("static", filename="oc.css") }}" />
 {% endblock %}
 
-{% block content %}
-    {{ macros.render_comic(u, comic, comics) }}
-    {{ macros.render_nav(u, chrono, characters) }}
-    <div class="shareables"></div>
-    <div id="discussion">
-        {% if not current_user.is_anonymous() %}
-            {{ ocmacros.render_form(ocform, url_for("comment", u=u, cid=comic.id), "co") }}
-        {% endif %}
-        {{ render_posts(comic.thread) }}
-    </div>
-    <div class="money"></div>
-{% endblock %}
-
 {% macro render_posts(thread) %}
     <section id="threads">
         {% for post in thread.posts %}
