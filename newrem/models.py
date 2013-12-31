@@ -10,7 +10,7 @@ from flask import current_app
 from flask.ext.login import LoginManager, make_secure_token
 from flask.ext.sqlalchemy import SQLAlchemy
 
-from newrem.files import extend_fp, extend_url, fp_root, url_root
+from newrem.files import extend_url, fp_root, url_root
 from newrem.util import slugify
 
 db = SQLAlchemy()
@@ -33,7 +33,7 @@ class FilenameMixin(object):
     """
 
     def fp(self):
-        return extend_fp(fp_root(current_app), self.segments())
+        return fp_root(current_app).descendant(self.segments())
 
     def url(self):
         return extend_url(url_root(current_app), self.segments())

@@ -22,16 +22,6 @@ def url_root(app):
     return url
 
 
-def extend_fp(fp, segments):
-    """
-    Extend a ``FilePath`` given a list of segments.
-    """
-
-    for segment in segments:
-        fp = fp.child(segment)
-    return fp
-
-
 def extend_url(url, segments):
     """
     Extend a URL given a list of segments.
@@ -70,7 +60,7 @@ def assets_in_paths(app, segments):
 
     for path in app.static_paths:
         root = FilePath(path)
-        fp = extend_fp(root, segments)
+        fp = root.descendant(segments)
 
         # Get some banners, if they exist.
         if fp.exists():
