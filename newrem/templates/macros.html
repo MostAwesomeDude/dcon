@@ -48,31 +48,31 @@
     </form>
 {% endmacro %}
 
+{% macro img_link(href, image, title) %}
+    <a href="{{ href }}"><img src="{{ image }}" title="{{ title }}" /></a>
+{% endmacro %}
+
 {% macro render_comic(u, comic, comics) %}
     <div class="navigation">
         {% if comics["upload"][0] %}
-            <a href="{{ url_for_comic(comics["upload"][0]) }}">
-                <img src="{{ url_for("static", filename="first.png") }}"
-                    title="First">
-            </a>
+            {{ img_link(url_for_comic(comics["upload"][0]),
+                        url_for("static", filename="first.png"),
+                        "First") }}
         {% endif %}
         {% if comics["upload"][1] %}
-            <a href="{{ url_for_comic(comics["upload"][1]) }}">
-                <img src="{{ url_for("static", filename="previous.png") }}"
-                    title="Previous">
-            </a>
+            {{ img_link(url_for_comic(comics["upload"][1]),
+                        url_for("static", filename="previous.png"),
+                        "Previous") }}
         {% endif %}
         {% if comics["upload"][2] %}
-            <a href="{{ url_for_comic(comics["upload"][2]) }}">
-                <img src="{{ url_for("static", filename="next.png") }}"
-                    title="Next">
-            </a>
+            {{ img_link(url_for_comic(comics["upload"][2]),
+                        url_for("static", filename="next.png"),
+                        "Next") }}
         {% endif %}
         {% if comics["upload"][3] %}
-            <a href="{{ url_for_comic(comics["upload"][3]) }}">
-                <img src="{{ url_for("static", filename="last.png") }}"
-                    title="Last">
-            </a>
+            {{ img_link(url_for_comic(comics["upload"][3]),
+                        url_for("static", filename="last.png"),
+                        "Last") }}
         {% endif %}
     </div>
     <div class="comic">
