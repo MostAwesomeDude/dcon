@@ -8,6 +8,8 @@
     {{ super() }}
     <link rel="stylesheet"
         href="{{ url_for("static", filename="oc.css") }}" />
+    <link rel="prev" href="{{ url_for_comic(chrono[0]) }}" />
+    <link rel="next" href="{{ url_for_comic(chrono[1]) }}" />
 {% endblock %}
 
 {% block content %}
