@@ -9,5 +9,6 @@ Parsley
 PyRSS2Gen>=1.0
 PyYAML
 Unidecode
+WTForms>=1.0.5
 betterpath
 python-dateutil
