@@ -6,10 +6,33 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet"
-        href="{{ url_for("static", filename="oc.css") }}" />
     <link rel="prev" href="{{ url_for_comic(chrono[0]) }}" />
     <link rel="next" href="{{ url_for_comic(chrono[1]) }}" />
+{% endblock %}
+
+{% block header %}
+    <div class="logo">
+    </div>
+    <div class="topadhelper">
+        <div class="headerad">
+        If you are seeing this, would you mind disabling your adblock for a
+        second and if the ad is flashing and obnoxious or if it's got sound or
+        anything like that tell me about it right away?
+        </div>
+    </div>
+    <div class="headernav">
+        <ul>
+            <li>Links</li>
+            <li>Another link</li>
+            <li>I'll think of more links</li>
+            <li>About</li>
+            <li>Cast</li>
+            <li>Twitter</li>
+            <li>More Twitter</li>
+            <li>Facebook</li>
+            <li>Github</li>
+        </ul>
+    </div>
 {% endblock %}
 
 {% block nav %}
@@ -43,37 +66,92 @@
             {% endif %}
         </div>
     {% endfor %}
+    <div class="castnavigation">
+        <h1>
+            Select your character
+        </h1>
+        <ul>
+            <li>Mika Mala</li>
+            <li>Alex Spiegal</li>
+            <li>Shine Orunitia</li>
+            <li>Lisa Taylor</li>
+            <li>Harmy Lana</li>
+            <li>Shaedo Orunitia</li>
+        </ul>
+    </div>
+    <hr />
+    <div class="sidebarad">
+    Oh hey! I see you have adblock. Good man, good man. Hey, think you could
+    turn that off for me? I mean, it's not like you'd ever click the ad and go
+    buy them but like... Sometimes my friends try to advertise their own
+    webcomics on my site and they're a lot better than me, so if you could, you
+    know... I'm rambling. You get what I'm saying though, right? Sorry.
+    Nevermind.
+    </div>
+    <hr />
+    <div class="sitenavigation">
+        <h1>
+            Select your fighting style
+        </h1>
+        <ul>
+            <li>Animated Gif Man Adventures</li>
+            <li>Remy Genie</li>
+            <li>Mid or Feed</li>
+        </ul>
+    </div>
+
+    <div class="sidebarad">
+    Still using that adblock, huh? Sorry. I'm sorry that... I don't know. I
+    feel like I must have wronged you in some way.
+    </div>
+
+    <div class="sidebarpicture">
+    Hey, this isn't even an ad! What gives?
+    </div>
 {% endblock %}
 
 {% block content %}
-    <div class="navigation">
-        {% if comics["upload"][0] %}
-            {{ img_link(url_for_comic(comics["upload"][0]),
-                        url_for("static", filename="first.png"),
-                        "First") }}
-        {% endif %}
-        {% if comics["upload"][1] %}
-            {{ img_link(url_for_comic(comics["upload"][1]),
-                        url_for("static", filename="previous.png"),
-                        "Previous") }}
-        {% endif %}
-        {% if comics["upload"][2] %}
-            {{ img_link(url_for_comic(comics["upload"][2]),
-                        url_for("static", filename="next.png"),
-                        "Next") }}
-        {% endif %}
-        {% if comics["upload"][3] %}
-            {{ img_link(url_for_comic(comics["upload"][3]),
-                        url_for("static", filename="last.png"),
-                        "Last") }}
-        {% endif %}
+    <div class="topnav">
+        <a class="first"
+            {% if comics["upload"][0] %}
+                href="{{ url_for_comic(comics["upload"][0]) }}"
+            {% endif %}
+            >First
+        </a>
+        <a class="previous"
+            {% if comics["upload"][1] %}
+                href="{{ url_for_comic(comics["upload"][1]) }}"
+            {% endif %}
+            >Prev
+        </a>
+        <a class="current">The current settings.</a>
+        <a class="next"
+            {% if comics["upload"][2] %}
+                href="{{ url_for_comic(comics["upload"][2]) }}"
+            {% endif %}
+            >Next
+        </a>
+        <a class="last"
+            {% if comics["upload"][3] %}
+                href="{{ url_for_comic(comics["upload"][3]) }}"
+            {% endif %}
+            >Last
+        </a>
     </div>
-    <div class="comic">
-        <img src="{{ comic.url() }}" title="{{ comic.description }}" />
+
+    <article>
+        <div class="comic">
+            <img src="{{ comic.url() }}" title="{{ comic.description }}" />
+            <div class="blurb">
+                <p>{{ comic.description }}</p>
+            </div>
+        </div>
+
         <div class="information">
             <h1>{{ comic.title }}</h1>
             {% if comic.characters %}
-                <div class="cast">Starring:
+                <div class="cast">
+                    Starring:
                     {% for character in comic.characters %}
                         <a href="{{ url_for("cast", u=u) }}#{{ character.slug }}">
                             {{ character.name }}
@@ -84,43 +162,47 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            <h6>Uploaded on
-            {{ comic.time.strftime("%B %d, %Y at %I:%M:%S %p") }}</h6>
             {% if comic.comment %}
-                {{ comic.comment|blogify|safe }}
+                <p>{{ comic.comment|blogify|safe }}</p>
             {% endif %}
+            <h2>Uploaded on
+            {{ comic.time.strftime("%B %d, %Y at %I:%M:%S %p") }}</h2>
         </div>
-    </div>
 
-    <div class="shareables"></div>
-    <div id="discussion">
-        {% if not current_user.is_anonymous() %}
-            {{ ocmacros.render_form(ocform, url_for("comment", u=u, cid=comic.id), "co") }}
-        {% else %}
-            To join the conversation, <a href="{{ url_for("users.register",
-                next=request.path) }}">register</a> and <a href="{{
-                url_for("users.login", next=request.path) }}">login</a>!
-        {% endif %}
-        {{ render_posts(comic.thread) }}
-    </div>
-    <div class="money"></div>
-{% endblock %}
-
-{% macro render_posts(thread) %}
-    <section id="threads">
-        {% for post in thread.posts %}
-        <article>
-            <header>
-                {{ post.author }} <time>{{ post.timestamp }}</time> No. {{ post.id }} <br />
-            </header>
-            <section>
-                {% if post.filename %}
-                    <img src="{{ post.url() }}" />
+        <div class="topnav">
+            <a class="first"
+                {% if comics["upload"][0] %}
+                    href="{{ url_for_comic(comics["upload"][0]) }}"
                 {% endif %}
-                {{ post.comment|eblogify|safe }}
-            </section>
-        </article>
-        <br />
-        {% endfor %}
+                >First
+            </a>
+            <a class="previous"
+                {% if comics["upload"][1] %}
+                    href="{{ url_for_comic(comics["upload"][1]) }}"
+                {% endif %}
+                >Prev
+            </a>
+            <a class="current">The current settings.</a>
+            <a class="next"
+                {% if comics["upload"][2] %}
+                    href="{{ url_for_comic(comics["upload"][2]) }}"
+                {% endif %}
+                >Next
+            </a>
+            <a class="last"
+                {% if comics["upload"][3] %}
+                    href="{{ url_for_comic(comics["upload"][3]) }}"
+                {% endif %}
+                >Last
+            </a>
+        </div>
+    </article>
+
+    <section>
+    News will go here if you're on the front page.
     </section>
-{% endmacro %}
+
+    <section>
+    Click me to view user comments.
+    </section>
+{% endblock %}
