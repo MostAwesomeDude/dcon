@@ -1,10 +1,9 @@
 {% extends "universe/base.html" %}
-{% import "universe/macros.html" as macros %}
 
 {% block title %}{{ u.title }} - Cast{% endblock %}
 
 {% block content %}
-    {% for character in cast %}
+    {% for character in characters %}
         <div class="cast {{ loop.cycle("cast-odd", "cast-even") }}">
             <img src="{{ character.url() }}" />
             <h2><a id="{{ character.slug }}">{{ character.name }}</a></h2>

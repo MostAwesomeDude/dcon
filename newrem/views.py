@@ -125,10 +125,7 @@ def cast(u):
         "characters": characters,
     })
 
-    try:
-        return render_template("universe/%s/cast.html" % u.slug, **context)
-    except TemplateNotFound:
-        return render_template("universe/cast.html", **context)
+    return render_template("universe/cast.html", **context)
 
 
 @app.route("/<universe:u>/")
