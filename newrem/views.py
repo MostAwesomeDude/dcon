@@ -5,8 +5,6 @@ from random import choice
 
 from sqlalchemy.orm.exc import NoResultFound
 
-from jinja2.exceptions import TemplateNotFound
-
 from flask import abort, flash, redirect, render_template, request, url_for
 from flask.ext.holster.main import init_holster
 from flask.ext.login import current_user
@@ -297,8 +295,10 @@ def not_found(error):
     images = assets_in_paths(app, segments)
     filename = choice(images)
     image = os.path.join("404", filename)
-    return render_template("404.html", image=image)
+    # 404s should still send the 404 status to the application.
+    return render_template("404.html", image=image), 404, {}
 
 @app.errorhandler(500)
 def internal_server_error(error):
-    return render_template("500.html")
+    # Do as little work as possible; just pass along that a 500 happened.
+    return render_template("500.html"), 500, {}
