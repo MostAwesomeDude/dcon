@@ -1,0 +1,142 @@
+body {
+        padding:0px;
+        margin:0px;
+        font-family:Arial, Helvetica, sans-serif;
+}
+.container {
+        width:1168px;
+        margin: 0px auto;
+        background-color:#EEE;
+}
+header {
+        display:block;
+}
+article {
+        display:block;
+}
+aside {
+        display:block;
+        float:right;
+        height:100%;
+        width:200px;
+        border:thin;
+        background-color:#CCC;
+}
+.cast {
+        font-size:x-small;
+        text-indent:10px;
+}
+aside ul, aside li {
+        list-style-type:none;
+        margin:5px;
+        padding:0px;
+}
+aside li {
+        border: solid thin;
+}
+.logo {
+        display:block;
+        height: 160px;
+        width: 700px;
+        background-color:#DDD;
+        opacity:.5;
+        margin:auto;
+}
+.comic {
+        text-align:center;
+        padding: 10px;
+        background-color:gray;
+        margin: 10px;
+}
+.blurb {
+        text-align:right;
+}
+.blurb p {
+        margin:0px;
+}
+footer {
+        clear:both;
+        background-color:#ccc;
+}
+.topnav {
+        text-align: center;
+        width: 968px;
+        height: 100%;
+        padding: 5px;
+}
+.first, .last, .next, .previous {
+        border: 3px solid black;
+        display: inline-block;
+        vertical-align:middle;
+}
+.current {
+        display: inline-block;
+        height:32px;
+}
+.sidebarad {
+        width:160px;
+        height:600px;
+        margin:auto;
+        border: solid black;
+        display:none;
+}
+.headerad {
+        height:90px;
+        width:728px;
+        border:solid;
+        margin: 0 auto;
+}
+.topadhelper {
+        display:none;
+        vertical-align:top;
+        width:968px;
+        margin:0;
+}
+.information {
+        border: dotted;
+        padding: 10px;
+        margin: 10px;
+}
+.information h1 {
+        font-size:x-large;
+        background-color:#DBDBDB;
+        margin-top:0px;
+        margin-bottom: 0px;
+}
+.information h2 {
+        text-align: right;
+        font-size: xx-small;
+        font-style: normal;
+        color: #666;
+        margin: 0px;
+        padding: 0px;
+}
+.headernav {
+        height: 46px;
+        text-align: center;
+        margin:3px;
+}
+.headernav ul, .headernav li {
+        vertical-align: middle;
+        margin: 0px;
+        padding: 0px;
+        list-style-type: none;
+        display: inline-block;
+}
+.headernav li {
+        margin-left: 2px;
+        margin-right: 2px;
+        padding:2px;
+        background-color:#CCC;
+}
+.wrapper {
+        width:968px;
+}
+.castnavigation h1 {
+        margin:0;
+        font-size:x-large;
+}
+.sitenavigation h1 {
+        margin:0;
+        font-size:x-large;
+}
