@@ -10,13 +10,15 @@
         href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono&v2'>
     <link rel="stylesheet" type="text/css"
         href="{{ url_for("static", filename="root.css") }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for("static", filename="boring.css") }}">
     {% block head %}
     {% endblock %}
 </head>
 
 <body>
-    <div class="body">
-        <div class="header">
+    <div class="container">
+        <header>
             {% with flashes = get_flashed_messages(True) %}
                 {% if flashes %}
                     <ul class="flashes">
@@ -28,14 +30,21 @@
             {% endwith %}
             {% block header %}
             {% endblock %}
-        </div>
+        </header>
 
-        <div class="content">
+        <aside>
+            <div class="sitenavigation">
+                {% block nav %}
+                {% endblock %}
+            </div>
+        </aside>
+
+        <div class="wrapper">
             {% block content %}
             {% endblock %}
         </div>
 
-        <div class="footer">
+        <footer>
             {% block footer %}
             {% endblock %}
             <p class="credits">
@@ -43,6 +52,6 @@
                 <a href="https://github.com/MostAwesomeDude/dcon">Source available</a>
                 under the terms of the GNU Public License, version 2.
             </p>
-        </div>
+        </footer>
     </div>
 </body>
