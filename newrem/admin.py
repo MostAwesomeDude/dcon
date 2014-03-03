@@ -171,8 +171,8 @@ def characters_create(u):
         db.session.add(character)
         db.session.commit()
 
-        if form.portrait.file:
-            save_file(character.fp(), form.portrait.file)
+        if form.portrait.data:
+            save_file(character.fp(), form.portrait.data)
 
         flash("Successfully created character %s!" % character.name)
     else:
@@ -195,8 +195,8 @@ def characters_modify(u, c):
 
         c.major = form.major.data
 
-        if form.portrait.file:
-            if save_file(c.fp(), form.portrait.file):
+        if form.portrait.data:
+            if save_file(c.fp(), form.portrait.data):
                 flash("Successfully changed portrait for character %s!" %
                     c.name)
             else:
@@ -247,7 +247,7 @@ def portraits_create():
         db.session.add(portrait)
         db.session.commit()
 
-        portrait.update_portrait(form.portrait.file)
+        portrait.update_portrait(form.portrait.data)
 
         flash("Successfully created portrait %s!" % portrait.name)
     else:
@@ -261,8 +261,8 @@ def portraits_modify():
 
     if form.validate_on_submit():
         portrait = form.portraits.data
-        if portrait and form.portrait.file:
-            portrait.update_portrait(form.portrait.file)
+        if portrait and form.portrait.data:
+            portrait.update_portrait(form.portrait.data)
 
             flash("Successfully changed portrait for portrait %s!" %
                 portrait.name)
