@@ -67,9 +67,7 @@
         </div>
     {% endfor %}
     <div class="castnavigation">
-        <h1>
-            Select your character
-        </h1>
+        <h1>Characters</h1>
         <ul>
             {% for major in majors %}
                 <li>{{ major.name }}</li>
@@ -87,13 +85,11 @@
     </div>
     <hr />
     <div class="sitenavigation">
-        <h1>
-            Select your fighting style
-        </h1>
+        <h1>Universes</h1>
         <ul>
-            <li>Animated Gif Man Adventures</li>
-            <li>Remy Genie</li>
-            <li>Mid or Feed</li>
+            {% for universe in universes %}
+                <li>{{ universe.title }}</li>
+            {% endfor %}
         </ul>
     </div>
 

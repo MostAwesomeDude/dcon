@@ -212,6 +212,7 @@ def comics(u, cid, name=None):
     cdict = {}
 
     majors = Character.query.filter_by(major=True).all()
+    universes = Universe.query.all()
 
     for character in comic.characters:
         pred = Comic.characters.any(Character.slug == character.slug)
@@ -227,6 +228,7 @@ def comics(u, cid, name=None):
         "chrono": chrono,
         "characters": cdict,
         "majors": majors,
+        "universes": universes,
     })
 
     return render_template("universe/comics.html", **context)
