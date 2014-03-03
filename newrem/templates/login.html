@@ -2,5 +2,17 @@
 {% import "macros.html" as macros %}
 
 {% block content %}
-    {{ macros.render_login(request, current_user, login_form) }}
+    <div class="login">
+        {% if current_user.is_anonymous() %}
+            {{ render_form(login_form, url_for("users.login", **request.args)) }}
+            Not currently logged in (
+            <a href="{{ url_for("users.login", next=request.path)}}">Login</a>,
+            <a href="{{ url_for("users.register", next=request.path)}}">Register?</a>
+            )
+        {% else %}
+            Logged in as {{ current_user.username }} (
+            <a href="{{ url_for("users.logout", next=request.path)}}">Logout?</a>
+            )
+        {% endif %}
+    </div>
 {% endblock %}
