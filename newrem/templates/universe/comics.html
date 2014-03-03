@@ -70,7 +70,11 @@
         <h1>Characters</h1>
         <ul>
             {% for major in majors %}
-                <li>{{ major.name }}</li>
+                <li>
+                    <a href="{{ url_for("cast", u=u) }}#{{ major.slug }}">
+                        {{ major.name }}
+                    </a>
+                </li>
             {% endfor %}
         </ul>
     </div>
@@ -88,7 +92,11 @@
         <h1>Universes</h1>
         <ul>
             {% for universe in universes %}
-                <li>{{ universe.title }}</li>
+                <li>
+                    <a href="{{ url_for("recent", u=universe) }}">
+                        {{ universe.title }}
+                    </a>
+                </li>
             {% endfor %}
         </ul>
     </div>
