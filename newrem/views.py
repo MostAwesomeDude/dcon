@@ -211,6 +211,8 @@ def comics(u, cid, name=None):
 
     cdict = {}
 
+    majors = Character.query.filter_by(major=True).all()
+
     for character in comic.characters:
         pred = Comic.characters.any(Character.slug == character.slug)
         previous = before.filter(pred).first()
@@ -224,15 +226,10 @@ def comics(u, cid, name=None):
         "comics": comics,
         "chrono": chrono,
         "characters": cdict,
+        "majors": majors,
     })
 
-    if not current_user.is_anonymous():
-        context["ocform"] = CommentForm()
-
-    try:
-        return render_template("universe/%s/comics.html" % u.slug, **context)
-    except TemplateNotFound:
-        return render_template("universe/comics.html", **context)
+    return render_template("universe/comics.html", **context)
 
 
 @app.route("/<universe:u>/comics/<int:cid>/comment", methods=("POST",))

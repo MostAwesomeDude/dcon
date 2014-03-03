@@ -71,12 +71,9 @@
             Select your character
         </h1>
         <ul>
-            <li>Mika Mala</li>
-            <li>Alex Spiegal</li>
-            <li>Shine Orunitia</li>
-            <li>Lisa Taylor</li>
-            <li>Harmy Lana</li>
-            <li>Shaedo Orunitia</li>
+            {% for major in majors %}
+                <li>{{ major.name }}</li>
+            {% endfor %}
         </ul>
     </div>
     <hr />
