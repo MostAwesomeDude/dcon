@@ -2,7 +2,7 @@ from werkzeug import secure_filename
 
 from flask import (Blueprint, abort, current_app, flash, redirect,
                    render_template, request, url_for)
-from flask.ext.wtf import FileRequired
+from flask.ext.wtf.file import FileRequired
 
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -349,7 +349,7 @@ def comics_create(u):
                 return render_template("upload.html", form=form, u=u)
 
         db.session.add(u)
-        filename = secure_filename(form.file.file.filename)
+        filename = secure_filename(form.file.data.filename)
 
         try:
             comic = Comic(u, filename)
@@ -374,7 +374,7 @@ def comics_create(u):
         db.session.add(comic)
         db.session.commit()
 
-        save_file(comic.fp(), form.file.file)
+        save_file(comic.fp(), form.file.data)
 
         return redirect(url_for("admin.comics_modify", u=u, cid=comic.id))
 
@@ -393,8 +393,8 @@ def comics_modify(u, cid):
         db.session.add(u)
 
         # Attempt to set the new filename, and then verify it.
-        if form.file.file:
-            comic.filename = secure_filename(form.file.file.filename)
+        if form.file.data:
+            comic.filename = secure_filename(form.file.data.filename)
             try:
                 comic.verify_fp()
             except Exception, e:
@@ -427,8 +427,8 @@ def comics_modify(u, cid):
         db.session.commit()
 
         # Only write a new image down if requested.
-        if form.file.file:
-            save_file(comic.fp(), form.file.file)
+        if form.file.data:
+            save_file(comic.fp(), form.file.data)
 
         return render_template("upload-modify.html", form=form, u=u,
                                comic=comic)
