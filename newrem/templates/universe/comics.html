@@ -6,8 +6,12 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="prev" href="{{ url_for_comic(chrono[0]) }}" />
-    <link rel="next" href="{{ url_for_comic(chrono[1]) }}" />
+    {% if chrono[0] %}
+        <link rel="prev" href="{{ url_for_comic(chrono[0]) }}" />
+    {% endif %}
+    {% if chrono[1] %}
+        <link rel="next" href="{{ url_for_comic(chrono[1]) }}" />
+    {% endif %}
 {% endblock %}
 
 {% block header %}
