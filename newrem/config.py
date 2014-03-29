@@ -23,7 +23,6 @@ def load_config(app):
     assets = config.get("assets", "")
     if assets:
         app.static_paths = [os.path.join(assets, "static")]
-        app.template_paths = [os.path.join(assets, "template")]
 
 
 def write_config(app):
