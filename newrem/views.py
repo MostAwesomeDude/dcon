@@ -206,7 +206,7 @@ def comics(u, cid, name=None):
 
     cdict = {}
 
-    majors = Character.query.filter_by(major=True).all()
+    majors = Character.query.filter_by(universe=u, major=True).all()
     universes = Universe.query.all()
 
     for character in comic.characters:
