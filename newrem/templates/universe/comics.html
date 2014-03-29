@@ -41,12 +41,12 @@
             <h3>Chonological Traversal</h3>
         {% endif %}
         {% if chrono[0] %}
-            {{ img_link(url_for_comic(chrono[0]),
+            {{ macros.img_link(url_for_comic(chrono[0]),
                         url_for("static", filename="previous.png"),
                         "Chrono Previous") }}
         {% endif %}
         {% if chrono[1] %}
-            {{ img_link(url_for_comic(chrono[1]),
+            {{ macros.img_link(url_for_comic(chrono[1]),
                         url_for("static", filename="next.png"),
                         "Chrono Next") }}
         {% endif %}
@@ -55,12 +55,12 @@
         <div class="navigation">
             <h3>{{ t[0].name }}</h3>
             {% if t[1] %}
-                {{ img_link(url_for_comic(t[1]),
+                {{ macros.img_link(url_for_comic(t[1]),
                             url_for("static", filename="previous.png"),
                             t[0].name + "Previous") }}
             {% endif %}
             {% if t[2] %}
-                {{ img_link(url_for_comic(t[2]),
+                {{ macros.img_link(url_for_comic(t[2]),
                             url_for("static", filename="next.png"),
                             t[0].name + "Next") }}
             {% endif %}
