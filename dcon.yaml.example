@@ -1,0 +1,7 @@
+--- # DCoN
+site_title: My Awesome DCoN Instance
+database: sqlite:///temp.db
+
+# Get ReCaptcha keys from https://www.google.com/recaptcha
+recaptcha_public: None
+recaptcha_private: None
