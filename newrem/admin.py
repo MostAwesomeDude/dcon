@@ -193,7 +193,12 @@ def characters_modify(u, c):
             c.rename(form.name.data)
             flash("Successfully renamed character %s!" % c.name)
 
-        c.major = form.major.data
+        if c.major != form.major.data:
+            c.major = form.major.data
+            if c.major: 
+                flash("%s is now a major character!" % c.name)
+            else: 
+                flash("%s is no longer a major character!" % c.name)
 
         if form.portrait.data:
             if save_file(c.fp(), form.portrait.data):
