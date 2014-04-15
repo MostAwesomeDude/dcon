@@ -100,12 +100,13 @@ def make_rss2(url, title, stuff):
     else meeting the polymorphic requirements.
 
     `url` is a URL. `title` is a title for the feed.  `stuff` is a dictionary
-    of URLs to objects with `title` and `time` attributes.
+    of URLs to objects with `title`, `time`, and `universe` attributes.
     """
 
     items = []
     for url, obj in stuff:
-        item = RSSItem(title=obj.title, link=url, description=obj.comment,
+        item = RSSItem(title = ("%s: %s" % (obj.universe.title, obj.title)), 
+            link=url, description=obj.comment,
             guid=Guid(url), pubDate=obj.time)
         items.append(item)
 

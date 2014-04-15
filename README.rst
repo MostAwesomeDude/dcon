@@ -30,4 +30,4 @@ database tables, is
 .. code-block:: 
 
     $ pip install twisted
-    $ twistd -n web --wsi newrem.main.app 
+    $ twistd -n web --wsgi newrem.main.app 
