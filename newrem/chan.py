@@ -1,3 +1,17 @@
+# Copyright (c) 2010 Ben Kero, 2012 Corbin Simpson
+#
+# This file is part of DCoN.
+#
+# DCoN is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License, version 3, as published by the Free
+# Software Foundation.
+#
+# DCoN is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# DCoN. If not, see <http://www.gnu.org/licenses/>.
 from flask import Blueprint, render_template, request, url_for
 
 from newrem.forms import ChanForm
