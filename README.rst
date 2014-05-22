@@ -11,6 +11,10 @@ DCoN incorporates code from Ben Kero's osuchan library.
 
 DCoN is made available under the GNU Public License, version 2.
 
+DCoN incorporates artwork (c) 2011 by Mark Alan Harris II; all PNG files in
+this repository are owned by him and made available under the Creative Commons
+BY-NC-SA 3.0 license.
+
 Deployment
 ----------
 
