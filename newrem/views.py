@@ -229,8 +229,14 @@ def comics(u, cid, name=None):
 
         cdict[character.slug] = character, previous, next
 
+    # Buffer watch feature. Figure out the datetime for the latest comic
+    # uploaded, and send that datetime along.
+    q = Comic.query.filter(Comic.universe == u)
+    buffered = q.order_by(Comic.time.desc()).first().time
+
     context = universe_context(app, u)
     context.update({
+        "buffered": buffered,
         "comic": comic,
         "comics": comics,
         "chrono": chrono,
