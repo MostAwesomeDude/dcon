@@ -10,22 +10,78 @@ well as its ability to manage comics anachronistically.
 For licensing information, see the ``LICENSE`` file.
 
 Deployment
-----------
+==========
 
-The files secret.key, temp.db, and passwords.dcon must exist in order to run
-the app. Secret.key must contain at least one byte of data for the app to run
-correctly.
+Virtual Environments
+--------------------
 
-To enable admin panel access, add each account's username and password to
-passwords.dcon in the format
+If you don't have other preferences for your DCON deployment, you probably
+want to install its dependencies in a `virtual environment`_. 
 
-.. code-block:: 
+.. _virtual environment: https://virtualenv.pypa.io/en/latest/
+
+::
+    # only create the virtual environment ONCE
+    $ virtualenv venv
+    
+    # activate the virtualenv every time you want to use it
+    $ source venv/bin/activate
+
+    # run this command again if the requirements change
+    (venv)$ pip install -r requirements.txt
+
+    # leave the virtualenv when you're done working with dcon
+    (venv)$ deactivate
+
+Create required files
+---------------------
+
+::
+    # secret.key must contain at least 1 byte of data for dcon to function
+    # put 50 random characters in it
+    $ pwgen 50 1 > secret.key
+
+    $ touch passwords.dcon
+    
+    # customize dcon.yaml with your site's name, database URL, etc.
+    $ cp dcon.yaml.example dcon.yaml
+
+    # only if you're using db settings from dcon.yaml.example
+    $ touch temp.db
+
+Enable admin access
+-------------------
+
+Edit the file ``passwords.dcon`` to contain the usernames and passwords of
+everyone who gets administrative access in your dcon instance, one per line,
+in the form::
+
     username:password
 
-One way to make the app go, after running shell.py to create the necessary
-database tables, is 
+Create database tables
+----------------------
 
-.. code-block:: 
+Once you've got your database URL set correctly in ``dcon.yaml``, just run
+``shell.py``::
 
-    $ pip install twisted
-    $ twistd -n web --wsgi newrem.main.app 
+    (venv)$ python shell.py
+    
+Start the app
+-------------
+
+One way to make the app go is:: 
+
+    (venv)$ pip install twisted
+    (venv)$ twistd -n web --wsgi newrem.main.app 
+
+Yes, that's ``newrem.main.app``, not the name of your comic, since all the
+files relevant to twisted are in the ``newrem`` directory.
+
+Add Content
+-----------
+
+If you're running dcon with twisted as shown above, your site will now be
+online at `http://localhost:8080/ <http://localhost:8080/>`_. If you haven't
+created any universes yet, the site will show only a footer. Start adding
+content by going to `/admin <http://localhost:8080/admin>`_ and logging in
+with the credentials you set in ``passwords.dcon``.  
