@@ -61,12 +61,12 @@
             {% if t[1] %}
                 {{ macros.img_link(url_for_comic(t[1]),
                             url_for("static", filename="previous.png"),
-                            t[0].name + "Previous") }}
+                            t[0].name + " Previous") }}
             {% endif %}
             {% if t[2] %}
                 {{ macros.img_link(url_for_comic(t[2]),
                             url_for("static", filename="next.png"),
-                            t[0].name + "Next") }}
+                            t[0].name + " Next") }}
             {% endif %}
         </div>
     {% endfor %}
