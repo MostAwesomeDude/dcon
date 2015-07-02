@@ -224,11 +224,11 @@ def comics(u, cid, name=None):
 
     for character in comic.characters:
         pred = Comic.characters.any(Character.slug == character.slug)
-        # Invert first and last.
-        first = before.order_by(Comic.position).filter(pred).first()
-        last = after.order_by(Comic.position.desc()).filter(pred).first()
         previous = before.filter(pred).first()
         next = after.filter(pred).first()
+        # SQLAlchemy doesn't make this any easier.
+        first = get_comic_query(u).filter(pred).order_by(Comic.position).first()
+        last = get_comic_query(u).filter(pred).order_by(Comic.position.desc()).first()
 
         cdict[character.slug] = character, first, previous, next, last
 
