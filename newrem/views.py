@@ -224,10 +224,13 @@ def comics(u, cid, name=None):
 
     for character in comic.characters:
         pred = Comic.characters.any(Character.slug == character.slug)
+        # Invert first and last.
+        first = before.order_by(Comic.position).filter(pred).first()
+        last = after.order_by(Comic.position.desc()).filter(pred).first()
         previous = before.filter(pred).first()
         next = after.filter(pred).first()
 
-        cdict[character.slug] = character, previous, next
+        cdict[character.slug] = character, first, previous, next, last
 
     # Buffer watch feature. Figure out the datetime for the latest comic
     # uploaded, and send that datetime along.

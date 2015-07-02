@@ -60,13 +60,23 @@
             <h3>{{ t[0].name }}</h3>
             {% if t[1] %}
                 {{ macros.img_link(url_for_comic(t[1]),
-                            url_for("static", filename="previous.png"),
-                            t[0].name + " Previous") }}
+                            url_for("static", filename="first.png"),
+                            t[0].name + " First") }}
             {% endif %}
             {% if t[2] %}
                 {{ macros.img_link(url_for_comic(t[2]),
+                            url_for("static", filename="previous.png"),
+                            t[0].name + " Previous") }}
+            {% endif %}
+            {% if t[3] %}
+                {{ macros.img_link(url_for_comic(t[3]),
                             url_for("static", filename="next.png"),
                             t[0].name + " Next") }}
+            {% endif %}
+            {% if t[4] %}
+                {{ macros.img_link(url_for_comic(t[4]),
+                            url_for("static", filename="last.png"),
+                            t[0].name + " Last") }}
             {% endif %}
         </div>
     {% endfor %}
